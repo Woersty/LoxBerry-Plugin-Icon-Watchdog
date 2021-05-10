@@ -1,0 +1,16 @@
+				<center>
+					<img src="<TMPL_VAR LOGO_ICON>"><br>
+				</center>
+				<br>
+				<center>
+					<b><TMPL_VAR Icon-Watchdog.HEADER_TEXT></b>
+					<br>
+					<small><TMPL_VAR Icon-Watchdog.DESCRIPTION_TEXT></small>
+					<br><br>
+					<div style="font-family: monospace;"><TMPL_VAR STATUS></div>
+					<br><br>
+				<br><a id="btncancel" data-role="button" data-inline="true" data-mini="true" data-icon="delete" href="/admin/index.cgi"><TMPL_VAR Icon-Watchdog.BUTTON_EXIT></a>
+				<br>
+				<button onclick="window.open('/admin/system/tools/logfile.cgi?logfile=<TMPL_VAR LOGFILE>&amp;header=html&amp;format=template', 'log'); return false;" id="logview" data-role="button" data-inline="true" data-mini="true"><TMPL_VAR Icon-Watchdog.LOG_BUTTON_VIEW></button>
+				</center>
+<small><small><TMPL_VAR VERSION></small></small>

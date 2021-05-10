@@ -1,0 +1,25 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          Icon-Watchdog
+# Required-Start:    $remote_fs $syslog $network
+# Required-Stop:     $remote_fs $syslog $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: This file is for the Icon-Watchdog.
+# Description:       This file is for the Icon-Watchdog Autostart.
+### END INIT INFO
+
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:REPLACELBHOMEDIR/bin"
+PATH=$PATH.":REPLACELBHOMEDIR/sbin"
+
+. /lib/lsb/init-functions
+
+### END INIT INFO
+
+logfile="REPLACELBPLOGDIR/Icon-Watchdog.log"
+touch $logfile
+chown loxberry:loxberry $logfile
+chmod 666 $logfile
+echo "`date` <INFO>Startig Icon-Watchdog ..." 2>&1 |tee -a $logfile
+
+exit 0
