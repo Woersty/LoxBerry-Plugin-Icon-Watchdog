@@ -1,16 +1,243 @@
-				<center>
-					<img src="<TMPL_VAR LOGO_ICON>"><br>
-				</center>
-				<br>
-				<center>
-					<b><TMPL_VAR Icon-Watchdog.HEADER_TEXT></b>
-					<br>
-					<small><TMPL_VAR Icon-Watchdog.DESCRIPTION_TEXT></small>
-					<br><br>
-					<div style="font-family: monospace;"><TMPL_VAR STATUS></div>
-					<br><br>
-				<br><a id="btncancel" data-role="button" data-inline="true" data-mini="true" data-icon="delete" href="/admin/index.cgi"><TMPL_VAR Icon-Watchdog.BUTTON_EXIT></a>
-				<br>
-				<button onclick="window.open('/admin/system/tools/logfile.cgi?logfile=<TMPL_VAR LOGFILE>&amp;header=html&amp;format=template', 'log'); return false;" id="logview" data-role="button" data-inline="true" data-mini="true"><TMPL_VAR Icon-Watchdog.LOG_BUTTON_VIEW></button>
-				</center>
+<link rel="stylesheet" href="<TMPL_VAR HTMLPATH>style.css" />
+<script src="<TMPL_VAR HTMLPATH>js/jquery-ui.min.js"></script>
+<CENTER>
+	<IMG src="<TMPL_VAR LOGO_ICON>">
+	<BR><BR>
+	<b><TMPL_VAR Icon-Watchdog.HEADER_TEXT></b>
+	<br><small><TMPL_VAR Icon-Watchdog.DESCRIPTION_TEXT></small>
+	<br><br>
+</CENTER>
+<DIV id="notifblock">
+<!-- NOTIFICATIONS //-->
+	<TMPL_VAR NOTIFICATIONS>
+<!-- NOTIFICATIONS //-->
+</DIV>
+<CENTER>
+	<div id="status_div"><TMPL_VAR STATUS></div>
+	<br>
+	<TABLE>
+		<TR>
+			<TD>
+				<select name="iwd_use" id="iwd_use" class="to_save to_disable_on_save">
+					<option value="off"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_OFF></option>
+					<option value="on"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_ON></option>
+				</select>
+			</TD>
+			<TD>
+				<select name="iwd_use_notify" id="iwd_use_notify" class="to_save to_disable_on_save">
+					<option value="off"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_NOTIFY_OFF></option>
+					<option value="on"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_NOTIFY_ON></option>
+				</select>
+			</TD>
+		</TR>
+	</TABLE>
+ </CENTER>
+ <input id="monitor_active_ms_1" class="to_save to_disable_on_save" value="1">
+<BR>
+<style>
+#alert_form{ display:none; }
+#alert_form {
+	margin: 0 0 0 0;
+	left: 0px;
+	top: 0px;
+    width: 100%;
+    z-index: 2;
+    height: 100%;
+    max-height: 1080px;
+    position: fixed;
+    background: rgba(70, 71, 72, 0.69);
+}
+#sub_alert_form { 
+	width: 240px;  
+	height: 110px;
+    margin: 0 auto;
+    background: white;
+    margin-top: 75px;
+    padding: 45px;
+    border: 1px solid #9E9E9E;
+    border-radius: .25em .25em .4em .4em;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255,225,225,.9);
+}
+#sub_alert_form span {
+	position: relative;
+    float: right;
+    font-weight: 700;
+    margin-top: -40px;
+    height: 15px;
+    font-size: 18px;
+    width: 15px;
+    line-height: 15px;
+    margin-right: -40px;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    padding: 7px;
+    background-color: rgba(255,128,128,.9);
+}
+
+span#alert_form_close:hover {
+	cursor:pointer;
+    color: #e0190b;
+}
+
+@media screen and (max-width: 440px) {
+	#sub_alert_form { 
+		width: 290px; 
+		padding: 35px;
+	}
+}
+</style>
+<div id="alert_form" > 
+ 	 <div id="sub_alert_form"> 
+  	 	<span id="alert_form_close"> X </span>
+ 	 	 	<div id="error_message"></div>
+ 	 </div>
+</div>
+<CENTER>
+<br><a class="to_disable_on_save" id="btncancel" data-role="button" data-inline="true" data-mini="true" data-icon="delete" href="/admin/index.cgi"><TMPL_VAR Icon-Watchdog.BUTTON_EXIT></a>
+<br>
+<button onclick="window.open('/admin/system/logmanager.cgi?package=icon-watchdog', 'log'); return false;" id="logview" data-role="button" data-inline="true" data-mini="true"><TMPL_VAR LOGGING.LOG_MGR></button>
+</CENTER>
 <small><small><TMPL_VAR VERSION></small></small>
+
+<script>
+	var miniservers=[];
+	function checkNotifications()
+	{
+		if ( $("#notifdeleteall").attr('deleting') != 1 )
+		{
+			$.ajax({url: '<TMPL_VAR HTMLPATH>get_notifications.php', type: 'GET', data: { 'package':'<TMPL_VAR LBPPLUGINDIR>', 'name':'<TMPL_VAR GENERAL.MY_NAME>'} }).success(function(data) {  $( '#notifblock' ).html(data).trigger('create'); }) ;
+		}
+	}
+
+	function show_error(error)
+	{
+		// Modal form
+ 		$("#alert_form").on('click', function(e){ if (e.target !== this) return; });
+		// Build and show....
+		$("#error_message").html("<table style='width:100%;'><tr><td style='width:100%; font-weight:bold;'><TMPL_VAR ERRORS.ERR_TITLE></td></tr><tr><td><hr></td></tr><tr><td>"+error+"</td></tr></table>");
+		$("#alert_form").show();
+		$("#alert_form_close").on('click', function(e){  // close button code. 
+		$('#alert_form').fadeOut('slow');
+	});
+		return;
+	}
+	
+	function save_config()
+	{
+		setTimeout( function() 
+		{ 
+			// Array with POST data to save
+			var postData = {};
+	
+			// Add random sleep value
+			postData['random_sleep'] = $('#random_sleep').val();
+
+			// Add general on/off switch
+			postData['iwd_use'] = $('#iwd_use').val();
+	
+			// Add notify on/off switch
+			postData['iwd_use_notify'] = $('#iwd_use_notify').val();
+	
+			// Add monitor_active_ms_1 value for testing
+			postData['monitor_active_ms_1'] = $('#monitor_active_ms_1').val();
+
+			// Go through all miniservers
+			var early_error=0;
+			miniservers.forEach(function(miniserver_id) 
+			{
+				// Add values per Miniserver
+				postData['monitor_active_ms_'+miniserver_id] = $('#monitor_active_ms_'+miniserver_id).val();
+			});		
+	
+			// Disable input fields and buttons			
+			$('.to_disable_on_save').addClass('ui-disabled');
+	
+			// Empty variables
+	       	var object_to_be_saved = "";
+	       	
+	       	// Send datas
+			$.ajax({url: '<TMPL_VAR HTMLPATH>ajax_config_handler.php', type: 'POST', data : postData,
+	            success: function (data) 
+	            {
+		            eval(data);
+					// Enable input fields and buttons
+					$('.to_disable_on_save').removeClass('ui-disabled');
+	            },
+	            error: function (errorThrown) 
+	            {
+		            show_error('<TMPL_VAR ERRORS.ERR_006_CONFIG_FILE>');
+	                console.log('<TMPL_VAR GENERAL.MY_NAME> function save_config failed: Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
+					// Enable input fields and buttons
+	    			$('.to_disable_on_save').removeClass('ui-disabled');
+			    }	
+	        });
+		}, 500);
+	}
+
+	function checkStatus()
+	{
+	       	// Send datas
+			$.ajax({url: '<TMPL_VAR HTMLPATH>get_status.php', type: 'POST', data : '',
+	            success: function (data) 
+	            {
+		            $( '#status_div' ).html(data).trigger('create');
+	            },
+	            error: function (errorThrown) 
+	            {
+		            $( '#status_div' ).html('<TMPL_VAR ERRORS.ERR_013_ERROR_READING_STATUS>').trigger('create');
+	                console.log('<TMPL_VAR GENERAL.MY_NAME> function checkStatus failed: Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
+			    }	
+	        });
+
+	}
+	function checkState()
+	{
+		
+		if ( $("#iwd_use").val() == "on" )
+		{
+			$("#iwd_use").css('background-color','rgba(128,255,128,.2)');
+			$('#iwd_use_notify').removeClass('ui-disabled');
+		}
+		else
+		{
+			$("#iwd_use").css('background-color','rgba(255,255,128,.2)');
+			$('#iwd_use_notify').addClass('ui-disabled');
+
+		}
+
+		if ( $("#iwd_use_notify").val() == "on" )
+		{
+			$("#iwd_use_notify").css('background-color','rgba(128,255,128,.2)');
+		}
+		else
+		{
+			$("#iwd_use_notify").css('background-color','rgba(255,255,128,.2)');
+		}
+	}
+	
+	$( document ).ready(function() 
+	{
+		$("#iwd_use-button").remove(); 
+		$("#iwd_use").css('display','').selectmenu( "menuWidget" ); 
+		$("#iwd_use").addClass( "ui-mini ui-btn ui-corner-all ui-shadow" );
+		$("#iwd_use").val("<TMPL_VAR IWD_USE>"); 
+
+		$("#iwd_use_notify-button").remove(); 
+		$("#iwd_use_notify").css('display','').selectmenu( "menuWidget" ); 
+		$("#iwd_use_notify").addClass( "ui-mini ui-btn ui-corner-all ui-shadow" );
+		$("#iwd_use_notify").val("<TMPL_VAR IWD_USE_NOTIFY>"); 
+		$('#iwd_use_notify').addClass('ui-disabled');
+	
+		notify = setInterval(function() { checkNotifications(); },15000);
+		checkNotifications();	
+		watchDog = setInterval(function() { checkState(); },2500);
+		checkState();
+		status = setInterval(function() { checkStatus(); },5000);
+		checkStatus();	
+
+		// Event handler for save
+		$('.to_save').on("change", function(){ save_config(); });
+	});
+</script>	

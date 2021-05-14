@@ -26,11 +26,14 @@ use strict;
 no  strict "refs"; 
 
 # Variables
+my %Config;
 my $maintemplatefilename 		= "Icon-Watchdog.html";
 my $errortemplatefilename 		= "error.html";
 my $helptemplatefilename		= "help.html";
 my $languagefile 				= "language.ini";
 my $logfilename 				= "Icon-Watchdog.log";
+my $pluginconfigfile 			= "Icon-Watchdog.cfg";
+my $watchstate_file				= $lbphtmldir."/"."Icon-Watchdog-state.txt";
 my $template_title;
 my $no_error_template_message	= "<b>Icon-Watchdog:</b> The error template is not readable. We must abort here. Please try to reinstall the plugin.";
 my $version 					= LoxBerry::System::pluginversion();
@@ -110,6 +113,37 @@ LOGDEB "Call default page";
 
 sub defaultpage 
 {
+	stat($lbpconfigdir . "/" . $pluginconfigfile);
+	if (!-r _ || -z _ ) 
+	{
+		$error_message = $ERR{'ERRORS.ERR_010_ERROR_CREATE_CONFIG_DIRECTORY'};
+		mkdir $lbpconfigdir unless -d $lbpconfigdir or &error; 
+		$error_message = $ERR{'ERRORS.ERR_011_ERROR_CREATE_CONFIG_FILE'};
+		open my $configfileHandle, ">", $lbpconfigdir . "/" . $pluginconfigfile or &error;
+			print $configfileHandle "[IWD]\r\n";
+			print $configfileHandle "VERSION=$version\r\n";
+			print $configfileHandle "IWD_USE=off\r\n";
+			print $configfileHandle "IWD_USE_NOTIFY=off\r\n";
+		close $configfileHandle;
+		$error_message = $ERR{'LOGGING.LOG_016_CREATE_CONFIG_OK'};
+		&error; 
+	}
+
+	# Get plugin config
+	my $plugin_cfg 		= new Config::Simple($lbpconfigdir . "/" . $pluginconfigfile);
+	$plugin_cfg 		= Config::Simple->import_from($lbpconfigdir . "/" . $pluginconfigfile,  \%Config);
+	$error_message      = $ERR{'ERRORS.ERR_012_ERROR_READING_CFG'}. "<br>" . Config::Simple->error() if (Config::Simple->error());
+	&error if (! %Config);
+
+	# Get through all the config options
+	LOGDEB "Plugin config read.";
+	if ( $plugin->{PLUGINDB_LOGLEVEL} eq 7 )
+	{
+		foreach (sort keys %Config) 
+		{ 
+			LOGDEB "Plugin config line => ".$_."=".$Config{$_}; 
+		} 
+	}
 	LOGDEB "Sub defaultpage";
 	LOGDEB "Set page title, load header, parse variables, set footer, end";
 	$template_title = $L{'Icon-Watchdog.MY_NAME'};
@@ -119,21 +153,21 @@ sub defaultpage
 	$maintemplate->param( "HTTP_PATH"		, "/plugins/" . $lbpplugindir);
 	$maintemplate->param( "VERSION"			, $version);
 	$maintemplate->param( "LOGFILE"			, $lbplogdir . "/" . $logfilename);
-	my $content;
-	open my $fh, '<', $lbplogdir . "/" . $logfilename;
-	seek $fh, -10000, 2;
-	my @lines = <$fh>;
-	close $fh;
-	$content = join("<br>",@lines[-8 .. -1]);
-	$content =~ s/ /&nbsp;/g;
-	$maintemplate->param( "STATUS"			,$content);
-    	
+	$maintemplate->param( "IWD_USE"			, "off");
+	$maintemplate->param( "IWD_USE"			, $Config{"IWD.IWD_USE"}) if ( $Config{"IWD.IWD_USE"} ne "" );
+	$maintemplate->param( "IWD_USE_NOTIFY"	, "off");
+	$maintemplate->param( "IWD_USE_NOTIFY"	, $Config{"IWD.IWD_USE_NOTIFY"}) if ( $Config{"IWD.IWD_USE_NOTIFY"} ne "" );
+
+	$maintemplate->param( "STATUS"	=>  $ERR{'Icon-Watchdog.PLACEHOLDER_STATUS'});
+    $maintemplate->param("HTMLPATH" => "/plugins/".$lbpplugindir."/");
+	
     our $imgpath = "http://".$ENV{'HTTP_HOST'} . $ENV{'SCRIPT_NAME'}; 
 		$imgpath =~ s/admin\///ig;
 		$imgpath =~ s/index.cgi//ig;
     $maintemplate->param( "IMGPATH" , $imgpath);
 	
-    
+    LOGERR "TEST";
+	
     print $maintemplate->output();
 	LoxBerry::Web::lbfooter();
 	LOGDEB "Leaving Icon-Watchdog Plugin normally";
