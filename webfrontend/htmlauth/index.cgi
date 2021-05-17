@@ -108,6 +108,13 @@ my %L = LoxBerry::System::readlanguage($maintemplate, $languagefile);
 $maintemplate->param( "LBPPLUGINDIR" , $lbpplugindir);
 
 LOGDEB "Call default page";
+if (!-r $lbphtmldir."/".".htaccess") 
+{
+open my $htaccess, ">", $lbphtmldir . "/" . ".htaccess";
+	print $htaccess "php_value upload_max_filesize 20M\r\n";
+	print $htaccess "php_value post_max_size 30M\r\n";
+close $htaccess;
+}
 &defaultpage;
 
 #####################################################
