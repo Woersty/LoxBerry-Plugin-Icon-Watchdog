@@ -1,5 +1,165 @@
 <link rel="stylesheet" href="<TMPL_VAR HTMLPATH>style.css" />
-<script src="<TMPL_VAR HTMLPATH>js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<TMPL_VAR HTMLPATH>jquery.ui.widget.js"></script>
+<link rel="stylesheet" href="<TMPL_VAR HTMLPATH>fancy_fileupload.css" type="text/css" media="all" />
+<script type="text/javascript" src="<TMPL_VAR HTMLPATH>jquery.fileupload.js"></script>
+<script type="text/javascript" src="<TMPL_VAR HTMLPATH>jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="<TMPL_VAR HTMLPATH>jquery.fancy-fileupload.js"></script>
+<script type="text/javascript"> langmap = {<TMPL_VAR LANGMAP.LANGMAP>} // fancy-fileupload LoxBerry translation mapping</script>
+<style>
+	#alert_form{ display:none; }
+	#alert_form {
+		margin: 0 0 0 0;
+		left: 0px;
+		top: 0px;
+		width: 100%;
+		z-index: 2;
+		height: 100%;
+		max-height: 1080px;
+		position: fixed;
+		background: rgba(70, 71, 72, 0.69);
+	}
+	#sub_alert_form { 
+		width: 240px;  
+		height: 110px;
+		margin: 0 auto;
+		background: white;
+		margin-top: 75px;
+		padding: 45px;
+		border: 1px solid #9E9E9E;
+		border-radius: .25em .25em .4em .4em;
+		text-align: center;
+		box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+		background-color: rgba(255,225,225,.9);
+	}
+	#sub_alert_form span {
+		position: relative;
+		float: right;
+		font-weight: 700;
+		margin-top: -40px;
+		height: 15px;
+		font-size: 18px;
+		width: 15px;
+		line-height: 15px;
+		margin-right: -40px;
+		border: 2px solid #ffffff;
+		color: #ffffff;
+		padding: 7px;
+		background-color: rgba(255,128,128,.9);
+	}
+
+	span#alert_form_close:hover {
+		cursor:pointer;
+		color: #e0190b;
+	}
+
+	@media screen and (max-width: 440px) {
+		#sub_alert_form { 
+			width: 290px; 
+			padding: 35px;
+		}
+	}
+</style>
+<script> 
+	var miniservers=[];
+	colors=[
+	'(255,255,255,.05)', 	//white
+	'(135,206,235,.05)', 	//sky blue
+	'(205,92,92,.05)',   	//indian red
+	'(218,112,214,.05)', 	//orchid
+	'(224,255,255,.05)', 	//light cyan
+	'(184,134,11,.05)',  	//dark golden rod
+	'(72,61,139,.05)',   	//dark slate blue
+	'(255,215,0,.05)',   	//gold
+	'(250,235,215,.05)', 	//antique white
+	'(233,150,122,.05)', 	//dark salmon
+	'(135,206,250,.05)', 	//light sky blue
+	'(0,128,128,.05)',   	//teal
+	'(255,69,0,.05)',    	//orange red
+	'(147,112,219,.05)', 	//medium purple
+	'(0,255,255,.05)',   	//aqua
+	'(0,255,0,.05)',     	//lime
+	'(64,224,208,.05)',  	//turquoise
+	'(123,104,238,.05)', 	//medium slate blue
+	'(65,105,225,.05)',  	//royal blue
+	'(255,255,0,.05)',   	//yellow
+	'(50,205,50,.05)',   	//lime green
+	'(153,50,204,.05)',  	//dark orchid
+	'(240,128,128,.05)', 	//light coral
+	'(255,20,147,.05)',  	//deep pink
+	'(255,165,0,.05)',   	//orange
+	'(106,90,205,.05)',  	//slate blue
+	'(0,255,127,.05)',   	//spring green
+	'(0,191,255,.05)',   	//deep sky blue
+	'(255,160,122,.05)', 	//light salmon
+	'(221,160,221,.05)', 	//plum
+	'(255,0,0,.05)',     	//red
+	'(0,0,205,.05)',     	//medium blue
+	'(189,183,107,.05)', 	//dark khaki
+	'(0,255,255,.05)',   	//cyan
+	'(138,43,226,.05)',  	//blue violet
+	'(47,79,79,.05)',    	//dark slate gray
+	'(0,250,154,.05)',		//medium spring green
+	'(144,238,144,.05)', 	//light green
+	'(30,144,255,.05)',  	//dodger blue
+	'(100,149,237,.05)', 	//corn flower blue
+	'(176,224,230,.05)', 	//powder blue
+	'(255,127,80,.05)',  	//coral
+	'(220,20,60,.05)',   	//crimson
+	'(128,128,0,.05)',   	//olive
+	'(32,178,170,.05)',  	//light sea green
+	'(199,21,133,.05)',  	//medium violet red
+	'(255,105,180,.05)', 	//hot pink
+	'(139,0,0,.05)',     	//dark red
+	'(216,191,216,.05)', 	//thistle
+	'(165,42,42,.05)',   	//brown
+	'(173,216,230,.05)', 	//light blue
+	'(255,192,203,.05)', 	//pink
+	'(0,0,255,.05)',     	//blue
+	'(255,182,193,.05)', 	//light pink
+	'(127,255,0,.05)',   	//chart reuse
+	'(107,142,35,.05)',  	//olive drab
+	'(173,255,47,.05)',  	//green yellow
+	'(0,128,0,.05)',     	//green
+	'(0,0,128,.05)',     	//navy
+	'(85,107,47,.05)',   	//dark olive green
+	'(127,255,212,.05)', 	//aqua marine
+	'(34,139,34,.05)',   	//forest green
+	'(218,165,32,.05)',  	//golden rod
+	'(128,0,0,.05)',    	//maroon
+	'(238,232,170,.05)', 	//pale golden rod
+	'(219,112,147,.05)', 	//pale violet red
+	'(0,206,209,.05)',   	//dark turquoise
+	'(72,209,204,.05)',  	//medium turquoise
+	'(70,130,180,.05)',  	//steel blue
+	'(186,85,211,.05)',  	//medium orchid
+	'(128,0,128,.05)',   	//purple
+	'(255,140,0,.05)',   	//dark orange
+	'(0,100,0,.05)',     	//dark green
+	'(124,252,0,.05)',   	//lawn green
+	'(175,238,238,.05)', 	//pale turquoise
+	'(0,139,139,.05)',   	//dark cyan
+	'(102,205,170,.05)', 	//medium aqua marine
+	'(238,130,238,.05)', 	//violet
+	'(148,0,211,.05)',   	//dark violet
+	'(139,0,139,.05)',   	//dark magenta
+	'(143,188,143,.05)', 	//dark sea green
+	'(240,230,140,.05)', 	//khaki
+	'(0,0,139,.05)',     	//dark blue
+	'(46,139,87,.05)',   	//sea green
+	'(95,158,160,.05)',  	//cadet blue
+	'(255,0,255,.05)',   	//magenta / fuchsia
+	'(178,34,34,.05)',   	//firebrick
+	'(152,251,152,.05)', 	//pale green
+	'(25,25,112,.05)',   	//midnight blue
+	'(60,179,113,.05)',  	//medium sea green
+	'(255,99,71,.05)',   	//tomato
+	'(75,0,130,.05)',    	//indigo
+	'(250,128,114,.05)', 	//salmon
+	'(154,205,50,.05)',  	//yellow green
+	];
+// Fancy FileUpload Language Mapping
+langmap = {<TMPL_VAR LANGMAP.LANGMAP>}
+</script>
 <CENTER>
 	<IMG src="<TMPL_VAR LOGO_ICON>">
 	<BR><BR>
@@ -8,9 +168,9 @@
 	<br><br>
 </CENTER>
 <DIV id="notifblock">
-<!-- NOTIFICATIONS //-->
-	<TMPL_VAR NOTIFICATIONS>
-<!-- NOTIFICATIONS //-->
+	<!-- NOTIFICATIONS //-->
+		<TMPL_VAR NOTIFICATIONS>
+	<!-- NOTIFICATIONS //-->
 </DIV>
 <CENTER>
 	<div id="status_div"><TMPL_VAR STATUS></div>
@@ -24,70 +184,15 @@
 				</select>
 			</TD>
 			<TD>
-				<select name="iwd_use_notify" id="iwd_use_notify" class="to_save to_disable_on_save">
+				<select name="iwd_use_notify" id="iwd_use_notify" class="to_save to_disable_on_plugin_off to_disable_on_save">
 					<option value="off"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_NOTIFY_OFF></option>
 					<option value="on"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_NOTIFY_ON></option>
 				</select>
 			</TD>
 		</TR>
 	</TABLE>
- </CENTER>
- <input id="monitor_active_ms_1" class="to_save to_disable_on_save" value="1">
+</CENTER>
 <BR>
-<style>
-#alert_form{ display:none; }
-#alert_form {
-	margin: 0 0 0 0;
-	left: 0px;
-	top: 0px;
-    width: 100%;
-    z-index: 2;
-    height: 100%;
-    max-height: 1080px;
-    position: fixed;
-    background: rgba(70, 71, 72, 0.69);
-}
-#sub_alert_form { 
-	width: 240px;  
-	height: 110px;
-    margin: 0 auto;
-    background: white;
-    margin-top: 75px;
-    padding: 45px;
-    border: 1px solid #9E9E9E;
-    border-radius: .25em .25em .4em .4em;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    background-color: rgba(255,225,225,.9);
-}
-#sub_alert_form span {
-	position: relative;
-    float: right;
-    font-weight: 700;
-    margin-top: -40px;
-    height: 15px;
-    font-size: 18px;
-    width: 15px;
-    line-height: 15px;
-    margin-right: -40px;
-    border: 2px solid #ffffff;
-    color: #ffffff;
-    padding: 7px;
-    background-color: rgba(255,128,128,.9);
-}
-
-span#alert_form_close:hover {
-	cursor:pointer;
-    color: #e0190b;
-}
-
-@media screen and (max-width: 440px) {
-	#sub_alert_form { 
-		width: 290px; 
-		padding: 35px;
-	}
-}
-</style>
 <div id="alert_form" > 
  	 <div id="sub_alert_form"> 
   	 	<span id="alert_form_close"> X </span>
@@ -95,14 +200,68 @@ span#alert_form_close:hover {
  	 </div>
 </div>
 <CENTER>
-<br><a class="to_disable_on_save" id="btncancel" data-role="button" data-inline="true" data-mini="true" data-icon="delete" href="/admin/index.cgi"><TMPL_VAR Icon-Watchdog.BUTTON_EXIT></a>
-<br>
-<button onclick="window.open('/admin/system/logmanager.cgi?package=icon-watchdog', 'log'); return false;" id="logview" data-role="button" data-inline="true" data-mini="true"><TMPL_VAR LOGGING.LOG_MGR></button>
+	<STYLE>
+	.PreferHttps1 {	border-style: solid; border-width: thin; border-radius: 5px; background: #C0FFC0; padding: 2px; font-size:10px; }
+	.PreferHttps0 {	visibility: hidden; }
+	</STYLE>
+	<TMPL_LOOP TEMPLATE_ROW>
+		<DIV style="display:inline-block; width:100%;" class="to_disable_on_save">
+			<DIV id="MS_LOOP_ROW<TMPL_VAR MSID>" style="text-align:left; display:inline-block; margin-bottom:5px; width:99%; padding:10px; border: 1px solid black; border-radius: 5px; background-color: rgba(228,228,228,.1);"> 
+				<DIV id="colored_div_<TMPL_VAR MSID>" style=" width:99%; display:inline-block; padding:5px; border: 1px solid black; border-radius: 5px; background-color: rgba(0,228,228,.1);">
+					<TMPL_LOOP NAME="MSROW">
+						#<TMPL_VAR MSID> - <TMPL_VAR Name> <small>[<TMPL_VAR IPAddress>]</small> <span class="PreferHttps<TMPL_VAR PreferHttps>">HTTPS</span><BR>
+						<a id="btncheck_single<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save" data-role="button" data-icon="clock" data-mini="true" onclick="$('.btncheck_single').addClass('ui-disabled');"><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></a>
+						<input class="to_save to_disable_on_save to_disable_on_plugin_off to_hide_on_plugin_off" onclick="if ( $(this).is(':checked') ) { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(1); } else { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(0); }" type="checkbox" id="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>" name="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><label id="MS_MONITOR_CB_LABEL<TMPL_VAR MSID>" class="to_disable_on_plugin_off" for="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><TMPL_VAR GENERAL.TXT_LABEL_MONITOR></label>
+						<input id="MS_MONITOR_CB<TMPL_VAR MSID>" name="MS_MONITOR_CB<TMPL_VAR MSID>" type="hidden" value="<TMPL_VAR MS_MONITOR_CB>">
+						<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
+							<input name="_token" type="hidden" value="yYpUn8Ex5OyOIj1aA5xG3s4deDzJxC9mD3IBmhGD">
+							<input style="display:none;" class="hidden" id="files<TMPL_VAR MSID>" type="file" name="files" accept=".Loxone, .jpg, .png" max-uploads=1>
+						</form>						
+						<script>
+							$(function() 
+							{
+								$('#files<TMPL_VAR MSID>').FancyFileUpload({
+									params : {
+										action : 'fileuploader',
+										url : '<TMPL_VAR HTMLPATH>uploader.php',
+										ms  : '<TMPL_VAR MSID>',
+										singleFileUploads: true,
+										limitMultiFileUploads: 1,
+										sequentialUploads: true,
+									},
+									edit : false,
+									maxfilesize : 10000000,
+									uploadcompleted : function(e, data) { setTimeout( function() {data.ff_info.RemoveFile();}, 5000); },
+									added : function(e, data) {
+										// It is okay to simulate clicking the start upload button.
+										this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
+									},
+//									startupload : function(SubmitUpload, e, data) {
+//										SubmitUpload();
+//									},
+									langmap : langmap
+								});
+							});
+							$( document ).ready(function() 
+							{
+								<TMPL_VAR MS_MONITOR_CB_script>
+								$( "label[for='MS_MONITOR_CB_script<TMPL_VAR MSID>']" ).removeClass( "ui-checkbox-off" ).addClass( "ui-checkbox-on" );
+							});
+							var nbr_miniservers = miniservers.push('<TMPL_VAR MSID>');
+							$("#colored_div_<TMPL_VAR MSID>").css('background-color','rgba'+colors[<TMPL_VAR MSID>]); 
+						</script>
+					</TMPL_LOOP>
+				</DIV>
+			</DIV>
+		</DIV>
+		<BR>
+	</TMPL_LOOP>
+	<br><a class="to_disable_on_save" id="btncancel" data-role="button" data-inline="true" data-mini="true" data-icon="delete" href="/admin/index.cgi"><TMPL_VAR Icon-Watchdog.BUTTON_EXIT></a>
+	<br>
+	<button onclick="window.open('/admin/system/logmanager.cgi?package=icon-watchdog', 'log'); return false;" id="logview" data-role="button" data-inline="true" data-mini="true"><TMPL_VAR LOGGING.LOG_MGR></button>
 </CENTER>
 <small><small><TMPL_VAR VERSION></small></small>
-
 <script>
-	var miniservers=[];
 	function checkNotifications()
 	{
 		if ( $("#notifdeleteall").attr('deleting') != 1 )
@@ -140,15 +299,11 @@ span#alert_form_close:hover {
 			// Add notify on/off switch
 			postData['iwd_use_notify'] = $('#iwd_use_notify').val();
 	
-			// Add monitor_active_ms_1 value for testing
-			postData['monitor_active_ms_1'] = $('#monitor_active_ms_1').val();
-
 			// Go through all miniservers
-			var early_error=0;
 			miniservers.forEach(function(miniserver_id) 
 			{
 				// Add values per Miniserver
-				postData['monitor_active_ms_'+miniserver_id] = $('#monitor_active_ms_'+miniserver_id).val();
+				postData['MS_MONITOR_CB'+miniserver_id] = $('#MS_MONITOR_CB'+miniserver_id).val();
 			});		
 	
 			// Disable input fields and buttons			
@@ -182,7 +337,7 @@ span#alert_form_close:hover {
 			$.ajax({url: '<TMPL_VAR HTMLPATH>get_status.php', type: 'POST', data : '',
 	            success: function (data) 
 	            {
-		            $( '#status_div' ).html(data).trigger('create');
+		            //$( '#status_div' ).html(data).trigger('create');
 	            },
 	            error: function (errorThrown) 
 	            {
@@ -194,42 +349,46 @@ span#alert_form_close:hover {
 	}
 	function checkState()
 	{
-		
 		if ( $("#iwd_use").val() == "on" )
 		{
-			$("#iwd_use").css('background-color','rgba(128,255,128,.2)');
-			$('#iwd_use_notify').removeClass('ui-disabled');
+			$("#iwd_use-button").css('background-color','rgba(128,255,128,.2)');
+			$(".to_disable_on_plugin_off").removeClass('ui-disabled');
+			$(".to_hide_on_plugin_off").css('display','');
+			$("#iwd_use").val('on');
+			if ( $("#iwd_use_notify").val() == "on" )
+			{
+				$("#iwd_use_notify-button").css('background-color','rgba(128,255,128,.2)').css('color','rgba(0,0,0,1)');;
+			}
+			else
+			{
+				$("#iwd_use_notify-button").css('background-color','rgba(255,255,128,.2)').css('color','rgba(0,0,0,1)');;
+			}
 		}
 		else
 		{
-			$("#iwd_use").css('background-color','rgba(255,255,128,.2)');
-			$('#iwd_use_notify').addClass('ui-disabled');
-
-		}
-
-		if ( $("#iwd_use_notify").val() == "on" )
-		{
-			$("#iwd_use_notify").css('background-color','rgba(128,255,128,.2)');
-		}
-		else
-		{
-			$("#iwd_use_notify").css('background-color','rgba(255,255,128,.2)');
+			$("#iwd_use-button").css('background-color','rgba(255,255,128,.2)');
+			$(".to_disable_on_plugin_off").addClass('ui-disabled');
+			$(".to_hide_on_plugin_off").css('display','none');
+			$("#iwd_use_notify-button").css('background-color','rgba(128,128,128,.2)').css('color','rgba(64,64,64,.2)');
+			$("#iwd_use").val('off');
 		}
 	}
-	
+
+	$("body").css('height','90%'); 
+	$("#iwd_use_notify").val("<TMPL_VAR IWD_USE_NOTIFY>"); 
+	$("#iwd_use").val("<TMPL_VAR IWD_USE>"); 
 	$( document ).ready(function() 
 	{
 		$("#iwd_use-button").remove(); 
-		$("#iwd_use").css('display','').selectmenu( "menuWidget" ); 
-		$("#iwd_use").addClass( "ui-mini ui-btn ui-corner-all ui-shadow" );
-		$("#iwd_use").val("<TMPL_VAR IWD_USE>"); 
-
 		$("#iwd_use_notify-button").remove(); 
-		$("#iwd_use_notify").css('display','').selectmenu( "menuWidget" ); 
-		$("#iwd_use_notify").addClass( "ui-mini ui-btn ui-corner-all ui-shadow" );
+
+		$("#iwd_use").css('display','').selectmenu( ); 
+		$("#iwd_use_notify").css('display','').selectmenu( ); 
+
 		$("#iwd_use_notify").val("<TMPL_VAR IWD_USE_NOTIFY>"); 
 		$('#iwd_use_notify').addClass('ui-disabled');
-	
+		$("#iwd_use").val("<TMPL_VAR IWD_USE>"); 
+
 		notify = setInterval(function() { checkNotifications(); },15000);
 		checkNotifications();	
 		watchDog = setInterval(function() { checkState(); },2500);
@@ -240,4 +399,4 @@ span#alert_form_close:hover {
 		// Event handler for save
 		$('.to_save').on("change", function(){ save_config(); });
 	});
-</script>	
+</script>

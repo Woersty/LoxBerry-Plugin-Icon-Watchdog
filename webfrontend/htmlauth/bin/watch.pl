@@ -34,7 +34,7 @@ sleep 1;
 my $output_string = `ps -ef | grep "$lbphtmldir/watch.php"|grep -v grep |wc -l 2>/dev/null`;
 if ( int $output_string == 0 ) 
 {
-	notify( $lbpplugindir, $ERR{'GENERAL.MY_NAME'}, $ERR{'ERRORS.ERR_016_UNABLE_TO_INITIATE_CHECK'},1);
-	LOGERR $ERR{'ERRORS.ERR_016_UNABLE_TO_INITIATE_CHECK'}; 
+	notify( $lbpplugindir, $ERR{'GENERAL.MY_NAME'}, $ERR{'ERRORS.ERR_012_UNABLE_TO_INITIATE_CHECK'},1);
+	LOGERR $ERR{'ERRORS.ERR_012_UNABLE_TO_INITIATE_CHECK'}; 
 }
 LOGEND ""; 

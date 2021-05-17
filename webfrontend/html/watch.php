@@ -315,12 +315,8 @@ if ( ! is_link($watchstate_file) || ! is_file($watchstate_tmp) ) debug(__line__,
 ###############################################################################################
 debug(__line__,"Running MS 1",5);
 @file_put_contents($watchstate_tmp, "Running MS 1");
-
-$log->LOGTITLE("Running MS 1");
-sleep (10);
+echo system($lbphtmldir."/get_status.php");
 @file_put_contents($watchstate_tmp, "-");
-
-var_dump($ms);
 debug(__line__,$L["LOGGING.LOG_017_PLUGIN_EXEC_OK"],5);
 $log->LOGTITLE($L["LOGGING.LOG_017_PLUGIN_EXEC_OK"]);
 LOGEND ("");

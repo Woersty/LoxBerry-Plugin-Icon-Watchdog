@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 128 128.00001"
+   id="svg4288"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="fancy_upload.svg">
+  <title
+     id="title4140">MyLoxBerry</title>
+  <defs
+     id="defs4290" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="4.0000002"
+     inkscape:cx="61.381259"
+     inkscape:cy="28.927786"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer3"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     borderlayer="false" />
+  <metadata
+     id="metadata4293">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>MyLoxBerry</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Hintergrund"
+     transform="translate(0,100.00001)" />
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-924.36219)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Text"
+     transform="translate(0,100.00001)">
+    <path
+       inkscape:connector-curvature="0"
+       d="m 74.261947,-48.879184 c -2.066103,-2.235989 -5.647353,-2.235989 -7.713458,0 0,0 -16.666582,16.909684 -17.217533,17.468686 -2.203859,2.235991 -2.203859,5.729722 0,7.965722 2.0661,2.235987 5.647348,2.235987 7.851194,0 0.551066,-0.558998 7.713456,-7.825977 7.713456,-7.825977 l 0,39.9683578 c 0,3.0744782 2.617063,5.7297232 5.509607,5.7297232 3.030297,0 5.509624,-2.655245 5.509624,-5.7297232 l 0,-39.9683578 c 0,0 7.575724,7.546474 7.713459,7.825977 2.203848,2.235987 5.647358,2.235987 7.988927,0 2.066117,-2.236 2.066117,-5.729731 0,-7.965722 -0.137731,-0.279499 -17.355276,-17.468686 -17.355276,-17.468686 z m 43.388223,-20.85695 c 0,0 -0.55107,-0.55906 -26.721638,-27.1114 -0.688679,-0.838498 -2.20385,-1.676994 -3.994473,-1.676994 l -59.779298,0 c -3.16804,0 -5.647368,2.51549 -5.647368,5.729734 l 0,114.31506 c 0,3.214244 2.479328,5.729734 5.647368,5.729734 l 86.500949,0 c 3.16802,0 5.50959,-2.51549 5.50959,-5.729734 l 0,-87.203664 c 0.13775,-1.816742 -0.551,-3.214247 -1.51513,-4.052736 z m -84.84806,-17.328936 48.484602,0 0.137761,21.381672 c 0,3.074482 2.479319,5.589969 5.509599,5.589969 l 21.074278,0 0,75.883974 -75.206229,0 0,-102.855615 z"
+       id="path4"
+       style="fill:#c8c8c8;fill-opacity:1;stroke:none"
+       sodipodi:nodetypes="ccccccsssccccccccsssssssccccccsccccc" />
+    <g
+       id="g4167"
+       transform="matrix(1.4858585,0,0,1.5322024,-40.318683,-148.32649)">
+      <rect
+         y="47.999989"
+         x="30.49999"
+         height="13.999999"
+         width="50.249996"
+         id="rect4161"
+         style="opacity:1;fill:#68c04f;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text4163"
+         y="58.694702"
+         x="32.869106"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.6202507px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial, Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           y="58.694702"
+           x="32.869106"
+           id="tspan4165"
+           sodipodi:role="line">LOXONE</tspan></text>
+    </g>
+  </g>
+</svg>

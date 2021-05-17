@@ -40,6 +40,9 @@ my $version 					= LoxBerry::System::pluginversion();
 my $helpurl 					= "http://www.loxwiki.eu/display/LOXBERRY/Icon-Watchdog";
 my $log 						= LoxBerry::Log->new ( name => 'Icon-Watchdog', filename => $lbplogdir ."/". $logfilename, append => 1 );
 my $error_message				= "";
+my $ms_id;
+my $miniservercount;
+my %miniservers;
 
 # Logging
 my $plugin = LoxBerry::System::plugindata();
@@ -132,7 +135,7 @@ sub defaultpage
 	# Get plugin config
 	my $plugin_cfg 		= new Config::Simple($lbpconfigdir . "/" . $pluginconfigfile);
 	$plugin_cfg 		= Config::Simple->import_from($lbpconfigdir . "/" . $pluginconfigfile,  \%Config);
-	$error_message      = $ERR{'ERRORS.ERR_012_ERROR_READING_CFG'}. "<br>" . Config::Simple->error() if (Config::Simple->error());
+	$error_message      = $ERR{'ERRORS.ERR_005_ERROR_READING_CFG'}. "<br>" . Config::Simple->error() if (Config::Simple->error());
 	&error if (! %Config);
 
 	# Get through all the config options
@@ -157,10 +160,80 @@ sub defaultpage
 	$maintemplate->param( "IWD_USE"			, $Config{"IWD.IWD_USE"}) if ( $Config{"IWD.IWD_USE"} ne "" );
 	$maintemplate->param( "IWD_USE_NOTIFY"	, "off");
 	$maintemplate->param( "IWD_USE_NOTIFY"	, $Config{"IWD.IWD_USE_NOTIFY"}) if ( $Config{"IWD.IWD_USE_NOTIFY"} ne "" );
-
 	$maintemplate->param( "STATUS"	=>  $ERR{'Icon-Watchdog.PLACEHOLDER_STATUS'});
-    $maintemplate->param("HTMLPATH" => "/plugins/".$lbpplugindir."/");
+
+	# All Miniservers
+	my %miniservers = LoxBerry::System::get_miniservers();
+	if ( ! %miniservers ) 
+	{
+		LOGERR $ERR{'ERRORS.ERR_003_NO_MINISERVERS_CONFIGURED'};
+	}
+	else
+	{
+		$miniservercount = keys %miniservers;
+		my @template_row;
+		for ($ms_id = 1; $ms_id<=$miniservercount; $ms_id++) 
+		{ 
+		my @row;
+		my %row;
+			 LOGDEB "Miniserver $ms_id Name => ".$miniservers{$ms_id}{'Name'};
+			 LOGDEB "Miniserver $ms_id IP   => ".$miniservers{$ms_id}{'IPAddress'};
+			
+			my %ms;
+			$ms{Name} 			= $miniservers{$ms_id}{'Name'};
+			$ms{IPAddress} 		= $miniservers{$ms_id}{'IPAddress'};
+			$ms{PreferHttps} 	= $miniservers{$ms_id}{'PreferHttps'};
+			
+			if ( $ms{PreferHttps} eq "1" )
+			{
+				$ms{Port} 		= $miniservers{$ms_id}{'PortHttps'};
+			}
+			else
+			{
+				$ms{Port} 		= $miniservers{$ms_id}{'Port'};
+			}
+
+			foreach my $ms_parameter_to_process ('MS_MONITOR_CB')
+			{
+				LOGDEB "$ms_parameter_to_process: ".int($Config{'IWD.'.$ms_parameter_to_process . $ms_id});
+				if ( int($Config{'IWD.'.$ms_parameter_to_process . $ms_id}) eq 1 ) 
+				{
+					$ms{$ms_parameter_to_process} = 1; 
+					$ms{$ms_parameter_to_process. "_script"} = '$("#'.$ms_parameter_to_process . '_checkbox'.$ms_id .'").prop("checked", 1);';
+				}
+				else
+				{
+					$ms{$ms_parameter_to_process} = 0; 
+					$ms{$ms_parameter_to_process. "_script"} = '$("#'.$ms_parameter_to_process . '_checkbox'.$ms_id .'").prop("checked", 0);';
+				}
+				$ms{$ms_parameter_to_process. "_script"}  = $ms{$ms_parameter_to_process. "_script"} . '
+				$("#'.$ms_parameter_to_process . '_checkbox'.$ms_id.'").on("change", function(event) 
+				{ 
+					if ( $("#'.$ms_parameter_to_process . '_checkbox'.$ms_id.'").is(":checked") ) 
+					{ 
+						$("#'.$ms_parameter_to_process . $ms_id.'").val(1); 
+						$("label[for=\''.$ms_parameter_to_process . '_checkbox'.$ms_id.'\']" ).removeClass( "ui-checkbox-off" ).addClass( "ui-checkbox-on" );
+					} 
+					else 
+					{ 
+						$("#'.$ms_parameter_to_process . $ms_id.'").val(0); 
+						$("label[for=\''.$ms_parameter_to_process . '_checkbox'.$ms_id.'\']" ).removeClass( "ui-checkbox-on" ).addClass( "ui-checkbox-off" );
+					}
+				});
+				$("#'.$ms_parameter_to_process . '_checkbox' .$ms_id.'").trigger("change");';
+				LOGDEB "Set special parameter " . $ms_parameter_to_process . $ms_id;
+			}
 	
+			push @{ $row{'MSROW'} }					, \%ms;
+					$row{'MSID'} 					= $ms_id;
+					
+
+			push(@template_row, \%row);
+		}	
+		$maintemplate->param("TEMPLATE_ROW" => \@template_row);
+	}	
+    $maintemplate->param("HTMLPATH" => "/plugins/".$lbpplugindir."/");
+
     our $imgpath = "http://".$ENV{'HTTP_HOST'} . $ENV{'SCRIPT_NAME'}; 
 		$imgpath =~ s/admin\///ig;
 		$imgpath =~ s/index.cgi//ig;

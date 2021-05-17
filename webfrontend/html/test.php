@@ -1,4 +1,5 @@
 <?php
+
 $xml = simplexml_load_file ( "/opt/loxberry/webfrontend/html/plugins/icon-watchdog/xml.loxone" , "SimpleXMLElement" ,LIBXML_NOCDATA);
 foreach ($xml->C->C as $value) 
 {
@@ -49,5 +50,5 @@ foreach ($xml->C->C as $value)
 
 $data = $xml->asXML();
 $data = str_replace("<IoData/>", "<IoData></IoData>", $data);
-//file_put_contents("/tmp/test.loxone", $data);
+file_put_contents("/opt/loxberry/webfrontend/html/plugins/icon-watchdog/test.loxone", $data);
 
