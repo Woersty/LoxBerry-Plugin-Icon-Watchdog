@@ -89,7 +89,7 @@ LOGDEB "Read error strings from " . $languagefile . " for language " . $lang;
 my %ERR = LoxBerry::System::readlanguage($errortemplate, $languagefile);
 
 LOGDEB "Check, if filename for the maintemplate is readable, if not raise an error";
-$error_message = $ERR{'ERRORS.ERR_MAIN_TEMPLATE_NOT_READABLE'};
+$error_message = $L{'ERRORS.ERR_MAIN_TEMPLATE_NOT_READABLE'};
 stat($lbptemplatedir . "/" . $maintemplatefilename);
 &error if !-r _;
 LOGDEB "Filename for the maintemplate is ok, preparing template";
@@ -119,23 +119,23 @@ sub defaultpage
 	stat($lbpconfigdir . "/" . $pluginconfigfile);
 	if (!-r _ || -z _ ) 
 	{
-		$error_message = $ERR{'ERRORS.ERR_010_ERROR_CREATE_CONFIG_DIRECTORY'};
+		$error_message = $L{'ERRORS.ERR_010_ERROR_CREATE_CONFIG_DIRECTORY'};
 		mkdir $lbpconfigdir unless -d $lbpconfigdir or &error; 
-		$error_message = $ERR{'ERRORS.ERR_011_ERROR_CREATE_CONFIG_FILE'};
+		$error_message = $L{'ERRORS.ERR_011_ERROR_CREATE_CONFIG_FILE'};
 		open my $configfileHandle, ">", $lbpconfigdir . "/" . $pluginconfigfile or &error;
 			print $configfileHandle "[IWD]\r\n";
 			print $configfileHandle "VERSION=$version\r\n";
 			print $configfileHandle "IWD_USE=off\r\n";
 			print $configfileHandle "IWD_USE_NOTIFY=off\r\n";
 		close $configfileHandle;
-		$error_message = $ERR{'LOGGING.LOG_016_CREATE_CONFIG_OK'};
+		$error_message = $L{'LOGGING.LOG_016_CREATE_CONFIG_OK'};
 		&error; 
 	}
 
 	# Get plugin config
 	my $plugin_cfg 		= new Config::Simple($lbpconfigdir . "/" . $pluginconfigfile);
 	$plugin_cfg 		= Config::Simple->import_from($lbpconfigdir . "/" . $pluginconfigfile,  \%Config);
-	$error_message      = $ERR{'ERRORS.ERR_005_ERROR_READING_CFG'}. "<br>" . Config::Simple->error() if (Config::Simple->error());
+	$error_message      = $L{'ERRORS.ERR_005_ERROR_READING_CFG'}. "<br>" . Config::Simple->error() if (Config::Simple->error());
 	&error if (! %Config);
 
 	# Get through all the config options
@@ -160,13 +160,23 @@ sub defaultpage
 	$maintemplate->param( "IWD_USE"			, $Config{"IWD.IWD_USE"}) if ( $Config{"IWD.IWD_USE"} ne "" );
 	$maintemplate->param( "IWD_USE_NOTIFY"	, "off");
 	$maintemplate->param( "IWD_USE_NOTIFY"	, $Config{"IWD.IWD_USE_NOTIFY"}) if ( $Config{"IWD.IWD_USE_NOTIFY"} ne "" );
-	$maintemplate->param( "STATUS"	=>  $ERR{'Icon-Watchdog.PLACEHOLDER_STATUS'});
+	$maintemplate->param( "STATUS"	=>  $L{'Icon-Watchdog.PLACEHOLDER_STATUS'});
+
+	my $langmap;
+	foreach (keys %L)
+	{
+		if (substr($_,0,7) eq "LANGMAP" )
+		{
+			$langmap = $langmap . "\n".'"'.substr($_,8).'":"'.$L{$_}.'",';
+		}
+	}
+	$maintemplate->param( "LANGMAP.LANGMAP"	=>  $langmap);
 
 	# All Miniservers
 	my %miniservers = LoxBerry::System::get_miniservers();
 	if ( ! %miniservers ) 
 	{
-		LOGERR $ERR{'ERRORS.ERR_003_NO_MINISERVERS_CONFIGURED'};
+		LOGERR $L{'ERRORS.ERR_003_NO_MINISERVERS_CONFIGURED'};
 	}
 	else
 	{
@@ -253,7 +263,7 @@ sub error
 	LOGDEB "Sub error";
 	LOGERR $error_message;
 	LOGDEB "Set page title, load header, parse variables, set footer, end with error";
-	$template_title = $ERR{'ERRORS.MY_NAME'} . " - " . $ERR{'ERRORS.ERR_TITLE'};
+	$template_title = $L{'ERRORS.MY_NAME'} . " - " . $L{'ERRORS.ERR_TITLE'};
 	LoxBerry::Web::lbheader($template_title, $helpurl, $helptemplatefilename);
 	$errortemplate->param('ERR_MESSAGE'		, $error_message);
 	$errortemplate->param('ERR_TITLE'		, $ERR{'ERRORS.ERR_TITLE'});
