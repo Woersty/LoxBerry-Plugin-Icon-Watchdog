@@ -167,12 +167,12 @@ sub defaultpage
 	$maintemplate->param( "IWD_USE"			, $Config{"IWD.IWD_USE"}) if ( $Config{"IWD.IWD_USE"} ne "" );
 	$maintemplate->param( "IWD_USE_NOTIFY"	, "off");
 	$maintemplate->param( "IWD_USE_NOTIFY"	, $Config{"IWD.IWD_USE_NOTIFY"}) if ( $Config{"IWD.IWD_USE_NOTIFY"} ne "" );
-	$maintemplate->param( "STATUS"	=>  $L{'Icon-Watchdog.PLACEHOLDER_STATUS'});
+	$maintemplate->param( "STATUS"			=>  $L{'Icon-Watchdog.PLACEHOLDER_STATUS'});
 
 	my $langmap;
 	foreach (keys %L)
 	{
-		if (substr($_,0,7) eq "LANGMAP" )
+		if (substr($_,0,8) eq "LANGMAP." )
 		{
 			$langmap = $langmap . "\n".'"'.substr($_,8).'":"'.$L{$_}.'",';
 		}

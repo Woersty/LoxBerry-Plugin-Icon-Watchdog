@@ -2,6 +2,7 @@
 // Include System Lib
 require_once "loxberry_system.php";
 require_once "loxberry_log.php";
+require_once "import.php";
 $logfileprefix			= LBPLOGDIR."/Icon-Watchdog_";
 $logfilesuffix			= ".txt";
 $logfilename			= $logfileprefix.date("Y-m-d_H\hi\ms\s",time()).$logfilesuffix;
@@ -90,6 +91,11 @@ function ModifyUploadResult(&$result, $filename, $name, $ext, $fileinfo)
 					{
 						rename($files[0]["file"], "$lbpdatadir/ms_$ms/".$files[0]["name"]);
 						LOGINF  ("<INFO>".str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS "]));
+						$project = import_loxone_project("$lbpdatadir/ms_$ms/".$files[0]["name"]);
+						file_put_contents("$lbpdatadir/ms_$ms/Convert_".$files[0]["name"], $project['xml']);
+						file_put_contents("$lbpdatadir/ms_$ms/JSON_".$files[0]["name"], $project['json']);
+						chmod("$lbpdatadir/ms_$ms/Convert_".$files[0]["name"], 0666);
+						chmod("$lbpdatadir/ms_$ms/JSON_".$files[0]["name"], 0666);
 						$result = array(
 							"success" => true,
 							"message" => str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS "])
