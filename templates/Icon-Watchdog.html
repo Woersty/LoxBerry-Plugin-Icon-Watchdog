@@ -157,6 +157,11 @@
 	'(250,128,114,.05)', 	//salmon
 	'(154,205,50,.05)',  	//yellow green
 	];
+	function nl2br (str, is_xhtml) {
+	var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '' : '<br>';
+	return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+	}
+
 </script>
 <CENTER>
 	<IMG src="<TMPL_VAR LOGO_ICON>">
@@ -205,20 +210,22 @@
 	<TMPL_LOOP TEMPLATE_ROW>
 		<DIV style="display:inline-block; width:100%;" class="to_disable_on_save">
 			<DIV id="MS_LOOP_ROW<TMPL_VAR MSID>" style="text-align:left; display:inline-block; margin-bottom:5px; width:99%; padding:10px; border: 1px solid black; border-radius: 5px; background-color: rgba(228,228,228,.1);"> 
-				<DIV id="colored_div_<TMPL_VAR MSID>" style=" width:99%; display:inline-block; padding:5px; border: 1px solid black; border-radius: 5px; background-color: rgba(0,228,228,.1);">
+				<DIV id="colored_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:5px; border: 1px solid black; border-radius: 5px; background-color: rgba(0,228,228,.1);">
 					<TMPL_LOOP NAME="MSROW">
 						#<TMPL_VAR MSID> - <TMPL_VAR Name> <small>[<TMPL_VAR IPAddress>]</small> <span class="PreferHttps<TMPL_VAR PreferHttps>">HTTPS</span><BR>
 						<a id="btncheck_single<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save" data-role="button" data-icon="clock" data-mini="true" onclick="$('.btncheck_single').addClass('ui-disabled');"><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></a>
 						<input class="to_save to_disable_on_save to_disable_on_plugin_off to_hide_on_plugin_off" onclick="if ( $(this).is(':checked') ) { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(1); } else { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(0); }" type="checkbox" id="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>" name="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><label id="MS_MONITOR_CB_LABEL<TMPL_VAR MSID>" class="to_disable_on_plugin_off" for="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><TMPL_VAR GENERAL.TXT_LABEL_MONITOR></label>
 						<input id="MS_MONITOR_CB<TMPL_VAR MSID>" name="MS_MONITOR_CB<TMPL_VAR MSID>" type="hidden" value="<TMPL_VAR MS_MONITOR_CB>">
-						<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
-							<input name="_token" type="hidden" value="yYpUn8Ex5OyOIj1aA5xG3s4deDzJxC9mD3IBmhGD">
-							<input style="display:none;" class="hidden" id="files<TMPL_VAR MSID>" type="file" name="files" accept=".Loxone, .jpg, .png" max-uploads=1>
-						</form>						
-						<script>
+						<DIV id="loxone_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,79,.5);">
+							<TMPL_VAR Icon-Watchdog.TXT_IMPORT_PROJECT>
+							<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
+								<input name="_token" type="hidden" value="yYpUn8Ex5OyOIj1aA5xG3s4deDzJxC9mD3IBmhGD<TMPL_VAR MSID>">
+								<input style="display:none;" class="hidden" id="loxone_files<TMPL_VAR MSID>" type="file" name="files" accept=".Loxone" max-uploads=1>
+							</form>						
+							<script>
 							$(function() 
 							{
-								$('#files<TMPL_VAR MSID>').FancyFileUpload({
+								$('#loxone_files<TMPL_VAR MSID>').FancyFileUpload({
 									params : {
 										action : 'fileuploader',
 										url : '<TMPL_VAR HTMLPATH>uploader.php',
@@ -229,7 +236,11 @@
 									},
 									edit : false,
 									maxfilesize : 10000000,
-									uploadcompleted : function(e, data) { setTimeout( function() {data.ff_info.RemoveFile();}, 5000); },
+									uploadcompleted : function(e, data) { 
+									setTimeout( function() {data.ff_info.RemoveFile();}, 5000); 
+									
+									$("#JSON_<TMPL_VAR MSID>").html(nl2br("<code>"+data.result.project_as_pretty+"</code>"));
+									},
 									added : function(e, data) {
 										// It is okay to simulate clicking the start upload button.
 										this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
@@ -240,13 +251,56 @@
 									langmap : langmap
 								});
 							});
-							$( document ).ready(function() 
+							</script>
+						</DIV>
+						<DIV id="JSON_<TMPL_VAR MSID>"></DIV>
+						<DIV class="svg" id="svg_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,79,.5);">
+							<TMPL_VAR Icon-Watchdog.TXT_IMPORT_SVG>
+							<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
+								<input name="_token" type="hidden" value="yYpUn8Ex5OyOIj1aA5xG3s4deDzJxC9mD3IBmhGD<TMPL_VAR MSID>">
+								<input style="display:none;" class="hidden" id="svg_files<TMPL_VAR MSID>" type="file" name="files" accept=".svg" max-uploads=1>
+							</form>						
+							<script>
+							$(function() 
 							{
-								<TMPL_VAR MS_MONITOR_CB_script>
-								$( "label[for='MS_MONITOR_CB_script<TMPL_VAR MSID>']" ).removeClass( "ui-checkbox-off" ).addClass( "ui-checkbox-on" );
+								$('#svg_files<TMPL_VAR MSID>').FancyFileUpload({
+									params : {
+										action : 'fileuploader',
+										url : '<TMPL_VAR HTMLPATH>uploader.php',
+										ms  : '<TMPL_VAR MSID>',
+										singleFileUploads: true,
+										limitMultiFileUploads: 1,
+										sequentialUploads: true,
+
+									},
+									edit : false,
+									maxfilesize : 10000000,
+									uploadcompleted : function(e, data) { setTimeout( function() {data.ff_info.RemoveFile();}, 5000); },
+									added : function(e, data) {
+										// It is okay to simulate clicking the start upload button.
+										files = svg_files<TMPL_VAR MSID>;
+										this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
+									},
+//									startupload : function(SubmitUpload, e, data) {
+//										SubmitUpload();
+//									},
+									langmap : langmap
+								});
 							});
-							var nbr_miniservers = miniservers.push('<TMPL_VAR MSID>');
-							$("#colored_div_<TMPL_VAR MSID>").css('background-color','rgba'+colors[<TMPL_VAR MSID>]); 
+							
+							
+							</script>
+						</DIV>
+						<script>
+						$( document ).ready(function() 
+						{
+						
+							$(".svg .ff_fileupload_wrap .ff_fileupload_dropzone").css('background-Image','url(<TMPL_VAR HTMLPATH>fancy_upload_svg.svg)');
+							<TMPL_VAR MS_MONITOR_CB_script>
+							$( "label[for='MS_MONITOR_CB_script<TMPL_VAR MSID>']" ).removeClass( "ui-checkbox-off" ).addClass( "ui-checkbox-on" );
+						});
+						var nbr_miniservers = miniservers.push('<TMPL_VAR MSID>');
+						$("#colored_div_<TMPL_VAR MSID>").css('background-color','rgba'+colors[<TMPL_VAR MSID>]); 
 						</script>
 					</TMPL_LOOP>
 				</DIV>

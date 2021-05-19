@@ -29,3 +29,7 @@
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
 	background-color: rgba(225,225,225,.9); 
 }
+
+.icon_head { background-color: #C0C0C0; padding: 5px;}
+.icon_ok { 	background-color: #C0FFC0; padding: 5px;}
+.icon_bad { background-color: #FFC0C0; padding: 5px;}

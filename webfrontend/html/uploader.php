@@ -97,8 +97,10 @@ function ModifyUploadResult(&$result, $filename, $name, $ext, $fileinfo)
 						chmod("$lbpdatadir/ms_$ms/Convert_".$files[0]["name"], 0666);
 						chmod("$lbpdatadir/ms_$ms/JSON_".$files[0]["name"], 0666);
 						$result = array(
+							"project_as_json" => $project['json'],
+							"project_as_pretty" => $project['pretty'],
 							"success" => true,
-							"message" => str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS "])
+							"message" => str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"])
 						);
 					}					
 					else
