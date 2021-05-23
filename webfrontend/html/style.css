@@ -18,18 +18,18 @@
     border-radius: .6em; 
 }
 
-#status_div { 
+#iwd_status_div { 
+	position:fixed;  z-index:1000; 
+	top:8px; 
+	left:45px;
 	font-family: monospace;
-	margin: 0 auto; 
-	background: white; 
+	amargin: 0 auto; 
 	padding: 5px; 
-	border: 1px solid #9E9E9E; 
+	border: 1px solid #FF0000; 
 	border-radius: .25em .25em .4em .4em; 
 	text-align: left; 
-	box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
-	background-color: rgba(225,225,225,.9); 
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+	text-shadow:none;	
+	background-color: rgba(255,128,128,.7); 
 }
 
-.icon_head { background-color: #C0C0C0; padding: 5px;}
-.icon_ok { 	background-color: #C0FFC0; padding: 5px;}
-.icon_bad { background-color: #FFC0C0; padding: 5px;}

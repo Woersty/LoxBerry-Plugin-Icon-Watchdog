@@ -3,13 +3,13 @@
 require_once "loxberry_system.php";
 require_once "loxberry_log.php";
 require_once "import.php";
-$logfileprefix			= LBPLOGDIR."/Icon-Watchdog_";
+$logfileprefix			= LBPLOGDIR."/Icon-Watchdog_uploader_";
 $logfilesuffix			= ".txt";
 $logfilename			= $logfileprefix.date("Y-m-d_H\hi\ms\s",time()).$logfilesuffix;
 $L						= LBSystem::readlanguage("language.ini");
 
 $params = [
-    "name" => $L["LOGGING.LOG_001_LOGFILE_NAME"],
+    "name" => $L["LOGGING.LOG_022_LOGFILE_UPLOADER_NAME"],
     "filename" => $logfilename,
     "addtime" => 1];
 
@@ -21,8 +21,14 @@ ini_set("log_errors", 1);
 $log = LBLog::newLog ($params);
 $date_time_format       = "m-d-Y h:i:s a";						 # Default Date/Time format
 if (isset($L["GENERAL.DATE_TIME_FORMAT_PHP"])) $date_time_format = $L["GENERAL.DATE_TIME_FORMAT_PHP"];
-LOGSTART ($L["LOGGING.LOG_002_CHECK_STARTED"]);
-$log->LOGTITLE("UPLOADER");
+if ( isset($_REQUEST["ms"]) )
+{
+	LOGSTART(str_replace("<ms>",$ms,$L["LOGGING.LOG_025_UPLOAD_STARTED"]));
+}
+else
+{
+	LOGSTART ($L["GENERAL.TXT_STATUS_WORKING"]);
+}
 
 function Translate($string)
 {
@@ -34,24 +40,12 @@ function Translate($string)
 define("CS_TRANSLATE_FUNC", "Translate");
 require_once "fancy_file_uploader_helper.php";
 
-function ModifyUploadResult(&$result, $filename, $name, $ext, $fileinfo)
-{
-	// Add more information to the result here as necessary (e.g. a URL to the file that a callback uses to link to or show the file).
-}
-/*
-	$options = array(
-		"allowed_exts" => array("jpg", "png"),
-		"filename" => __DIR__ . "/" . $id . ".{ext}",
-//		"result_callback" => "ModifyUploadResult"
-	);
-*/
-	//FancyFileUploaderHelper::HandleUpload("files", $options);
-
 // Depending on your server, you might have to use $_POST instead of $_REQUEST.
 	if (isset($_REQUEST["action"]) && $_REQUEST["action"] === "fileuploader" && isset($_REQUEST["ms"]) )
 	{
-		header("Content-Type: application/json; charset=UTF-8");
 		$ms=intval($_REQUEST["ms"]);
+		$log->LOGTITLE(str_replace("<ms>",$ms,$L["LOGGING.LOG_025_UPLOAD_STARTED"]));
+		header("Content-Type: application/json; charset=UTF-8");
 		if ($ms) 
 		{
 			$allowedexts = array(
@@ -82,34 +76,91 @@ function ModifyUploadResult(&$result, $filename, $name, $ext, $fileinfo)
 				}
 				else
 				{
-					if (!is_dir("$lbpdatadir/ms_$ms/"))
-					{
-						@mkdir("$lbpdatadir/ms_$ms/", 0777, true);
-					}
 					
-					if (is_dir("$lbpdatadir/ms_$ms/"))
+					if ( strtolower($files[0]["ext"]) == "loxone" )
 					{
-						rename($files[0]["file"], "$lbpdatadir/ms_$ms/".$files[0]["name"]);
-						LOGINF  ("<INFO>".str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS "]));
-						$project = import_loxone_project("$lbpdatadir/ms_$ms/".$files[0]["name"]);
-						file_put_contents("$lbpdatadir/ms_$ms/Convert_".$files[0]["name"], $project['xml']);
-						file_put_contents("$lbpdatadir/ms_$ms/JSON_".$files[0]["name"], $project['json']);
-						chmod("$lbpdatadir/ms_$ms/Convert_".$files[0]["name"], 0666);
-						chmod("$lbpdatadir/ms_$ms/JSON_".$files[0]["name"], 0666);
-						$result = array(
-							"project_as_json" => $project['json'],
-							"project_as_pretty" => $project['pretty'],
-							"success" => true,
-							"message" => str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"])
-						);
-					}					
+						
+						if (!is_dir("$lbpdatadir/project/ms_$ms/"))
+						{
+							@mkdir("$lbpdatadir/project/ms_$ms/", 0777, true);
+						}
+						
+						if (is_dir("$lbpdatadir/project/ms_$ms/"))
+						{
+							rename($files[0]["file"], "$lbpdatadir/project/ms_$ms/".$files[0]["name"]);
+							LOGINF  ("<INFO>".str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"]));
+							LOGINF  ("<INFO>".$L["LOGGING.LOG_023_IMPORT_STARTED"]);
+							$project = import_loxone_project("$lbpdatadir/project/ms_$ms/".$files[0]["name"],$ms);
+							LOGINF  ("<INFO>".$L["LOGGING.LOG_024_IMPORT_DONE"]);
+							error_reporting(E_ALL  & ~E_NOTICE ); 
+							if ( $project['error'] )
+							{
+								$result = array(
+								"success" => false,
+								"error" => $project['error'],
+								"errorcode" => $project['errorcode']
+								);
+							}
+							else
+							{
+								sleep(1);
+								file_put_contents("$lbpdatadir/project/ms_$ms/".$L["GENERAL.PREFIX_JSON_FILE"].$ms.".json", $project['json']);
+								file_put_contents("$lbpdatadir/project/ms_$ms/".$L["GENERAL.PREFIX_CONVERTED_FILE"].$files[0]["name"], $project['xml']);
+								chmod("$lbpdatadir/project/ms_$ms/".$L["GENERAL.PREFIX_CONVERTED_FILE"].$files[0]["name"], 0666);
+								chmod("$lbpdatadir/project/ms_$ms/".$L["GENERAL.PREFIX_JSON_FILE"].$ms.".json", 0666);
+								$result = array(
+									"project_as_json" => $project['json'],
+									//"project_as_pretty" => $project['pretty'],
+									"success" => true,
+									"message" => str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"])
+								);
+							}
+							error_reporting(E_ALL ); 
+
+						}					
+						else
+						{
+							$result = array(
+								"success" => false,
+								"error" => $L["ERRORS.ERR_017_ERR_CREATE_UPLOAD_DIR"],
+								"errorcode" => "create_upload_dir"
+							);
+						}
+						
+					}
+					else if ( strtolower($files[0]["ext"]) == "svg" )
+					{
+						if (!is_dir("$lbpdatadir/zip/ms_$ms/"))
+						{
+							@mkdir("$lbpdatadir/zip/ms_$ms/", 0777, true);
+						}
+						
+						if (is_dir("$lbpdatadir/zip/ms_$ms/"))
+						{
+							rename($files[0]["file"], "$lbpdatadir/zip/ms_$ms/".$files[0]["name"]);
+							LOGINF  ("<INFO>".str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"]));
+						
+							$result = array(
+								"success" => true,
+								"message" => str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"])
+							);
+						}					
+						else
+						{
+							$result = array(
+								"success" => false,
+								"error" => $L["ERRORS.ERR_017_ERR_CREATE_UPLOAD_DIR"],
+								"errorcode" => "create_upload_dir"
+							);
+						}
+					}
 					else
-					{
-						$result = array(
+					{	
+							$result = array(
 							"success" => false,
-							"error" => $L["ERRORS.ERR_017_ERR_CREATE_UPLOAD_DIR"],
-							"errorcode" => "create_upload_dir"
-						);
+							"error" => $L["ERRORS.ERR_044_ERROR_IN_UPLOADER"],
+							"errorcode" => "uploader_error_1_".strtolower($files[0]["ext"])
+							);
 					}
 				}
 			}
@@ -118,11 +169,29 @@ function ModifyUploadResult(&$result, $filename, $name, $ext, $fileinfo)
 		{
 			$result = array(
 				"success" => false,
-				"error" => str_ireplace('<allowed_ext>',implode(", ", array_keys($allowedexts)),$L["ERRORS.ERR_016_ERR_INVALID_FILEEXT"]),
+				"error" => "Invalid MS fixme",
 				"errorcode" => "invalid_file_ext"
 				);
 		}
-		echo json_encode($result, JSON_UNESCAPED_SLASHES);
-		LOGEND ();
-		exit();
+	}
+	else
+	{
+			$result = array(
+			"success" => false,
+			"error" => $L["ERRORS.ERR_044_ERROR_IN_UPLOADER"],
+			"errorcode" => "uploader_error_2"
+		);
 	}	
+echo json_encode($result, JSON_UNESCAPED_SLASHES);
+if ($result["error"])
+{
+	LOGERR ($result["error"]);
+	$log->LOGTITLE($result["error"]);
+}
+else
+{
+	LOGOK(str_replace("<ms>",$ms,$L["LOGGING.LOG_026_UPLOAD_DONE"]));
+	$log->LOGTITLE(str_replace("<ms>",$ms,$L["LOGGING.LOG_026_UPLOAD_DONE"]));
+}
+LOGEND();
+exit();

@@ -31,7 +31,7 @@ my $maintemplatefilename 		= "Icon-Watchdog.html";
 my $errortemplatefilename 		= "error.html";
 my $helptemplatefilename		= "help.html";
 my $languagefile 				= "language.ini";
-my $logfilename 				= "Icon-Watchdog.log";
+my $logfilename 				= "Icon-Watchdog_UI.log";
 my $pluginconfigfile 			= "Icon-Watchdog.cfg";
 my $watchstate_file				= $lbphtmldir."/"."Icon-Watchdog-state.txt";
 my $template_title;
@@ -131,9 +131,11 @@ sub defaultpage
 		$error_message = $L{'ERRORS.ERR_011_ERROR_CREATE_CONFIG_FILE'};
 		open my $configfileHandle, ">", $lbpconfigdir . "/" . $pluginconfigfile or &error;
 			print $configfileHandle "[IWD]\r\n";
+			print $configfileHandle "CLOUDDNS=dns.loxonecloud.com\r\n";
 			print $configfileHandle "VERSION=$version\r\n";
 			print $configfileHandle "IWD_USE=off\r\n";
 			print $configfileHandle "IWD_USE_NOTIFY=off\r\n";
+			print $configfileHandle "WORKDIR_PATH=/tmp/Icon-Watchdog\r\n";
 		close $configfileHandle;
 		$error_message = $L{'LOGGING.LOG_016_CREATE_CONFIG_OK'};
 		&error; 
@@ -163,6 +165,8 @@ sub defaultpage
 	$maintemplate->param( "HTTP_PATH"		, "/plugins/" . $lbpplugindir);
 	$maintemplate->param( "VERSION"			, $version);
 	$maintemplate->param( "LOGFILE"			, $lbplogdir . "/" . $logfilename);
+	$maintemplate->param( "PLUGINDB_LOGLEVEL", $plugin->{PLUGINDB_LOGLEVEL});
+	$maintemplate->param( "PLUGINDB_MD5_CHECKSUM", $plugin->{PLUGINDB_MD5_CHECKSUM});
 	$maintemplate->param( "IWD_USE"			, "off");
 	$maintemplate->param( "IWD_USE"			, $Config{"IWD.IWD_USE"}) if ( $Config{"IWD.IWD_USE"} ne "" );
 	$maintemplate->param( "IWD_USE_NOTIFY"	, "off");
@@ -200,6 +204,9 @@ sub defaultpage
 			$ms{Name} 			= $miniservers{$ms_id}{'Name'};
 			$ms{IPAddress} 		= $miniservers{$ms_id}{'IPAddress'};
 			$ms{PreferHttps} 	= $miniservers{$ms_id}{'PreferHttps'};
+			$ms{icontable_IconPlace}	= '<table class="icontable IconPlace" id="icontable_IconPlace_'.$ms_id.'"><thead><tr><th>'.$L{'GENERAL.TXT_TABLE_ICON'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_UNIQUEID'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_TITLE'}.'</th></tr></thead><tbody></tbody></table>';
+			$ms{icontable_IconCat}		= '<table class="icontable IconCat"   id="icontable_IconCat_'.$ms_id.'"><thead><tr><th>'.$L{'GENERAL.TXT_TABLE_ICON'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_UNIQUEID'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_TITLE'}.'</th></tr></thead><tbody></tbody></table>';
+			$ms{icontable_IconState}	= '<table class="icontable IconState" id="icontable_IconState_'.$ms_id.'"><thead><tr><th>'.$L{'GENERAL.TXT_TABLE_ICON'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_UNIQUEID'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_TITLE'}.'</th></tr></thead><tbody></tbody></table>';
 			
 			if ( $ms{PreferHttps} eq "1" )
 			{
@@ -239,6 +246,7 @@ sub defaultpage
 				});
 				$("#'.$ms_parameter_to_process . '_checkbox' .$ms_id.'").trigger("change");';
 				LOGDEB "Set special parameter " . $ms_parameter_to_process . $ms_id;
+
 			}
 	
 			push @{ $row{'MSROW'} }					, \%ms;
@@ -255,8 +263,6 @@ sub defaultpage
 		$imgpath =~ s/admin\///ig;
 		$imgpath =~ s/index.cgi//ig;
     $maintemplate->param( "IMGPATH" , $imgpath);
-	
-    LOGERR "TEST";
 	
     print $maintemplate->output();
 	LoxBerry::Web::lbfooter();

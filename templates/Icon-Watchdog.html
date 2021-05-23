@@ -1,11 +1,52 @@
 <link rel="stylesheet" href="<TMPL_VAR HTMLPATH>style.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
 <link rel="stylesheet" href="<TMPL_VAR HTMLPATH>fancy_fileupload.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
+<script type="text/javascript"> var langmap = {<TMPL_VAR LANGMAP.LANGMAP>} // fancy-fileupload LoxBerry translation mapping</script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>jquery.ui.widget.js?<TMPL_VAR VERSION>"></script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>jquery.fileupload.js?<TMPL_VAR VERSION>"></script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>jquery.iframe-transport.js?<TMPL_VAR VERSION>"></script>
-<script type="text/javascript"> var langmap = {<TMPL_VAR LANGMAP.LANGMAP>} // fancy-fileupload LoxBerry translation mapping</script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>jquery.fancy-fileupload.js?<TMPL_VAR VERSION>"></script>
 <style>
+.iconrow  				{ width: 32x; height: 32px; padding: 5px; cursor: pointer;}
+.icon_ok 					{ }
+.icon_bad 				{ color: #FF0000; }
+
+.icontable {
+	cell-spacing:1px;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+	border: 1px solid #547529;
+}
+.icontable thead tr {
+    background-color: #6DAC20;
+    color: #ffffff;
+    text-align: center;
+	height: 32px;
+}
+.icontable th,
+.icontable td {
+    padding: 4px 4px;
+	text-shadow: none;
+	border-left: 1px solid #547529;
+    border-right: 1px solid #547529;
+	font-weight: bold;
+}
+.icontable tbody tr:nth-of-type(even) {
+    background-color: rgba(243,243,243,0.3);
+}
+
+.icontable tbody tr:last-of-type {
+    border-bottom: 1px solid #547529;
+}
+.icontable tbody tr:hover {
+    color: #FFFFFF;
+	background-color: rgba(49,56,62,1.0);
+}
+
+.svg_icon { width: 32x; height: 32px; background-repeat: no-repeat; }
+
 	#alert_form{ display:none; }
 	#alert_form {
 		margin: 0 0 0 0;
@@ -161,7 +202,7 @@
 	var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '' : '<br>';
 	return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
 	}
-
+	$("body").append('<div style="display:none;" id="iwd_status_div"><TMPL_VAR STATUS></div>');
 </script>
 <CENTER>
 	<IMG src="<TMPL_VAR LOGO_ICON>">
@@ -176,7 +217,6 @@
 	<!-- NOTIFICATIONS //-->
 </DIV>
 <CENTER>
-	<div id="status_div"><TMPL_VAR STATUS></div>
 	<br>
 	<TABLE>
 		<TR>
@@ -213,14 +253,14 @@
 				<DIV id="colored_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:5px; border: 1px solid black; border-radius: 5px; background-color: rgba(0,228,228,.1);">
 					<TMPL_LOOP NAME="MSROW">
 						#<TMPL_VAR MSID> - <TMPL_VAR Name> <small>[<TMPL_VAR IPAddress>]</small> <span class="PreferHttps<TMPL_VAR PreferHttps>">HTTPS</span><BR>
-						<a id="btncheck_single<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save" data-role="button" data-icon="clock" data-mini="true" onclick="$('.btncheck_single').addClass('ui-disabled');"><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></a>
-						<input class="to_save to_disable_on_save to_disable_on_plugin_off to_hide_on_plugin_off" onclick="if ( $(this).is(':checked') ) { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(1); } else { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(0); }" type="checkbox" id="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>" name="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><label id="MS_MONITOR_CB_LABEL<TMPL_VAR MSID>" class="to_disable_on_plugin_off" for="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><TMPL_VAR GENERAL.TXT_LABEL_MONITOR></label>
-						<input id="MS_MONITOR_CB<TMPL_VAR MSID>" name="MS_MONITOR_CB<TMPL_VAR MSID>" type="hidden" value="<TMPL_VAR MS_MONITOR_CB>">
-						<DIV id="loxone_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,79,.5);">
+						<input data-mini="true" class="to_save to_disable_on_save to_disable_on_plugin_off to_hide_on_plugin_off" onclick="if ( $(this).is(':checked') ) { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(1); } else { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(0); }" type="checkbox" id="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>" name="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><label id="MS_MONITOR_CB_LABEL<TMPL_VAR MSID>" class="to_disable_on_plugin_off" for="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><TMPL_VAR GENERAL.TXT_LABEL_MONITOR></label>
+						<a id="btncheck<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left;" data-role="button" data-icon="clock" data-mini="true" onclick="runCheck('<TMPL_VAR MSID>');"><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></a>
+						<input class="to_disable_on_plugin_off" id="MS_MONITOR_CB<TMPL_VAR MSID>" name="MS_MONITOR_CB<TMPL_VAR MSID>" type="hidden" value="<TMPL_VAR MS_MONITOR_CB>">
+						<DIV class="to_disable_on_plugin_off" id="loxone_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,79,.5);">
 							<TMPL_VAR Icon-Watchdog.TXT_IMPORT_PROJECT>
 							<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
 								<input name="_token" type="hidden" value="yYpUn8Ex5OyOIj1aA5xG3s4deDzJxC9mD3IBmhGD<TMPL_VAR MSID>">
-								<input style="display:none;" class="hidden" id="loxone_files<TMPL_VAR MSID>" type="file" name="files" accept=".Loxone" max-uploads=1>
+								<input class="to_disable_on_plugin_off" style="display:none;" class="hidden" id="loxone_files<TMPL_VAR MSID>" type="file" name="files" accept=".Loxone" max-uploads=1>
 							</form>						
 							<script>
 							$(function() 
@@ -237,24 +277,23 @@
 									edit : false,
 									maxfilesize : 10000000,
 									uploadcompleted : function(e, data) { 
-									setTimeout( function() {data.ff_info.RemoveFile();}, 5000); 
-									
-									$("#JSON_<TMPL_VAR MSID>").html(nl2br("<code>"+data.result.project_as_pretty+"</code>"));
+									$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
+									setTimeout( function() {data.ff_info.RemoveFile();
+									}, 5000); 
 									},
 									added : function(e, data) {
 										// It is okay to simulate clicking the start upload button.
+										progress(1);
 										this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
+										
 									},
-//									startupload : function(SubmitUpload, e, data) {
-//										SubmitUpload();
-//									},
 									langmap : langmap
 								});
 							});
 							</script>
 						</DIV>
-						<DIV id="JSON_<TMPL_VAR MSID>"></DIV>
-						<DIV class="svg" id="svg_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,79,.5);">
+						<br/><br/>
+						<DIV class="svg to_disable_on_plugin_off" id="svg_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,192,.5);">
 							<TMPL_VAR Icon-Watchdog.TXT_IMPORT_SVG>
 							<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
 								<input name="_token" type="hidden" value="yYpUn8Ex5OyOIj1aA5xG3s4deDzJxC9mD3IBmhGD<TMPL_VAR MSID>">
@@ -275,11 +314,13 @@
 									},
 									edit : false,
 									maxfilesize : 10000000,
-									uploadcompleted : function(e, data) { setTimeout( function() {data.ff_info.RemoveFile();}, 5000); },
+									uploadcompleted : function(e, data) { 
+									$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
+									setTimeout( function() { data.ff_info.RemoveFile(); }, 5000); },
 									added : function(e, data) {
 										// It is okay to simulate clicking the start upload button.
-										files = svg_files<TMPL_VAR MSID>;
 										this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
+										progress(1);
 									},
 //									startupload : function(SubmitUpload, e, data) {
 //										SubmitUpload();
@@ -302,7 +343,23 @@
 						var nbr_miniservers = miniservers.push('<TMPL_VAR MSID>');
 						$("#colored_div_<TMPL_VAR MSID>").css('background-color','rgba'+colors[<TMPL_VAR MSID>]); 
 						</script>
-					</TMPL_LOOP>
+						<br/><br/>
+						<DIV class="svg to_disable_on_plugin_off" style="display:none;" id="div_svgDropdown_<TMPL_VAR MSID>">
+							<DIV style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(255,192,255,.5);">
+								<TMPL_VAR Icon-Watchdog.TXT_SVG_DROPDOWN><br/><br/>
+								<center>
+								<table class="table" style="padding:0; spacing:0; margin:0; border: 2px solid #808080; border-radius: .4em .4em .4em .4em;">
+									<tr>
+									   <td style="vertical-align: top; background-color: rgba(64,64,255,.2);"><div style="background-position: center; margin-left: auto; margin-bottom:-48px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI2LDNINkM1LjQsMyw1LDMuNCw1LDR2MjRjMCwwLjYsMC40LDEsMSwxaDIwYzAuNiwwLDEtMC40LDEtMVY0QzI3LDMuNCwyNi42LDMsMjYsM3ogTTI1LDE1aC04VjVoOFYxNXogTTE1LDV2MTBIN1Y1SDE1eiBNNywxN2g4djEwSDdWMTd6IE0xNywyN1YxN2g4djEwSDE3eiI+PC9wYXRoPiA8L3N2Zz4=')"></div><br/><TMPL_VAR icontable_IconPlace></td>
+									   <td style="vertical-align: top; background-color: rgba(255,255,64,.2);"><div style=" background-position: center; margin-left: auto; margin-bottom:-48px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI3LDVIMVYyNkgyOVY1SDI3Wm0wLDE5SDNWN0gyN1YyNFptLTctOC00LDMtNi03TDUsMjJIMjVabTEtMmEyLDIsMCwxLDAtMi0yQTIsMiwwLDAsMCwyMSwxNFoiPjwvcGF0aD4gPC9zdmc+')"></div><br/><TMPL_VAR icontable_IconState></td>
+									   <td style="vertical-align: top; background-color: rgba(0,128,0,.2);"><div style=" background-position: center; margin-left: auto; margin-bottom:-48px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTEwLDJINkM1LjQsMiw1LDIuNCw1LDN2MjZjMCwwLjYsMC40LDEsMSwxaDRjMC42LDAsMS0wLjQsMS0xVjNDMTEsMi40LDEwLjYsMiwxMCwyeiBNOCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzEwLDI3LjEsOS4xLDI4LDgsMjh6IE0xMCwxOEg2VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTE4LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MxOSwyLjQsMTguNiwyLDE4LDJ6IE0xNiwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzE4LDI3LjEsMTcuMSwyOCwxNiwyOHogTTE4LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTI2LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MyNywyLjQsMjYuNiwyLDI2LDJ6IE0yNCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzI2LDI3LjEsMjUuMSwyOCwyNCwyOHogTTI2LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPC9zdmc+')"></div><br/><TMPL_VAR icontable_IconCat></td>
+									  </tr>
+								</table>
+								</center>
+							</DIV>
+						<br/><br/>
+						</DIV>
+				</TMPL_LOOP>
 				</DIV>
 			</DIV>
 		</DIV>
@@ -310,10 +367,83 @@
 	</TMPL_LOOP>
 	<br><a class="to_disable_on_save" id="btncancel" data-role="button" data-inline="true" data-mini="true" data-icon="delete" href="/admin/index.cgi"><TMPL_VAR Icon-Watchdog.BUTTON_EXIT></a>
 	<br>
-	<button onclick="window.open('/admin/system/logmanager.cgi?package=icon-watchdog', 'log'); return false;" id="logview" data-role="button" data-inline="true" data-mini="true"><TMPL_VAR LOGGING.LOG_MGR></button>
+	<br>
+				
+			<DIV style="display:table; width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(240,240,255,.5);">
+				<b><TMPL_VAR LOGGING.LOG_AREA></b>
+				<DIV style="display:table-row;">
+					<DIV style="display:table-cell; border-radius: 5px;">
+						<table>
+							<tr>
+								<td>
+									<TMPL_VAR LOGGING.LOG_LEVEL>
+								</td>
+								<td>
+									<select name="loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>" id="loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>" data-mini="true">
+											<option value="0"><TMPL_VAR LOGGING.LOGLEVEL0></option>
+										<optgroup label="<TMPL_VAR LOGGING.LOGLEVEL_GROUP_NOTIFY>">
+											<option value="1"><TMPL_VAR LOGGING.LOGLEVEL1></option>
+											<option value="2"><TMPL_VAR LOGGING.LOGLEVEL2></option> 
+											<option value="3"><TMPL_VAR LOGGING.LOGLEVEL3></option>
+										</optgroup>
+										<optgroup label="<TMPL_VAR LOGGING.LOGLEVEL_GROUP_NORMAL>">
+											<option value="4"><TMPL_VAR LOGGING.LOGLEVEL4></option>
+											<option value="5"><TMPL_VAR LOGGING.LOGLEVEL5></option>
+										</optgroup>
+										<optgroup label="<TMPL_VAR LOGGING.LOGLEVEL_GROUP_FREAKS>">
+											<option value="6"><TMPL_VAR LOGGING.LOGLEVEL6></option>
+										</optgroup>
+										<optgroup label="<TMPL_VAR LOGGING.LOGLEVEL_GROUP_DEVELOPMENT>">
+											<option value="7"><TMPL_VAR LOGGING.LOGLEVEL7></option>
+										</optgroup>
+									</select>
+								</td>
+								<td>
+									<button onclick="window.open('/admin/system/logmanager.cgi?package=icon-watchdog', 'log'); return false;" id="logview" data-icon="bars" data-role="button" data-inline="true" data-mini="true"><TMPL_VAR LOGGING.LOG_MGR></button>
+								</td>
+							</tr>
+						</table>
+						<script>
+							function post_value (action, pluginmd5, value)
+							{
+								console.log("Action:", action, "Plugin-MD5:", pluginmd5, "Value:", value);
+								$.post ( '/admin/system/tools/ajax-config-handler.cgi', 
+									{ 	action: action,
+										value: value,
+										pluginmd5: pluginmd5
+									});
+							}
+
+						</script>
+		 			</DIV>
+				</DIV>
+			</DIV>
 </CENTER>
 <small><small><TMPL_VAR VERSION></small></small>
 <script>
+	function build_svgDropdown (ms,project_as_json)
+	{
+		progress(1);
+		if ( !ms || !project_as_json || ms < 1 ) return;
+		var icons_obj = jQuery.parseJSON( project_as_json );
+		var optgroup = "";
+		var optgroup_end = "";
+		$( ".icontable > tbody tr" ).remove();
+		$.each(icons_obj.Icons, function( id, icon ) 
+		{
+			if ( icon.Type[0] )
+			{
+				$("#icontable_"+icon.Type[0]+"_"+ms+" > tbody:last-child").append('<tr class="iconrow '+icon.Type[0]+' '+ icon.Class+'"><td><span class="svg_icon"  id="svg_icon_'+ms+'_'+icon.U[0]+'"></span></td><td>'+icon.U[0]+'</td><td>'+icon.Title[0]+'</td></tr>"');							
+				$('#svg_icon_'+ms+'_'+icon.U[0]).html(icon.ImageSrc);
+
+			}
+		});
+		$(".icontable > tbody tr:nth-child(odd)").addClass("darker");
+		$("#div_svgDropdown_"+ms).fadeIn('slow');
+		progress("");
+		return;
+	}
+
 	function checkNotifications()
 	{
 		if ( $("#notifdeleteall").attr('deleting') != 1 )
@@ -328,6 +458,7 @@
  		$("#alert_form").on('click', function(e){ if (e.target !== this) return; });
 		// Build and show....
 		$("#error_message").html("<table style='width:100%;'><tr><td style='width:100%; font-weight:bold;'><TMPL_VAR ERRORS.ERR_TITLE></td></tr><tr><td><hr></td></tr><tr><td>"+error+"</td></tr></table>");
+		$("#alert_form").css("z-index",1000);
 		$("#alert_form").show();
 		$("#alert_form_close").on('click', function(e){  // close button code. 
 		$('#alert_form').fadeOut('slow');
@@ -370,50 +501,74 @@
 	            {
 		            eval(data);
 					// Enable input fields and buttons
-					$('.to_disable_on_save').removeClass('ui-disabled');
+					setTimeout( function() {$('.to_disable_on_save').removeClass('ui-disabled');}, 500); 
 	            },
 	            error: function (errorThrown) 
 	            {
 		            show_error('<TMPL_VAR ERRORS.ERR_006_CONFIG_FILE>');
 	                console.log('<TMPL_VAR GENERAL.MY_NAME> function save_config failed: Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
 					// Enable input fields and buttons
-	    			$('.to_disable_on_save').removeClass('ui-disabled');
+	    			setTimeout( function() {$('.to_disable_on_save').removeClass('ui-disabled');}, 500);
 			    }	
 	        });
 		}, 500);
 	}
-
-	function checkStatus()
+	function runCheck(ms)
 	{
+			$('.to_disable_on_save').addClass('ui-disabled');
 	       	// Send datas
-			$.ajax({url: '<TMPL_VAR HTMLPATH>get_status.php', type: 'POST', data : '',
+			$.ajax({url: '<TMPL_VAR HTMLPATH>watch.php', type: 'POST', data : {ms:ms},
 	            success: function (data) 
 	            {
-		            //$( '#status_div' ).html(data).trigger('create');
+					const projects = JSON.parse(data);
+					for (const [miniserver, projectinfo] of Object.entries(projects)) 
+					{
+						if (projectinfo.error)
+						{
+							if ( parseInt(projectinfo.ms) > 0 )
+							{
+								show_error("Miniserver #"+projectinfo.ms +"\n<br>"+ projectinfo.error);
+							}
+							else
+							{
+								show_error(projectinfo.error);
+							}
+						}
+						if (projectinfo.success === true)
+						{
+							build_svgDropdown (projectinfo.ms,projectinfo.project_as_json);
+						}
+					}
 	            },
 	            error: function (errorThrown) 
 	            {
-		            $( '#status_div' ).html('<TMPL_VAR ERRORS.ERR_013_ERROR_READING_STATUS>').trigger('create');
-	                console.log('<TMPL_VAR GENERAL.MY_NAME> function checkStatus failed: Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
+					$( '#iwd_status_div' ).html('<TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>').trigger('create');
+					console.log('<TMPL_VAR GENERAL.MY_NAME> function checkStatus failed: Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
+					setTimeout( function() {$('.to_disable_on_save').removeClass('ui-disabled');}, 500);
 			    }	
 	        });
 
 	}
-	function checkState()
+	function checkStatus()
 	{
 		if ( $("#iwd_use").val() == "on" )
 		{
 			$("#iwd_use-button").css('background-color','rgba(128,255,128,.2)');
-			$(".to_disable_on_plugin_off").removeClass('ui-disabled');
-			$(".to_hide_on_plugin_off").css('display','');
 			$("#iwd_use").val('on');
-			if ( $("#iwd_use_notify").val() == "on" )
+			if ( $("#iwd_use_notify-button").hasClass('ui-disabled') )
 			{
-				$("#iwd_use_notify-button").css('background-color','rgba(128,255,128,.2)').css('color','rgba(0,0,0,1)');;
+				$("#iwd_use_notify-button").css('background-color','rgba(128,128,128,.2)').css('color','rgba(64,64,64,1)');
 			}
 			else
 			{
-				$("#iwd_use_notify-button").css('background-color','rgba(255,255,128,.2)').css('color','rgba(0,0,0,1)');;
+				if ( $("#iwd_use_notify").val() == "on" )
+				{
+					$("#iwd_use_notify-button").css('background-color','rgba(128,255,128,.2)').css('color','rgba(0,0,0,1)');
+				}
+				else
+				{
+					$("#iwd_use_notify-button").css('background-color','rgba(255,255,128,.2)').css('color','rgba(0,0,0,1)');
+				}
 			}
 		}
 		else
@@ -421,9 +576,94 @@
 			$("#iwd_use-button").css('background-color','rgba(255,255,128,.2)');
 			$(".to_disable_on_plugin_off").addClass('ui-disabled');
 			$(".to_hide_on_plugin_off").css('display','none');
-			$("#iwd_use_notify-button").css('background-color','rgba(128,128,128,.2)').css('color','rgba(64,64,64,.2)');
+			$("#iwd_use_notify-button").css('background-color','rgba(128,128,128,.2)').css('color','rgba(64,64,64,1)');
 			$("#iwd_use").val('off');
+			return;
 		}
+
+		var active = $('.ff_fileupload_uploading, .ff_fileupload_starting');
+		if (active.length )
+		{
+			$('.to_disable_on_save').addClass('ui-disabled');
+			$( '#iwd_status_div' ).html('<TMPL_VAR Icon-Watchdog.INF_0095_WAIT_UPLOAD_IN_PROGRESS>').trigger('create');
+			$( '#iwd_status_div' ).fadeIn('fast');
+			return;
+		}
+		else
+		{
+			if ($( '#iwd_status_div' ).attr("something_in_progress"))
+			{
+				$( '#iwd_status_div' ).html('<TMPL_VAR General.TXT_STATUS_WORKING>').trigger('create');
+				$( '#iwd_status_div' ).fadeIn('slow');
+				progress("");
+			}
+		
+			if ($( '#iwd_status_div' ).attr("something_uploaded"))
+			{
+				var which_ms = $( '#iwd_status_div' ).attr("something_uploaded");
+				setTimeout( function() {
+				if ( parseInt(which_ms) > 0 ) 
+				{
+					$("#btncheck"+parseInt(which_ms)).trigger( "click");
+				}
+				which_ms = 0; }, 1000); 
+				$( '#iwd_status_div' ).attr("something_uploaded","");
+				$( '#iwd_status_div' ).fadeOut('fast');
+				return;
+			}
+
+			// Send datas
+			$.ajax({url: '<TMPL_VAR HTMLPATH>get_status.php', type: 'POST', data : '',
+				success: function (data) 
+				{
+					if ( data === "" )
+					{
+						setTimeout( function() {$('.to_disable_on_save').removeClass('ui-disabled');}, 500);
+						//$('#btncheck').removeClass('ui-disabled');
+						$( '#iwd_status_div' ).fadeOut('slow');
+						$('.to_disable_on_plugin_off').removeClass('ui-disabled');
+						$(".to_hide_on_plugin_off").css('display','');
+						$.each($('.svgDropdown'), function( drop_id ) 
+						{
+							if ( $('.svgDropdown')[drop_id].id )
+							{
+								var svg_select_name = $('.svgDropdown')[drop_id].id;
+								var svg_select = $("#"+svg_select_name)[0];
+								if( svg_select.length > 0)
+								{
+									$("#div_"+svg_select_name).fadeIn('slow');
+								}
+								else
+								{
+									$("#div_"+svg_select_name).fadeOut('slow');
+								}
+							}
+							
+						});
+					}
+					else
+					{
+						$('.to_disable_on_save').addClass('ui-disabled');
+						//$('#btncheck').addClass('ui-disabled');
+						$( '#iwd_status_div' ).html(data).trigger('create');
+						$( '#iwd_status_div' ).fadeIn('slow');
+					}
+					
+				},
+				error: function (errorThrown) 
+				{
+					$('.to_disable_on_save').removeClass('ui-disabled');
+					$( '#iwd_status_div' ).html('<TMPL_VAR ERRORS.ERR_013_ERROR_READING_STATUS>').trigger('create');
+					console.log('<TMPL_VAR GENERAL.MY_NAME> function checkStatus failed: Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
+					
+				}	
+			});
+
+		}
+	}
+	function progress (progress)
+	{
+		$( '#iwd_status_div' ).attr("something_in_progress",progress);
 	}
 
 	$("body").css('height','90%'); 
@@ -434,21 +674,32 @@
 		$("#iwd_use-button").remove(); 
 		$("#iwd_use_notify-button").remove(); 
 
-		$("#iwd_use").css('display','').selectmenu( ); 
-		$("#iwd_use_notify").css('display','').selectmenu( ); 
+		$("#iwd_use").css('display','').selectmenu(); 
+		$("#iwd_use_notify").css('display','').selectmenu(); 
 
 		$("#iwd_use_notify").val("<TMPL_VAR IWD_USE_NOTIFY>"); 
+		$("#loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>").selectmenu("refresh");
 		$('#iwd_use_notify').addClass('ui-disabled');
 		$("#iwd_use").val("<TMPL_VAR IWD_USE>"); 
 
-		notify = setInterval(function() { checkNotifications(); },15000);
+		notify = setInterval(function() { checkNotifications(); },10000);
 		checkNotifications();	
-		watchDog = setInterval(function() { checkState(); },2500);
-		checkState();
-		status = setInterval(function() { checkStatus(); },5000);
+		status = setInterval(function() { checkStatus(); },2500);
 		checkStatus();	
 
 		// Event handler for save
 		$('.to_save').on("change", function(){ save_config(); });
+
+		$("#loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>-button").remove();
+		$("#loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>").css('display','').selectmenu();
+		$("#loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>").change(function()
+		{
+			var val = $(this).val();
+			console.log("Loglevel", val);
+			post_value('plugin-loglevel', '<TMPL_VAR PLUGINDB_MD5_CHECKSUM>', val); 
+		});
+		$("#loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>").val("<TMPL_VAR PLUGINDB_LOGLEVEL>");
+		$("#loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>").selectmenu("refresh");
+
 	});
 </script>
