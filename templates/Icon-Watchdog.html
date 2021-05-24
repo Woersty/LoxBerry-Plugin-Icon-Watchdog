@@ -7,7 +7,7 @@
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.fancy-fileupload.js?<TMPL_VAR VERSION>"></script>
 <style>
 .iconrow  				{ width: 32x; height: 32px; padding: 5px; cursor: pointer;}
-.icon_ok 					{ }
+.icon_ok 				{ }
 .icon_bad 				{ color: #FF0000; }
 
 .icontable {
@@ -351,15 +351,30 @@
 								<TMPL_VAR Icon-Watchdog.TXT_SVG_DROPDOWN><br/>
 								<center>
 								<table class="table" style="width:99%; padding:0; spacing:1; margin:0; border: 2px solid #808080; border-radius: .4em .4em .4em .4em;">
-									<tr style="cursor: pointer;" onclick="if ( $('.icontable.IconPlace').css('display') == 'none' ) {$('.icontable.IconPlace').fadeIn('slow');} else {$('.icontable.IconPlace').fadeOut('slow');}">
-									   <td style="width:99%; vertical-align: top; background-color: rgba(64,64,255,.2);"><div style="background-position: center; margin-left: auto; margin-bottom:-20px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI2LDNINkM1LjQsMyw1LDMuNCw1LDR2MjRjMCwwLjYsMC40LDEsMSwxaDIwYzAuNiwwLDEtMC40LDEtMVY0QzI3LDMuNCwyNi42LDMsMjYsM3ogTTI1LDE1aC04VjVoOFYxNXogTTE1LDV2MTBIN1Y1SDE1eiBNNywxN2g4djEwSDdWMTd6IE0xNywyN1YxN2g4djEwSDE3eiI+PC9wYXRoPiA8L3N2Zz4=')"></div><br/><div style="width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONPLACE></div><TMPL_VAR icontable_IconPlace></td>
+									<tr>
+									   <td style="width:99%; vertical-align: top; background-color: rgba(64,64,255,.2);">
+										<div onclick="if ( $('.icontable.IconPlace').css('display') == 'none' ) {$('.icontable.IconPlace').fadeIn('slow');} else {$('.icontable.IconPlace').fadeOut('slow');}"  
+											style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI2LDNINkM1LjQsMyw1LDMuNCw1LDR2MjRjMCwwLjYsMC40LDEsMSwxaDIwYzAuNiwwLDEtMC40LDEtMVY0QzI3LDMuNCwyNi42LDMsMjYsM3ogTTI1LDE1aC04VjVoOFYxNXogTTE1LDV2MTBIN1Y1SDE1eiBNNywxN2g4djEwSDdWMTd6IE0xNywyN1YxN2g4djEwSDE3eiI+PC9wYXRoPiA8L3N2Zz4=')">
+											<br/>
+											<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONPLACE></div>
+										</div><TMPL_VAR icontable_IconPlace></td>
 									</tr>
-									<tr style="cursor: pointer;" onclick="if ( $('.icontable.IconState').css('display') == 'none' ) {$('.icontable.IconState').fadeIn('slow');} else {$('.icontable.IconState').fadeOut('slow');}">
-									   <td style="width:99%; vertical-align: top; background-color: rgba(255,255,64,.2);"><div style=" background-position: center; margin-left: auto; margin-bottom:-20px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI3LDVIMVYyNkgyOVY1SDI3Wm0wLDE5SDNWN0gyN1YyNFptLTctOC00LDMtNi03TDUsMjJIMjVabTEtMmEyLDIsMCwxLDAtMi0yQTIsMiwwLDAsMCwyMSwxNFoiPjwvcGF0aD4gPC9zdmc+')"></div><br/><div style="width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONSTATE></div><TMPL_VAR icontable_IconState></td>
+									<tr>
+									   <td style="width:99%; vertical-align: top; background-color: rgba(255,255,64,.2);">
+										<div onclick="if ( $('.icontable.IconState').css('display') == 'none' ) {$('.icontable.IconState').fadeIn('slow');} else {$('.icontable.IconState').fadeOut('slow');}"  
+											style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI3LDVIMVYyNkgyOVY1SDI3Wm0wLDE5SDNWN0gyN1YyNFptLTctOC00LDMtNi03TDUsMjJIMjVabTEtMmEyLDIsMCwxLDAtMi0yQTIsMiwwLDAsMCwyMSwxNFoiPjwvcGF0aD4gPC9zdmc+')">
+											<br/>
+											<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONSTATE></div>
+										</div><TMPL_VAR icontable_IconState></td>
 									</tr>
-									<tr style="cursor: pointer;" onclick="if ( $('.icontable.IconCat').css('display') == 'none' ) {$('.icontable.IconCat').fadeIn('slow');} else {$('.icontable.IconCat').fadeOut('slow');}">
-									   <td style="width:99%; vertical-align: top; background-color: rgba(0,128,0,.2);"><div style=" background-position: center; margin-left: auto; margin-bottom:-20px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTEwLDJINkM1LjQsMiw1LDIuNCw1LDN2MjZjMCwwLjYsMC40LDEsMSwxaDRjMC42LDAsMS0wLjQsMS0xVjNDMTEsMi40LDEwLjYsMiwxMCwyeiBNOCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzEwLDI3LjEsOS4xLDI4LDgsMjh6IE0xMCwxOEg2VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTE4LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MxOSwyLjQsMTguNiwyLDE4LDJ6IE0xNiwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzE4LDI3LjEsMTcuMSwyOCwxNiwyOHogTTE4LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTI2LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MyNywyLjQsMjYuNiwyLDI2LDJ6IE0yNCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzI2LDI3LjEsMjUuMSwyOCwyNCwyOHogTTI2LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPC9zdmc+')"></div><br/><div style="width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONCAT></div><TMPL_VAR icontable_IconCat></td>
-									</tr>
+									<tr>
+									   <td style="width:99%; vertical-align: top; background-color: rgba(0,120,0,.2);">
+										<div onclick="if ( $('.icontable.IconCat').css('display') == 'none' ) {$('.icontable.IconCat').fadeIn('slow');} else {$('.icontable.IconCat').fadeOut('slow');}"  
+											style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTEwLDJINkM1LjQsMiw1LDIuNCw1LDN2MjZjMCwwLjYsMC40LDEsMSwxaDRjMC42LDAsMS0wLjQsMS0xVjNDMTEsMi40LDEwLjYsMiwxMCwyeiBNOCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzEwLDI3LjEsOS4xLDI4LDgsMjh6IE0xMCwxOEg2VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTE4LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MxOSwyLjQsMTguNiwyLDE4LDJ6IE0xNiwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzE4LDI3LjEsMTcuMSwyOCwxNiwyOHogTTE4LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTI2LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MyNywyLjQsMjYuNiwyLDI2LDJ6IE0yNCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzI2LDI3LjEsMjUuMSwyOCwyNCwyOHogTTI2LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPC9zdmc+')">
+											<br/>
+											<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONCAT></div>
+										</div><TMPL_VAR icontable_IconCat></td>
+									</tr>	
 								</table>
 								</center>
 							</DIV>
