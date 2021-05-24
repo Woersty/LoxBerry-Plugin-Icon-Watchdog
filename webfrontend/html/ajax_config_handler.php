@@ -155,12 +155,12 @@ if (flock($plugin_cfg_handle, LOCK_EX))
 					if ( substr(strtolower($config_key),0,7) == "iwd_use" )
 					{
 						$output .= "$('#".strtolower($config_key)."-button').css('background-color','#C0FFC0');\n";
-						$output .= "setTimeout( function() { $('#".strtolower($config_key)."-button').css('background-color',''); checkState();}, 3000);\n";
+						$output .= "setTimeout( function() { $('#".strtolower($config_key)."-button').css('background-color',''); checkStatus();}, 500);\n";
 					}
 					else
 					{
 						$output .= "$('#".strtolower($config_key)."').css('background-color','#C0FFC0');\n";
-						$output .= "setTimeout( function() { $('#".strtolower($config_key)."').css('background-color',''); checkState();}, 3000);\n";
+						$output .= "setTimeout( function() { $('#".strtolower($config_key)."').css('background-color',''); checkStatus();}, 500);\n";
 					}
 				}
 		}
