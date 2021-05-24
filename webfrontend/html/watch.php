@@ -701,7 +701,7 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 		else
 		{
 			debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_030_COMPARE_NOT_ON_MS_ANYMORE"]." (".$short_name.") ".filesize($file_on_disk)." Bytes [".filemtime($file_on_disk)."]",1);
-			//unlink($file_on_disk);
+			unlink($file_on_disk);
 		}
 	}
 
@@ -1338,6 +1338,36 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 								{
 									debug(__line__,str_replace(array("<file>","<ms>"),array($file,$msno),$L["Icon-Watchdog.INF_0098_FTP_UPLOAD_DONE"]),5);
 									@file_put_contents ("/tmp/ms".$msno."_images.zip.md5", md5_file ($savedir_path."/ms_".$msno."/web/images.zip"));
+
+									$curl_reboot = curl_init(str_replace(" ","%20",$prefix.$miniserver['IPAddress'].":".$port."/dev/sys/reboot"));
+									curl_setopt($curl_reboot, CURLOPT_USERPWD				, $miniserver['Credentials_RAW']);
+									curl_setopt($curl_reboot, CURLOPT_NOPROGRESS			, 1);
+									curl_setopt($curl_reboot, CURLOPT_FOLLOWLOCATION		, 1);
+									curl_setopt($curl_reboot, CURLOPT_CONNECTTIMEOUT		, 10); 
+									curl_setopt($curl_reboot, CURLOPT_TIMEOUT				, 10);
+									curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYPEER		, 0);
+									curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYSTATUS		, 0);
+									curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYHOST		, 0);
+									curl_setopt($curl_reboot, CURLOPT_HEADER				, 0);  
+									curl_setopt($curl_reboot, CURLOPT_RETURNTRANSFER		, true);
+									if ( !$curl_reboot )
+									{
+										debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_0002_ERROR_INIT_CURL"],4);
+										debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_055_MS_REBOOT_FAILED"],4);
+									}
+									else
+									{
+										$reboot_response = curl_exec($curl_reboot);  
+										switch (curl_getinfo($curl_reboot,CURLINFO_RESPONSE_CODE)) 
+										{
+											case "200":
+												debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0101_MS_REBOOT_OK"],5);
+												break;
+											default;
+											debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_055_MS_REBOOT_FAILED"],4);
+										}
+										curl_close($curl_reboot);
+									}
 								}
 								else 
 								{
