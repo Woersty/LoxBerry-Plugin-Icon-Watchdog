@@ -344,11 +344,11 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 	}
 	if (isset($_REQUEST['ms'])) 
 	{
-		if ( $_REQUEST['ms'] == $msno )
+		if ( preg_replace('/[^0-9]/', '', $_REQUEST['ms']) == $msno )
 		{
 			debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0002_MANUAL_DOWNLOAD_SINGLE_MS"]." ".$msno."/".count($ms)." => ".$miniserver['Name'],5);
 		}
-		else if ( $_REQUEST['ms'] == 0)
+		else if ( preg_replace('/[^0-9]/', '', $_REQUEST['ms']) == 0)
 		{
 			// No single manual save
 		}
@@ -699,8 +699,8 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 		}
 		else
 		{
-			debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_030_COMPARE_NOT_ON_MS_ANYMORE"]." (".$short_name.") ".filesize($file_on_disk)." Bytes [".filemtime($file_on_disk)."]",1);
-			//unlink($file_on_disk);
+				debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_030_COMPARE_NOT_ON_MS_ANYMORE"]." (".$short_name.") ".filesize($file_on_disk)." Bytes [".filemtime($file_on_disk)."]",1);
+				unlink($file_on_disk);
 		}
 	}
 
@@ -1168,6 +1168,7 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 	////////////////
 	/// Check Part
 	////////////////
+	$ProjectSerial = "none";
 	require_once "import.php";
 	$project_files = glob("$lbpdatadir/project/ms_$msno/".$L["GENERAL.PREFIX_CONVERTED_FILE"]."*.Loxone", GLOB_NOSORT);
 	usort($project_files, function($a, $b) {return filemtime($b) - filemtime($a);});
@@ -1184,9 +1185,11 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 			"project_as_json" => "",
 			"success" => false,
 			"error" => $project['error'],
-			"errorcode" => $project['errorcode']
+			"errorcode" => $project['errorcode'],
+			"Serial"    => $project['Serial']
 			);
 			debug(__line__,$project['error'],3);
+			$ProjectSerial = $project['Serial'];
 			continue;
 		}
 		
@@ -1197,8 +1200,11 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 			//"pretty" => $project['pretty'],
 			"error" => false,
 			"success" => true,
-			"message" => $L["LOGGING.LOG_021_PROJECT_ANALYZE_OK"]
+			"message" => $L["LOGGING.LOG_021_PROJECT_ANALYZE_OK"],
+			"Serial"    => $project['Serial']
+
 		);
+		$ProjectSerial = $project['Serial'];
 	}
 	else
 	{
@@ -1206,7 +1212,9 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 			"ms" => $msno,
 			"success" => false,
 			"error" => $L["ERRORS.ERR_042_NO_PROJECT_FILE"],
-			"errorcode" => "no_project_file"
+			"errorcode" => "no_project_file",
+			"Serial"    => "none"
+
 		);
 		debug(__line__,$L["ERRORS.ERR_042_NO_PROJECT_FILE"],4);
 	}	
@@ -1215,6 +1223,7 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 
 	// Upload to MS
 	// Check serial
+	$serial="000000000000";
 	$MAC  = $prefix.$miniserver['IPAddress'].":".$port."/dev/cfg/mac";
 	$curl_mac = curl_init(str_replace(" ","%20",$MAC));
 	curl_setopt($curl_mac, CURLOPT_USERPWD				, $miniserver['Credentials_RAW']);
@@ -1225,68 +1234,129 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 	curl_setopt($curl_mac, CURLOPT_SSL_VERIFYPEER		, 0);
 	curl_setopt($curl_mac, CURLOPT_SSL_VERIFYSTATUS		, 0);
 	curl_setopt($curl_mac, CURLOPT_SSL_VERIFYHOST		, 0);
-	curl_setopt($curl_mac, CURLOPT_FILE, $fp) or $curl_mac_issue=1;
+	curl_setopt($curl_mac, CURLOPT_HEADER				, 0);  
+	curl_setopt($curl_mac, CURLOPT_RETURNTRANSFER		, true);
 	if ( !$curl_mac )
 	{
 		debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_0002_ERROR_INIT_CURL"],4);
+		debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_051_XML_MAC_FAILED"],4);
 	}
 	else
 	{
-		curl_exec($curl_mac);
-		$response = curl_multi_getcontent($curl_mac); 
+		$response = curl_exec($curl_mac);  
 		debug(__line__,"MS#".$msno." URL: $MAC => Response: ".htmlentities($response)."\n");
 		curl_close($curl_mac);
 
 		if ( $response )
 		{
-			debug(__line__,"MS#".$msno." ".str_replace(array("<ms>","<serial>"),array($msno,$serial),$L["Icon-Watchdog.INF_0099_MS_SERIAL_OK"]),6);
-			// Do FTP only for matched Serial
-			
-			if ( $miniserver['UseCloudDNS'] == "on" || $miniserver['UseCloudDNS'] == "1" ) 
+			$mac_response = simplexml_load_string ( $response, "SimpleXMLElement" ,LIBXML_NOCDATA | LIBXML_NOWARNING );
+			if ($mac_response === false) 
 			{
-				debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0041_CLOUD_DNS_USED"]." => ".$miniserver['Name'],6);
-				$ftpport = (isset($miniserver["CloudURLFTPPort"]))?$miniserver["CloudURLFTPPort"]:21;
+				$errors = libxml_get_errors();
+				$importerrors = array();
+				foreach ($errors as $error) 
+				{
+					report_xml_error($msno, $error, explode("\n",$response));
+				}
+				libxml_clear_errors();
 			}
 			else
 			{
-				$ftpport = (isset($plugin_cfg["FTPPort".$msno]))?$plugin_cfg["FTPPort".$msno]:21;
-			}	
-		
-			$file = $savedir_path."/ms_".$msno."/web/images.zip";
-			$remote_file = '/web/images.zip';
+				if ( isset($mac_response["value"][0]) )
+				{
+					$serial	= strtoupper(str_replace(":","",$mac_response["value"][0]));
+				}
+			}
+		}
+		debug(__line__,"MS#".$msno." Project-Serial: ".$ProjectSerial);
+		debug(__line__,"MS#".$msno." Miniserver-Serial: ".$serial);
+		if ( $serial == "000000000000" || $ProjectSerial == "none" ) 
+		{	
+			debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_051_XML_MAC_FAILED"],4);
+		}
+		else
+		{
+			if ( $ProjectSerial == $serial )
+			{
+				debug(__line__,"MS#".$msno." ".str_replace(array("<ms>","<serial>"),array($msno,$serial),$L["Icon-Watchdog.INF_0099_MS_SERIAL_OK"]),6);
+				$downloaded_zipmd5 = "";
+				if ( is_readable ( "/tmp/ms".$msno."_images.zip.md5" ) )
+				{
+					$downloaded_zipmd5 = file_get_contents ("/tmp/ms".$msno."_images.zip.md5");	
+				}
+				if ( is_readable ( $savedir_path."/ms_".$msno."/web/images.zip" ) )
+				{
+					$current_zipmd5 = md5_file ($savedir_path."/ms_".$msno."/web/images.zip");
+					debug(__line__,"MS#".$msno." MD5: ".$downloaded_zipmd5 ."<>".$current_zipmd5);
 
-			// Verbindung aufbauen
-			$conn_id = ftp_connect($miniserver['IPAddress'],$ftpport,10);
-			if ( !$conn_id )
-			{
-				debug(__line__,$L["ERRORS.ERR_048_FTP_CONNECT_FAILED"]." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,4);
+					if ( $downloaded_zipmd5 == $current_zipmd5 )
+					{
+						debug(__line__,"MS#".$msno." ".str_replace(array("<ms>","<serial>"),array($msno,$serial),$L["Icon-Watchdog.INF_0100_ZIP_NOT_CHANGED"]),5);
+					}
+					else
+					{
+						// File to be uploaded not there, skip.
+						
+						// Do FTP only for matched Serial
+						
+						if ( $miniserver['UseCloudDNS'] == "on" || $miniserver['UseCloudDNS'] == "1" ) 
+						{
+							debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0041_CLOUD_DNS_USED"]." => ".$miniserver['Name'],6);
+							$ftpport = (isset($miniserver["CloudURLFTPPort"]))?$miniserver["CloudURLFTPPort"]:21;
+						}
+						else
+						{
+							$ftpport = (isset($plugin_cfg["FTPPort".$msno]))?$plugin_cfg["FTPPort".$msno]:21;
+						}	
+					
+						$file = $savedir_path."/ms_".$msno."/web/images.zip";
+						$remote_file = '/web/images.zip';
+
+						// Verbindung aufbauen
+						$conn_id = ftp_connect($miniserver['IPAddress'],$ftpport,10);
+						if ( !$conn_id )
+						{
+							debug(__line__,$L["ERRORS.ERR_048_FTP_CONNECT_FAILED"]." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,4);
+						}
+						else
+						{
+							// Login mit Benutzername und Passwort
+							$login_result = ftp_login($conn_id, $miniserver['Admin_RAW'], $miniserver['Pass_RAW']);
+							if ( !$login_result )
+							{
+								debug(__line__,str_replace("<user>",$miniserver['Admin_RAW'],$L["ERRORS.ERR_049_FTP_LOGIN_FAILED"])." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,4);
+								debug(__line__,"Miniserver #".$msno." Login ".$miniserver['Admin_RAW']." and Password ".$miniserver['Pass_RAW']." for ".$miniserver['IPAddress']." at Port ".$ftpport);
+							}
+							else
+							{
+								// Schalte passiven Modus ein
+								ftp_pasv($conn_id, true);
+								ftp_set_option($conn_id, FTP_TIMEOUT_SEC, 60);
+								// Lade eine Datei hoch
+								if (ftp_put($conn_id, $remote_file, $file, FTP_BINARY)) 
+								{
+									debug(__line__,str_replace(array("<file>","<ms>"),array($file,$msno),$L["Icon-Watchdog.INF_0098_FTP_UPLOAD_DONE"]),5);
+									@file_put_contents ("/tmp/ms".$msno."_images.zip.md5", md5_file ($savedir_path."/ms_".$msno."/web/images.zip"));
+								}
+								else 
+								{
+									debug(__line__,str_replace(array("<file>","<ms>"),array($file,$msno),$L["ERRORS.ERR_050_FTP_UPLOAD_FAILED"]),4);
+								}
+							}
+							// Verbindung schließen
+							ftp_close($conn_id);
+						}
+					}
+				}
+				else			
+				{
+					// File to be uploaded not there, skip.
+					debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_052_UPLOAD_FILE_PROBLEM"],4);
+				}	
 			}
 			else
 			{
-				// Login mit Benutzername und Passwort
-				$login_result = ftp_login($conn_id, $miniserver['Admin_RAW'], $miniserver['Pass_RAW']);
-				if ( !$login_result )
-				{
-					debug(__line__,str_replace("<user>",$miniserver['Admin_RAW'],$L["ERRORS.ERR_049_FTP_LOGIN_FAILED"])." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,4);
-					debug(__line__,"Miniserver #".$msno." Login ".$miniserver['Admin_RAW']." and Password ".$miniserver['Pass_RAW']." for ".$miniserver['IPAddress']." at Port ".$ftpport);
-				}
-				else
-				{
-					// Schalte passiven Modus ein
-					ftp_pasv($conn_id, true);
-					ftp_set_option($ftp, FTP_TIMEOUT_SEC, 60);
-					// Lade eine Datei hoch
-					if (ftp_put($conn_id, $remote_file, $file, FTP_BINARY)) 
-					{
-						debug(__line__,str_replace(array("file","<ms>"),array($file,$msno),$L["Icon-Watchdog.INF_0098_FTP_UPLOAD_DONE"]),5);
-					}
-					else 
-					{
-						debug(__line__,str_replace(array("file","<ms>"),array($file,$msno),$L["ERRORS.ERR_050_FTP_UPLOAD_FAILED"]),4);
-					}
-				}
-				// Verbindung schließen
-				ftp_close($conn_id);
+				debug(__line__,"MS#".$msno." ".str_replace(array("<ms>","<serial>","<projectserial>"),array($msno,$serial,$ProjectSerial),$L["ERRORS.ERR_053_MS_SERIAL_MISMATCH"]),4);
 			}
 		}
 	}
@@ -2032,6 +2102,10 @@ function generate_images_zip($ms)
 	global $zipdir_path, $savedir_path, $L;
 	$zipArchive = new ZipArchive;
 
+	if ( is_readable ( $savedir_path."/ms_".$ms."/web/images.zip" ) )
+	{
+		@file_put_contents ("/tmp/ms".$ms."_images.zip.md5", md5_file ($savedir_path."/ms_".$ms."/web/images.zip"));
+	}
 	$zip = new ZipArchive();
 	$ret = $zip->open($savedir_path."/ms_".$ms."/web/images.zip", ZipArchive::CREATE|ZipArchive::CREATE);
 	if ($ret !== TRUE) {
@@ -2041,6 +2115,5 @@ function generate_images_zip($ms)
 		$zip->addGlob($zipdir_path."/ms_".$ms."/*.{svg,png}", GLOB_BRACE, $options);
 		$zip->close();
 	}
-
 	return;
 }

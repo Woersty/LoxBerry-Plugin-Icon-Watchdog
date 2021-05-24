@@ -112,54 +112,62 @@ function report_xml_error($ms, $error, $xml)
     return $return;
 }
 
+function str_ireplace_n($search, $replace, $subject, $occurrence)
+{
+	$search = preg_quote($search);
+    return preg_replace("/^((?:(?:.*?$search){".--$occurrence."}.*?))$search/i", "$1$replace", $subject);
+}
 function import_loxone_project($file,$ms)
 {
 	global $log, $L;
 	libxml_use_internal_errors(true);
+	$xml_project_file_to_parse = file_get_contents($file);
+	$ProjectSerial="none";
+	LOGWARN ("MS#".$ms." ".$L["ERRORS.ERR_054_DTYPE_FIXED"]);
+	$fixed_xml_string = "";
+	foreach (explode("\n",$xml_project_file_to_parse) as $xml_line)
+	{
+		if ( strpos($xml_line,' DType="13"') )
+		{
+			$fixed_xml_line = str_ireplace_n(' DType="13"','',$xml_line,2) . "\n";
+			$fixed_xml_string .= $fixed_xml_line;
+			LOGDEB ("$ms Before:".htmlentities($xml_line));
+			LOGDEB ("$ms After:".htmlentities($fixed_xml_line));
+		}
+		else if ( strpos($xml_line,' Type="LoxLIVE"') )
+		{
+			$serial_position = strpos($xml_line, 'Serial="');
+			if ($serial_position ) 
+			{
+				$ProjectSerial = strtoupper(substr($xml_line,$serial_position+8,12));
+			}
+			$fixed_xml_string .= $xml_line."\n";
+		}
+		else
+		{
+			$fixed_xml_string .= $xml_line."\n";
+		}
+	}
+	LOGDEB ("Miniserver $ms = Project-Serial: ".$ProjectSerial);
+	file_put_contents($file, $fixed_xml_string);
+	$xml_project_file_to_parse = $fixed_xml_string;
+	unset($fixed_xml_string);
+
 	// Main Import function
-	$xml = simplexml_load_file ( "$file" , "SimpleXMLElement" ,LIBXML_NOCDATA );
+	$xml = simplexml_load_string ( $xml_project_file_to_parse, "SimpleXMLElement" ,LIBXML_NOCDATA | LIBXML_NOWARNING );
 	if ($xml === false) 
 	{
 		$errors = libxml_get_errors();
 		$importerrors = array();
 		foreach ($errors as $error) 
 		{
-			report_xml_error($ms, $error, explode("\n", file_get_contents($file)));
+			report_xml_error($ms, $error, explode("\n",$xml_project_file_to_parse));
 		}
 		libxml_clear_errors();
-
-		unset ($xml);
-		LOGWARN ("Retry ignore Err");
-		$config = array(
-			'indent' => true,
-			'clean' => true,
-			'input-xml'  => true,
-			'output-xml' => true,
-			'wrap'       => false
-			);
-
-		$tidy = new Tidy();
-		$badXML = file_get_contents ($file);
-		$fixed_xml = $tidy->repairfile($badXML, $config);
-		
-		$xml = simplexml_load_string ( $fixed_xml , "SimpleXMLElement" ,LIBXML_NOCDATA | LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_ERR_NONE);
-		if ($xml === false) 
-		{
-			$errors = libxml_get_errors();
-			$importerrors = array();
-			foreach ($errors as $error) 
-			{
-				report_xml_error($ms, $error, explode("\n", file_get_contents($file)));
-			}
-			libxml_clear_errors();
-			$data['error'] = str_replace("<ms>",$ms,$L["ERRORS.ERR_045_PROJECT_XML_ANALYSIS_FAILED"]);
-			$data['errorcode'] = "ERR_045";
-			return $data;
-		}
-		else
-		{
-			LOGWOK ("Retry ignore Err OKAY");
-		}
+		$data['error'] = str_replace("<ms>",$ms,$L["ERRORS.ERR_045_PROJECT_XML_ANALYSIS_FAILED"]);
+		$data['errorcode'] = "ERR_045";
+		$data['Serial'] = $ProjectSerial;
+		return $data;
 	}
 		
 	$IconData = array("Icons" => array());
@@ -204,6 +212,7 @@ function import_loxone_project($file,$ms)
 	$data['xml'] = $xml->asXML();
 	$data['xml'] = str_replace(array("<IoData/>","<Display/>"),array("<IoData></IoData>","<Display></Display>"),$data);
 	$data['json'] = json_encode($IconData);
+	$data['Serial'] = $ProjectSerial;
 	//$data['pretty'] = $pretty;
 	return $data;
 }

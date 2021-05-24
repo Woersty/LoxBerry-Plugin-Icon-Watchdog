@@ -23,7 +23,7 @@ $date_time_format       = "m-d-Y h:i:s a";						 # Default Date/Time format
 if (isset($L["GENERAL.DATE_TIME_FORMAT_PHP"])) $date_time_format = $L["GENERAL.DATE_TIME_FORMAT_PHP"];
 if ( isset($_REQUEST["ms"]) )
 {
-	LOGSTART(str_replace("<ms>",$ms,$L["LOGGING.LOG_025_UPLOAD_STARTED"]));
+	LOGSTART(str_replace("<ms>",$_REQUEST["ms"],$L["LOGGING.LOG_025_UPLOAD_STARTED"]));
 }
 else
 {
@@ -109,7 +109,7 @@ require_once "fancy_file_uploader_helper.php";
 								chmod("$lbpdatadir/project/ms_$ms/".$L["GENERAL.PREFIX_CONVERTED_FILE"].$files[0]["name"], 0666);
 								chmod("$lbpdatadir/project/ms_$ms/".$L["GENERAL.PREFIX_JSON_FILE"].$ms.".json", 0666);
 								$result = array(
-									"project_as_json" => $project['json'],
+									//"project_as_json" => $project['json'],
 									//"project_as_pretty" => $project['pretty'],
 									"success" => true,
 									"message" => str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"])
@@ -137,7 +137,7 @@ require_once "fancy_file_uploader_helper.php";
 						
 						if (is_dir("$lbpdatadir/zip/ms_$ms/"))
 						{
-							rename($files[0]["file"], "$lbpdatadir/zip/ms_$ms/".$files[0]["name"]);
+							rename($files[0]["file"], "$lbpdatadir/zip/ms_$ms/".strtolower($files[0]["name"]));
 							LOGINF  ("<INFO>".str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"]));
 						
 							$result = array(
@@ -183,7 +183,7 @@ require_once "fancy_file_uploader_helper.php";
 		);
 	}	
 echo json_encode($result, JSON_UNESCAPED_SLASHES);
-if ($result["error"])
+if (isset($result["error"]))
 {
 	LOGERR ($result["error"]);
 	$log->LOGTITLE($result["error"]);

@@ -421,15 +421,15 @@
 </CENTER>
 <small><small><TMPL_VAR VERSION></small></small>
 <script>
-	function build_svgDropdown (ms,project_as_json)
+	function build_svgDropdown (ms,icons_as_json)
 	{
 		progress(1);
-		if ( !ms || !project_as_json || ms < 1 ) return;
-		var icons_obj = jQuery.parseJSON( project_as_json );
+		if ( !ms || !icons_as_json || ms < 1 ) return;
 		var optgroup = "";
 		var optgroup_end = "";
 		$( ".icontable > tbody tr" ).remove();
-		$.each(icons_obj.Icons, function( id, icon ) 
+		var icons = JSON.parse(icons_as_json);
+		$.each(icons.Icons, function( id, icon ) 
 		{
 			if ( icon.Type[0] )
 			{
@@ -441,7 +441,6 @@
 		$(".icontable > tbody tr:nth-child(odd)").addClass("darker");
 		$("#div_svgDropdown_"+ms).fadeIn('slow');
 		progress("");
-		return;
 	}
 
 	function checkNotifications()
@@ -515,39 +514,36 @@
 	}
 	function runCheck(ms)
 	{
+			clearInterval(status);
 			$('.to_disable_on_save').addClass('ui-disabled');
 	       	// Send datas
 			$.ajax({url: '<TMPL_VAR HTMLPATH>watch.php', type: 'POST', data : {ms:ms},
-	            success: function (data) 
+	            success: function (result) 
 	            {
-					const projects = JSON.parse(data);
-					for (const [miniserver, projectinfo] of Object.entries(projects)) 
-					{
-						if (projectinfo.error)
+						if ( result["ms"+ms].error === true )
 						{
-							if ( parseInt(projectinfo.ms) > 0 )
+							if ( parseInt(result["ms"+ms].ms) > 0 )
 							{
-								show_error("Miniserver #"+projectinfo.ms +"\n<br>"+ projectinfo.error);
+								show_error("Miniserver #"+result["ms"+ms].ms +"\n<br>"+ result["ms"+ms].error);
 							}
 							else
 							{
-								show_error(projectinfo.error);
+								show_error(result["ms"+ms].error);
 							}
 						}
-						if (projectinfo.success === true)
+						if ( result["ms"+ms].success === true) 
 						{
-							build_svgDropdown (projectinfo.ms,projectinfo.project_as_json);
+							build_svgDropdown (result["ms"+ms].ms,result["ms"+ms].project_as_json);
 						}
-					}
 	            },
 	            error: function (errorThrown) 
 	            {
-					$( '#iwd_status_div' ).html('<TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>').trigger('create');
-					console.log('<TMPL_VAR GENERAL.MY_NAME> function checkStatus failed: Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
+					$( '#iwd_status_div' ).html('<TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms).trigger('create');
+					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
 					setTimeout( function() {$('.to_disable_on_save').removeClass('ui-disabled');}, 500);
 			    }	
 	        });
-
+		status = setInterval(function() { checkStatus(); },2500);
 	}
 	function checkStatus()
 	{
