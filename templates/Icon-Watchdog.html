@@ -427,7 +427,9 @@
 		if ( !ms || !icons_as_json || ms < 1 ) return;
 		var optgroup = "";
 		var optgroup_end = "";
-		$( ".icontable > tbody tr" ).remove();
+		$( ".icontable.IconPlace.ms"+ms+" > tbody tr" ).remove();
+		$( ".icontable.IconCat.ms"+ms+" > tbody tr" ).remove();
+		$( ".icontable.IconState.ms"+ms+" > tbody tr" ).remove();
 		var icons = JSON.parse(icons_as_json);
 		$.each(icons.Icons, function( id, icon ) 
 		{
