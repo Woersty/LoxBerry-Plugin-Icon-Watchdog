@@ -178,7 +178,7 @@ $all_interval_used = 0;
 foreach ($plugin_cfg as $config_key => $config_value)
 {
 	#If at least one task is configured, set cronjob
-	if ( strpos($config_key, 'MONITOR_ACTIVE_MS_') !== false && intval($config_value) > 0 ) 
+	if ( strpos($config_key, 'MS_MONITOR_CB') !== false && intval($config_value) > 0 ) 
 	{
 		$all_interval_used = 1;
 	}
@@ -186,12 +186,12 @@ foreach ($plugin_cfg as $config_key => $config_value)
 #Create Cron-Job
 if ( $all_interval_used > 0 )
 {
-	if ( ! is_link(LBHOMEDIR."/system/cron/cron.hourly/".LBPPLUGINDIR)  )
+	if ( ! is_link(LBHOMEDIR."/system/cron/cron.daily/".LBPPLUGINDIR)  )
 	{
-		@symlink(LBPHTMLAUTHDIR."/bin/watch.pl", LBHOMEDIR."/system/cron/cron.hourly/".LBPPLUGINDIR);
+		@symlink(LBPHTMLAUTHDIR."/bin/watch.pl", LBHOMEDIR."/system/cron/cron.daily/".LBPPLUGINDIR);
 	}
 		
-	if ( ! is_link(LBHOMEDIR."/system/cron/cron.hourly/".LBPPLUGINDIR) )
+	if ( ! is_link(LBHOMEDIR."/system/cron/cron.daily/".LBPPLUGINDIR) )
 	{
 		LOGERR($L["ERRORS.ERR_009_ERR_CFG_CRON_JOB"]);	
 	}
@@ -202,9 +202,9 @@ if ( $all_interval_used > 0 )
 }
 else
 {
-	if ( is_link(LBHOMEDIR."/system/cron/cron.hourly/".LBPPLUGINDIR) )
+	if ( is_link(LBHOMEDIR."/system/cron/cron.daily/".LBPPLUGINDIR) )
 	{
-		unlink(LBHOMEDIR."/system/cron/cron.hourly/".LBPPLUGINDIR) or LOGERR($L["ERRORS.ERR_009_ERR_CFG_CRON_JOB"]);
+		unlink(LBHOMEDIR."/system/cron/cron.daily/".LBPPLUGINDIR) or LOGERR($L["ERRORS.ERR_009_ERR_CFG_CRON_JOB"]);
 	}
 	LOGINF($L["LOGGING.LOG_015_INFO_CRON_JOB_STOPPED"]);	
 }
