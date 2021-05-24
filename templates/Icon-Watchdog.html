@@ -58,7 +58,7 @@
 		background: rgba(70, 71, 72, 0.69);
 	}
 	#sub_alert_form { 
-		width: 240px;  
+		width: 90%;  
 		height: 110px;
 		margin: 0 auto;
 		background: white;
@@ -521,7 +521,11 @@
 			$.ajax({url: '<TMPL_VAR HTMLPATH>watch.php', type: 'POST', data : {ms:ms},
 	            success: function (result) 
 	            {
-						if ( result["ms"+ms].error === true )
+						if ( result["ms"+ms].success === true) 
+						{
+							build_svgDropdown (result["ms"+ms].ms,result["ms"+ms].project_as_json);
+						}
+						else
 						{
 							if ( parseInt(result["ms"+ms].ms) > 0 )
 							{
@@ -532,19 +536,16 @@
 								show_error(result["ms"+ms].error);
 							}
 						}
-						if ( result["ms"+ms].success === true) 
-						{
-							build_svgDropdown (result["ms"+ms].ms,result["ms"+ms].project_as_json);
-						}
+						status = setInterval(function() { checkStatus(); },2500);
 	            },
 	            error: function (errorThrown) 
 	            {
 					$( '#iwd_status_div' ).html('<TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms).trigger('create');
 					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
 					setTimeout( function() {$('.to_disable_on_save').removeClass('ui-disabled');}, 500);
+					status = setInterval(function() { checkStatus(); },10000);
 			    }	
 	        });
-		status = setInterval(function() { checkStatus(); },2500);
 	}
 	function checkStatus()
 	{
