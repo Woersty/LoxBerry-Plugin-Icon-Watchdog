@@ -123,7 +123,6 @@ function import_loxone_project($file,$ms)
 	libxml_use_internal_errors(true);
 	$xml_project_file_to_parse = file_get_contents($file);
 	$ProjectSerial="none";
-	LOGWARN ("MS#".$ms." ".$L["ERRORS.ERR_054_DTYPE_FIXED"]);
 	$fixed_xml_string = "";
 	foreach (explode("\n",$xml_project_file_to_parse) as $xml_line)
 	{
@@ -133,6 +132,7 @@ function import_loxone_project($file,$ms)
 			$fixed_xml_string .= $fixed_xml_line;
 			LOGDEB ("$ms Before:".htmlentities($xml_line));
 			LOGDEB ("$ms After:".htmlentities($fixed_xml_line));
+			LOGWARN ("MS#".$ms." ".$L["ERRORS.ERR_054_DTYPE_FIXED"]);
 		}
 		else if ( strpos($xml_line,' Type="LoxLIVE"') )
 		{
