@@ -2,7 +2,7 @@
 
 .ff_fileupload_wrap .ff_fileupload_dropzone_wrap { position: relative; }
 
-.ff_fileupload_wrap .ff_fileupload_dropzone { display: block; width: 100%; height: 200px; box-sizing: border-box; border: 2px dashed #A2B4CA; border-radius: 3px; padding: 0; background-color: #FCFCFC; background-image: url('fancy_upload.svg'); background-repeat: no-repeat; background-position: center center; opacity: 0.85; cursor: pointer; outline: none; }
+.ff_fileupload_wrap .ff_fileupload_dropzone { display: block; width: 100%; height: 200px; box-sizing: border-box; border: 2px dashed #A2B4CA; border-radius: 3px; padding: 0; background-color: #FCFCFC; background-image: url('fancy_upload_loxone.svg'); background-repeat: no-repeat; background-position: center center; opacity: 0.85; cursor: pointer; outline: none; }
 .ff_fileupload_wrap .ff_fileupload_dropzone::-moz-focus-inner { border: 0; }
 .ff_fileupload_wrap .ff_fileupload_dropzone:hover, .ff_fileupload_wrap .ff_fileupload_dropzone:focus, .ff_fileupload_wrap .ff_fileupload_dropzone:active { opacity: 1; background-color: #FDFDFD; border-color: #157EFB; }
 

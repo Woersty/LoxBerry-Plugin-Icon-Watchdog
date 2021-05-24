@@ -251,7 +251,8 @@
 					<TMPL_LOOP NAME="MSROW">
 						#<TMPL_VAR MSID> - <TMPL_VAR Name> <small>[<TMPL_VAR IPAddress>]</small> <span class="PreferHttps<TMPL_VAR PreferHttps>">HTTPS</span><BR>
 						<input data-mini="true" class="to_save to_disable_on_save to_disable_on_plugin_off to_hide_on_plugin_off" onclick="if ( $(this).is(':checked') ) { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(1); } else { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(0); }" type="checkbox" id="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>" name="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><label id="MS_MONITOR_CB_LABEL<TMPL_VAR MSID>" class="to_disable_on_plugin_off" for="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><TMPL_VAR GENERAL.TXT_LABEL_MONITOR></label>
-						<a id="btncheck<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left;" data-role="button" data-icon="clock" data-mini="true" onclick="runCheck('<TMPL_VAR MSID>');"><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></a>
+						<table><tr><td><a id="btncheck<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left;" data-role="button" data-icon="clock" data-mini="true" onclick="runCheck('<TMPL_VAR MSID>');"><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></a></td><td>
+						<a target="_self" id="btndwl<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left; display:none;" data-role="button" data-icon="action" data-mini="true");"><TMPL_VAR GENERAL.TXT_DOWNLOAD_CONVERTED_PROJECT></a></td></tr></table>
 						<input class="to_disable_on_plugin_off" id="MS_MONITOR_CB<TMPL_VAR MSID>" name="MS_MONITOR_CB<TMPL_VAR MSID>" type="hidden" value="<TMPL_VAR MS_MONITOR_CB>">
 						<DIV class="to_disable_on_plugin_off" id="loxone_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,79,.5);">
 							<TMPL_VAR Icon-Watchdog.TXT_IMPORT_PROJECT>
@@ -275,6 +276,7 @@
 									maxfilesize : 10000000,
 									uploadcompleted : function(e, data) { 
 									$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
+									$( '#iwd_status_div' ).fadeIn('slow');
 									setTimeout( function() {data.ff_info.RemoveFile();
 									}, 5000); 
 									},
@@ -311,6 +313,7 @@
 									maxfilesize : 10000000,
 									uploadcompleted : function(e, data) { 
 									$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
+									$( '#iwd_status_div' ).fadeIn('slow');
 									setTimeout( function() { data.ff_info.RemoveFile(); }, 5000); },
 									added : function(e, data) {
 										// It is okay to simulate clicking the start upload button.
@@ -334,9 +337,13 @@
 							$(".svg .ff_fileupload_wrap .ff_fileupload_dropzone").css('background-Image','url(<TMPL_VAR HTMLPATH>fancy_upload_svg.svg)');
 							<TMPL_VAR MS_MONITOR_CB_script>
 							$( "label[for='MS_MONITOR_CB_script<TMPL_VAR MSID>']" ).removeClass( "ui-checkbox-off" ).addClass( "ui-checkbox-on" );
+
+							getProjectfile("<TMPL_VAR MSID>");
+
 						});
 						var nbr_miniservers = miniservers.push('<TMPL_VAR MSID>');
 						$("#colored_div_<TMPL_VAR MSID>").css('background-color','rgba'+colors[<TMPL_VAR MSID>]); 
+						
 						</script>
 						<br/><br/>
 						<DIV class="svg to_disable_on_plugin_off" style="display:none;" id="div_svgDropdown_<TMPL_VAR MSID>">
@@ -513,6 +520,45 @@
 	        });
 		}, 500);
 	}
+
+	function getProjectfile(ms)
+	{
+			clearInterval(status);
+			$.ajax({url: '<TMPL_VAR HTMLPATH>get_project.php', type: 'POST', data : {ms:ms},
+	            success: function (result) 
+	            {
+						if ( result["ms"+ms].success === true) 
+						{
+							$( '#iwd_status_div' ).html(result["ms"+ms].message).trigger('create');
+							$( '#iwd_status_div' ).fadeIn('slow');
+							$( '#btndwl'+ms ).attr("href", '<TMPL_VAR HTMLPATH>get_project.php?ms='+ms+'&getfile&');
+							$( '#btndwl'+ms ).fadeIn("slow");
+						}
+						else
+						{
+							$( '#btndwl'+result["ms"+ms] ).attr("href");
+							$( '#btndwl'+result["ms"+ms] ).fadeOut("slow");
+							if ( parseInt(result["ms"+ms].ms) > 0 )
+							{
+								show_error("Miniserver #"+result["ms"+ms].ms +"\n<br>"+ result["ms"+ms].message);
+							}
+							else
+							{
+								show_error(result["ms"+ms].message);
+							}
+						}
+	            },
+	            error: function (errorThrown) 
+	            {
+					$( '#iwd_status_div' ).html('<TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms).trigger('create');
+					$( '#iwd_status_div' ).fadeIn('slow');
+					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
+			    }	
+	        });
+			setTimeout( function() { status = setInterval(function() { checkStatus(); },2500); }, 5000);
+			
+	}
+	
 	function runCheck(ms)
 	{
 			clearInterval(status);
@@ -524,6 +570,7 @@
 						if ( result["ms"+ms].success === true) 
 						{
 							build_svgDropdown (result["ms"+ms].ms,result["ms"+ms].project_as_json);
+							getProjectfile(result["ms"+ms].ms);
 						}
 						else
 						{
@@ -536,14 +583,16 @@
 								show_error(result["ms"+ms].error);
 							}
 						}
-						status = setInterval(function() { checkStatus(); },2500);
+						
+						setTimeout( function() { status = setInterval(function() { checkStatus(); },2500); }, 5000);
 	            },
 	            error: function (errorThrown) 
 	            {
 					$( '#iwd_status_div' ).html('<TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms).trigger('create');
+					$( '#iwd_status_div' ).fadeIn('slow');
 					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
 					setTimeout( function() {$('.to_disable_on_save').removeClass('ui-disabled');}, 500);
-					status = setInterval(function() { checkStatus(); },10000);
+					setTimeout( function() { status = setInterval(function() { checkStatus(); },2500); }, 5000);
 			    }	
 	        });
 	}
@@ -584,7 +633,7 @@
 		{
 			$('.to_disable_on_save').addClass('ui-disabled');
 			$( '#iwd_status_div' ).html('<TMPL_VAR Icon-Watchdog.INF_0095_WAIT_UPLOAD_IN_PROGRESS>').trigger('create');
-			$( '#iwd_status_div' ).fadeIn('fast');
+			$( '#iwd_status_div' ).fadeIn('slow');
 			return;
 		}
 		else
@@ -652,6 +701,7 @@
 				{
 					$('.to_disable_on_save').removeClass('ui-disabled');
 					$( '#iwd_status_div' ).html('<TMPL_VAR ERRORS.ERR_013_ERROR_READING_STATUS>').trigger('create');
+					$( '#iwd_status_div' ).fadeIn('slow');
 					console.log('<TMPL_VAR GENERAL.MY_NAME> function checkStatus failed: Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
 					
 				}	
@@ -682,7 +732,7 @@
 
 		notify = setInterval(function() { checkNotifications(); },10000);
 		checkNotifications();	
-		status = setInterval(function() { checkStatus(); },2500);
+		status = setInterval(function() { checkStatus(); },5000);
 		checkStatus();	
 
 		// Event handler for save
