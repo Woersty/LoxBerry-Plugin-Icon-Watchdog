@@ -1,10 +1,10 @@
-<link rel="stylesheet" href="<TMPL_VAR HTMLPATH>style.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
-<link rel="stylesheet" href="<TMPL_VAR HTMLPATH>fancy_fileupload.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
+<link rel="stylesheet" href="<TMPL_VAR HTMLPATH>css/style.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
+<link rel="stylesheet" href="<TMPL_VAR HTMLPATH>css/fancy_fileupload.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
 <script type="text/javascript"> var langmap = {<TMPL_VAR LANGMAP.LANGMAP>} // fancy-fileupload LoxBerry translation mapping</script>
-<script type="text/javascript" src="<TMPL_VAR HTMLPATH>jquery.ui.widget.js?<TMPL_VAR VERSION>"></script>
-<script type="text/javascript" src="<TMPL_VAR HTMLPATH>jquery.fileupload.js?<TMPL_VAR VERSION>"></script>
-<script type="text/javascript" src="<TMPL_VAR HTMLPATH>jquery.iframe-transport.js?<TMPL_VAR VERSION>"></script>
-<script type="text/javascript" src="<TMPL_VAR HTMLPATH>jquery.fancy-fileupload.js?<TMPL_VAR VERSION>"></script>
+<script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.ui.widget.js?<TMPL_VAR VERSION>"></script>
+<script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.fileupload.js?<TMPL_VAR VERSION>"></script>
+<script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.iframe-transport.js?<TMPL_VAR VERSION>"></script>
+<script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.fancy-fileupload.js?<TMPL_VAR VERSION>"></script>
 <style>
 .iconrow  				{ width: 32x; height: 32px; padding: 5px; cursor: pointer;}
 .icon_ok 					{ }
@@ -334,7 +334,7 @@
 						$( document ).ready(function() 
 						{
 						
-							$(".svg .ff_fileupload_wrap .ff_fileupload_dropzone").css('background-Image','url(<TMPL_VAR HTMLPATH>fancy_upload_svg.svg)');
+							$(".svg .ff_fileupload_wrap .ff_fileupload_dropzone").css('background-Image','url(<TMPL_VAR HTMLPATH>css/fancy_upload_svg.svg)');
 							<TMPL_VAR MS_MONITOR_CB_script>
 							$( "label[for='MS_MONITOR_CB_script<TMPL_VAR MSID>']" ).removeClass( "ui-checkbox-off" ).addClass( "ui-checkbox-on" );
 
