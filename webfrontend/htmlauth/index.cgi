@@ -204,9 +204,9 @@ sub defaultpage
 			$ms{Name} 			= $miniservers{$ms_id}{'Name'};
 			$ms{IPAddress} 		= $miniservers{$ms_id}{'IPAddress'};
 			$ms{PreferHttps} 	= $miniservers{$ms_id}{'PreferHttps'};
-			$ms{icontable_IconPlace}	= '<table class="icontable IconPlace ms'.$ms_id.' " id="icontable_IconPlace_'.$ms_id.'"><thead><tr><th>'.$L{'GENERAL.TXT_TABLE_ICON'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_UNIQUEID'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_TITLE'}.'</th></tr></thead><tbody></tbody></table>';
-			$ms{icontable_IconCat}		= '<table class="icontable IconCat ms'.$ms_id.' "   id="icontable_IconCat_'.$ms_id.'"><thead><tr><th>'.$L{'GENERAL.TXT_TABLE_ICON'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_UNIQUEID'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_TITLE'}.'</th></tr></thead><tbody></tbody></table>';
-			$ms{icontable_IconState}	= '<table class="icontable IconState ms'.$ms_id.' " id="icontable_IconState_'.$ms_id.'"><thead><tr><th>'.$L{'GENERAL.TXT_TABLE_ICON'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_UNIQUEID'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_TITLE'}.'</th></tr></thead><tbody></tbody></table>';
+			$ms{icontable_IconPlace}	= '<center><table style="display:none;" class="icontable IconPlace ms'.$ms_id.' " id="icontable_IconPlace_'.$ms_id.'"><thead><tr><th>'.$L{'GENERAL.TXT_TABLE_ICON'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_UNIQUEID'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_TITLE'}.'</th></tr></thead><tbody></tbody></table></center>';
+			$ms{icontable_IconCat}		= '<center><table style="display:none;" class="icontable IconCat ms'.$ms_id.' "   id="icontable_IconCat_'.$ms_id.'"><thead><tr><th>'.$L{'GENERAL.TXT_TABLE_ICON'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_UNIQUEID'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_TITLE'}.'</th></tr></thead><tbody></tbody></table></center>';
+			$ms{icontable_IconState}	= '<center><table style="display:none;" class="icontable IconState ms'.$ms_id.' " id="icontable_IconState_'.$ms_id.'"><thead><tr><th>'.$L{'GENERAL.TXT_TABLE_ICON'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_UNIQUEID'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_TITLE'}.'</th></tr></thead><tbody></tbody></table></center>';
 			
 			if ( $ms{PreferHttps} eq "1" )
 			{
