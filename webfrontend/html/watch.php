@@ -682,7 +682,8 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 		}
 		if ( !($key_in_filetree === false) )
 		{
-			if ( $filetree["size"][$key_in_filetree] == filesize($file_on_disk) && $filetree["time"][$key_in_filetree] == filemtime($file_on_disk) )
+			// Time is not compared anymore
+			if ( $filetree["size"][$key_in_filetree] == filesize($file_on_disk) )
 			{
 				debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0044_COMPARE_FOUND_REMOVE_FROM_LIST"]." (".$short_name.")",6); 
 				unset($filetree["name"][$key_in_filetree]);
@@ -699,8 +700,8 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 		}
 		else
 		{
-				debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_030_COMPARE_NOT_ON_MS_ANYMORE"]." (".$short_name.") ".filesize($file_on_disk)." Bytes [".filemtime($file_on_disk)."]",1);
-				unlink($file_on_disk);
+			debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_030_COMPARE_NOT_ON_MS_ANYMORE"]." (".$short_name.") ".filesize($file_on_disk)." Bytes [".filemtime($file_on_disk)."]",1);
+			//unlink($file_on_disk);
 		}
 	}
 
