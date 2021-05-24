@@ -132,7 +132,7 @@ function import_loxone_project($file,$ms)
 			$fixed_xml_string .= $fixed_xml_line;
 			LOGDEB ("$ms Before:".htmlentities($xml_line));
 			LOGDEB ("$ms After:".htmlentities($fixed_xml_line));
-			LOGWARN ("MS#".$ms." ".$L["ERRORS.ERR_054_DTYPE_FIXED"]);
+			LOGWARN ("MS#".$ms." ".$L["ERRORS.ERR_054_XML_FIXED"]);
 		}
 		else if ( strpos($xml_line,' Type="LoxLIVE"') )
 		{
@@ -142,6 +142,22 @@ function import_loxone_project($file,$ms)
 				$ProjectSerial = strtoupper(substr($xml_line,$serial_position+8,12));
 			}
 			$fixed_xml_string .= $xml_line."\n";
+		}
+		else if ( strpos($xml_line,'&apos;') )
+		{
+			$fixed_xml_line = str_ireplace('&apos;','__dummy_for_apos__',$xml_line) . "\n";
+			$fixed_xml_string .= $fixed_xml_line;
+			LOGDEB ("$ms Before:".htmlentities($xml_line));
+			LOGDEB ("$ms After:".htmlentities($fixed_xml_line));
+			LOGWARN ("MS#".$ms." ".$L["ERRORS.ERR_054_XML_FIXED"]);
+		}
+		else if ( strpos($xml_line,'`') )
+		{
+			$fixed_xml_line = str_ireplace('&apos;','__dummy_for_backtick__',$xml_line) . "\n";
+			$fixed_xml_string .= $fixed_xml_line;
+			LOGDEB ("$ms Before:".htmlentities($xml_line));
+			LOGDEB ("$ms After:".htmlentities($fixed_xml_line));
+			LOGWARN ("MS#".$ms." ".$L["ERRORS.ERR_054_XML_FIXED"]);
 		}
 		else
 		{
@@ -177,7 +193,7 @@ function import_loxone_project($file,$ms)
 
 	foreach ($xml->C->C as $value) 
 	{
-		if ((string) $value['Title'] == 'Symbole') 
+		if ((string) $value['Type'] == "LoxCaption" && (string) $value['CaptionType'] == 5 && (string) $value['SubType'] == 5 )
 		{
 			foreach ($value as $symbol_category) 
 			{
@@ -210,7 +226,7 @@ function import_loxone_project($file,$ms)
 	}
 	//$pretty .= "</Table>";
 	$data['xml'] = $xml->asXML();
-	$data['xml'] = str_replace(array("<IoData/>","<Display/>"),array("<IoData></IoData>","<Display></Display>"),$data);
+	$data['xml'] = str_replace(array("<IoData/>","<Display/>","__dummy_for_apos__","__dummy_for_backtick__"),array("<IoData></IoData>","<Display></Display>","&apos;","`"),$data);
 	$data['json'] = json_encode($IconData);
 	$data['Serial'] = $ProjectSerial;
 	//$data['pretty'] = $pretty;
