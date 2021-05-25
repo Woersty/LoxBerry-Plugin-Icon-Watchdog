@@ -17,12 +17,12 @@ if ( -f $watchstate_tmp && int $output_string eq 0 )
 	open my $fh, '<', $watchstate_tmp or LOGERR $ERR{'ERRORS.ERR_014_PROBLEM_WITH_STATE_FILE'};
 	my $data = do { local $/; <$fh> };
 	close $fh;
-	if ( $data ne "-" )
+	if ( $data ne "" )
 	{
 		notify( $lbpplugindir, $ERR{'GENERAL.MY_NAME'}, $ERR{'ERRORS.ERR_015_ERR_STATE_FILE_REINIT'}." ".$data,1);
 		LOGWARN $ERR{'ERRORS.ERR_015_ERR_STATE_FILE_REINIT'}." ".$data;
 		open(my $fh, '>', $watchstate_tmp) or exit;
-		print $fh "-";
+		print $fh "";
 		close $fh;
 	}
 }
