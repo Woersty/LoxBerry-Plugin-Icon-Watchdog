@@ -6,7 +6,8 @@
 use LoxBerry::System;
 use LoxBerry::Log;
 my $watchstate_tmp 				= "/tmp"."/"."Icon-Watchdog-state.txt";
-my $log 						= LoxBerry::Log->new ( name => 'Icon-Watchdog (CronJob)' ); 
+my $logfilename 				= "Icon-Watchdog_cron.log";
+my $log 						= LoxBerry::Log->new ( name => 'Icon-Watchdog (CronJob)', filename => $lbplogdir ."/". $logfilename, append => 1 );
 my %ERR 						= LoxBerry::System::readlanguage();
 LOGSTART $ERR{'LOGGING.LOG_018_CRON_CALLED'};
 # Complete rededign - from now it's PHP and not Perl anymore

@@ -1,0 +1,1 @@
+0 20 * * * REPLACELBPBINDIR/watch.pl > REPLACELBPLOGDIR/Icon-Watchdog_cron.log 2>&1 &
