@@ -14,9 +14,9 @@ echo "<INFO> Moving back existing log files"
 mv -v /tmp/$ARGV1\_upgrade/log/* $ARGV5/log/plugins/$ARGV3/
 
 echo "<INFO> Moving back existing compare files"
-mv -v $ARGV5/data/plugins/tmp_data_iwd $ARGV5/data/plugins/$ARGV3
+mv -v $ARGV5/data/plugins/tmp_data_iwd/* $ARGV5/data/plugins/$ARGV3/
 
 echo "<INFO> Remove temporary folders"
-rm -r /tmp/$ARGV1\_upgrade
-
+rm -rf /tmp/$ARGV1\_upgrade
+rm -rf $ARGV5/data/plugins/tmp_data_iwd
 exit 0

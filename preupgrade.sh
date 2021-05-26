@@ -39,7 +39,7 @@ mv -v $ARGV5/log/plugins/$ARGV3/* /tmp/$ARGV1\_upgrade/log/
 
 echo "<INFO> Backing up existing data files"
 mkdir -p $ARGV5/data/plugins/tmp_data_iwd
-mv -v $ARGV5/data/plugins/$ARGV3 $ARGV5/data/plugins/tmp_data_iwd
+mv -v $ARGV5/data/plugins/$ARGV3/* $ARGV5/data/plugins/tmp_data_iwd
 
 # Exit with Status 0
 exit 0
