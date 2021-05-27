@@ -251,8 +251,13 @@
 					<TMPL_LOOP NAME="MSROW">
 						#<TMPL_VAR MSID> - <TMPL_VAR Name> <small>[<TMPL_VAR IPAddress>]</small> <span class="PreferHttps<TMPL_VAR PreferHttps>">HTTPS</span><BR>
 						<input data-mini="true" class="to_save to_disable_on_save to_disable_on_plugin_off to_hide_on_plugin_off" onclick="if ( $(this).is(':checked') ) { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(1); } else { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(0); }" type="checkbox" id="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>" name="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><label id="MS_MONITOR_CB_LABEL<TMPL_VAR MSID>" class="to_disable_on_plugin_off" for="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><TMPL_VAR GENERAL.TXT_LABEL_MONITOR></label>
-						<table><tr><td><a id="btncheck<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left;" data-role="button" data-icon="clock" data-mini="true" onclick="runCheck('<TMPL_VAR MSID>');"><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></a></td><td>
-						<a target="_self" id="btndwl<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left; display:none;" data-role="button" data-icon="action" data-mini="true");"><TMPL_VAR GENERAL.TXT_DOWNLOAD_CONVERTED_PROJECT></a></td></tr></table>
+						<table>
+						 <tr>
+						  <td><a id="btncheck<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left;" data-role="button" data-icon="clock" data-mini="true" onclick="runCheck('<TMPL_VAR MSID>');"><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></a></td>
+						  <td><a target="_self" id="btndwl<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left; display:none;" data-role="button" data-icon="action" data-mini="true"><TMPL_VAR GENERAL.TXT_DOWNLOAD_CONVERTED_PROJECT></a></td>
+						  <td style="width:100%"></td>
+						  <td><a href="<TMPL_VAR HTMLPATH>svg/Example_EU_Socket.svg" download="<TMPL_VAR GENERAL.TXT_DOWNLOAD_EXAMPLE_SVG_FILENAME>" id="btnsvg<TMPL_VAR MSID>" class="btnsvg" style="text-align:right;" data-role="button" data-icon="action" data-mini="true"><TMPL_VAR GENERAL.TXT_DOWNLOAD_EXAMPLE_SVG></a></td>
+						  </tr></table>
 						<input class="to_disable_on_plugin_off" id="MS_MONITOR_CB<TMPL_VAR MSID>" name="MS_MONITOR_CB<TMPL_VAR MSID>" type="hidden" value="<TMPL_VAR MS_MONITOR_CB>">
 						<DIV class="to_disable_on_plugin_off" id="loxone_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,79,.5);">
 							<TMPL_VAR Icon-Watchdog.TXT_IMPORT_PROJECT>
