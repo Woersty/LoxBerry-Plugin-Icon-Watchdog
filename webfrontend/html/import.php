@@ -71,21 +71,15 @@ function convert_icons($xml,$icon_types)
 	{
 		// Get a Xpath list with all icons
 		$icon_Xpath_array = array_keys($rs,$icon_type);
-		// Start Index numbering at 1
-		$Ix = 1;
 		// Convert each icon
 		foreach ($icon_Xpath_array as $icon_Xpath)
 		{
-			// New numbering
-			$Ix++;
 			// Get parent node
 			$Icon_Node=str_replace("/@Type", "", $icon_Xpath);
 			// Remove bitmap icon definition
 			unset($xml->xpath($Icon_Node.'/@Icon')[0][0]);
 			// Remove User info
 			unset($xml->xpath($Icon_Node.'/@User')[0][0]);
-			// Set new index
-			$xml->xpath($Icon_Node."[@Type='$icon_type']")[0]->attributes()['Ix'] = $Ix;
 		}
 	}
 	return $xml;
