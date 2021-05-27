@@ -1331,13 +1331,23 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 							}
 							else
 							{
-								debug(__line__,str_replace("<user>",$miniserver['Admin_RAW'],$L["Icon-Watchdog.INF_0107_FTP_LOGIN_OK"])." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,4);
+								debug(__line__,str_replace("<user>",$miniserver['Admin_RAW'],$L["Icon-Watchdog.INF_0107_FTP_LOGIN_OK"])." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,6);
 								debug(__line__,"Miniserver #".$msno." Login ".$miniserver['Admin_RAW']." and Password ".$miniserver['Pass_RAW']." for ".$miniserver['IPAddress']." at Port ".$ftpport);
 								// Schalte passiven Modus ein
-								ftp_pasv($conn_id, true);
+								//ftp_pasv($conn_id, true);
 								ftp_set_option($conn_id, FTP_TIMEOUT_SEC, 60);
 								// Lade eine Datei hoch
-								if (ftp_put($conn_id, $remote_file, $file, FTP_BINARY)) 
+								debug(__line__,"Miniserver #".$msno." Try to send $file as $remote_file");
+								$transfer = ftp_put($conn_id, $remote_file, $file, FTP_BINARY);
+								if (!$transfer) 
+								{
+									foreach ( error_get_last() as $ftp_error )
+									{
+										debug(__line__,$ftp_error);
+									}
+									debug(__line__,str_replace(array("<file>","<ms>"),array($file,$msno),$L["ERRORS.ERR_050_FTP_UPLOAD_FAILED"]),4);
+								}
+								else 
 								{
 									debug(__line__,str_replace(array("<file>","<ms>"),array($file,$msno),$L["Icon-Watchdog.INF_0098_FTP_UPLOAD_DONE"]),5);
 									file_put_contents ("/tmp/ms".$msno."_images.zip.md5", md5_file ($savedir_path."/ms_".$msno."/web/images.zip"));
@@ -1371,11 +1381,6 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 										}
 										curl_close($curl_reboot);
 									}
-								}
-								else 
-								{
-									debug(__line__,str_replace(array("<file>","<ms>"),array($file,$msno),$L["ERRORS.ERR_050_FTP_UPLOAD_FAILED"]),4);
-									debug(__line__,implode("\n",error_get_last()));
 								}
 							}
 							// Verbindung schließen
