@@ -88,7 +88,7 @@ require_once "fancy_file_uploader_helper.php";
 						if (is_dir("$lbpdatadir/project/ms_$ms/"))
 						{
 							rename($files[0]["file"], "$lbpdatadir/project/ms_$ms/".$files[0]["name"]);
-							LOGINF  ("<INFO>".str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"]));
+							LOGINF  ("<INFO>".str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"])." [".$files[0]["name"]."]");
 							LOGINF  ("<INFO>".$L["LOGGING.LOG_023_IMPORT_STARTED"]);
 							$project = import_loxone_project("$lbpdatadir/project/ms_$ms/".$files[0]["name"],$ms);
 							LOGINF  ("<INFO>".$L["LOGGING.LOG_024_IMPORT_DONE"]);
@@ -138,7 +138,7 @@ require_once "fancy_file_uploader_helper.php";
 						if (is_dir("$lbpdatadir/zip/ms_$ms/"))
 						{
 							rename($files[0]["file"], "$lbpdatadir/zip/ms_$ms/".strtolower($files[0]["name"]));
-							LOGINF  ("<INFO>".str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"]));
+							LOGINF  ("<INFO>".str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"])." [".$files[0]["name"]."]");
 						
 							$result = array(
 								"success" => true,

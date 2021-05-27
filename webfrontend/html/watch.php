@@ -1321,6 +1321,7 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 						}
 						else
 						{
+							debug(__line__,$L["Icon-Watchdog.INF_0106_FTP_CONNECT_OK"]." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,6);
 							// Login mit Benutzername und Passwort
 							$login_result = ftp_login($conn_id, $miniserver['Admin_RAW'], $miniserver['Pass_RAW']);
 							if ( !$login_result )
@@ -1330,6 +1331,8 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 							}
 							else
 							{
+								debug(__line__,str_replace("<user>",$miniserver['Admin_RAW'],$L["Icon-Watchdog.INF_0107_FTP_LOGIN_OK"])." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,4);
+								debug(__line__,"Miniserver #".$msno." Login ".$miniserver['Admin_RAW']." and Password ".$miniserver['Pass_RAW']." for ".$miniserver['IPAddress']." at Port ".$ftpport);
 								// Schalte passiven Modus ein
 								ftp_pasv($conn_id, true);
 								ftp_set_option($conn_id, FTP_TIMEOUT_SEC, 60);
@@ -1337,7 +1340,7 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 								if (ftp_put($conn_id, $remote_file, $file, FTP_BINARY)) 
 								{
 									debug(__line__,str_replace(array("<file>","<ms>"),array($file,$msno),$L["Icon-Watchdog.INF_0098_FTP_UPLOAD_DONE"]),5);
-									@file_put_contents ("/tmp/ms".$msno."_images.zip.md5", md5_file ($savedir_path."/ms_".$msno."/web/images.zip"));
+									file_put_contents ("/tmp/ms".$msno."_images.zip.md5", md5_file ($savedir_path."/ms_".$msno."/web/images.zip"));
 
 									$curl_reboot = curl_init(str_replace(" ","%20",$prefix.$miniserver['IPAddress'].":".$port."/dev/sys/reboot"));
 									curl_setopt($curl_reboot, CURLOPT_USERPWD				, $miniserver['Credentials_RAW']);
@@ -1372,6 +1375,7 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 								else 
 								{
 									debug(__line__,str_replace(array("<file>","<ms>"),array($file,$msno),$L["ERRORS.ERR_050_FTP_UPLOAD_FAILED"]),4);
+									debug(__line__,implode("\n",error_get_last()));
 								}
 							}
 							// Verbindung schließen
