@@ -479,7 +479,7 @@ function svgDialog(ms,U,Title){
 			$.ajax({url: '<TMPL_VAR HTMLPATH>dialog.php', type: 'POST', data : {ms:ms},
 	            success: function (dialog) 
 	            {
-						$("#dialog-heading").html("<TMPL_VAR Icon-Watchdog.INF_0108_PLEASE_SELECT_AN_ICON_TO_ASSIGN><br/><b>'"+Title+"'</b><br/><sub>"+U+"</sub>");
+						$("#dialog-heading").html("<TMPL_VAR Icon-Watchdog.INF_0108_PLEASE_SELECT_AN_ICON_TO_ASSIGN><br/><b>"+Title+"</b><br/><sub>"+U+"</sub>");
 						$("#dialogcontent").html(dialog);
 	            },
 	            error: function (errorThrown) 
