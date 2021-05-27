@@ -28,7 +28,7 @@ ini_set("log_errors", 1);
 $msno = "";
 if ( !isset($_REQUEST["ms"]) ) 
 {
-	$result["ms0"] = array("ms" => 0,"success" => false, "error" => true, "message" => $L["ERRORS.ERR_056_MS_ID_MISSING"]); 
+	$result["ms0"] = array("ms" => 0,"success" => false, "error" => true, "display_error" => true, "message" => $L["ERRORS.ERR_056_MS_ID_MISSING"]); 
 	header('Content-Type: application/json; charset=utf-8');
 	echo json_encode($result, JSON_UNESCAPED_SLASHES);
 	$log->LOGTITLE($L["ERRORS.ERR_056_MS_ID_MISSING"]);
@@ -65,7 +65,11 @@ else
 	}
 	else
 	{
+		$result["ms".$msno] = array("ms" => $msno,"success" => false, "error" => true, "display_error" => true, "message" => $L["ERRORS.ERR_002_ERROR_READING_CFG"]); 
+		header('Content-Type: application/json; charset=utf-8');
+		echo json_encode($result, JSON_UNESCAPED_SLASHES);
 		LOGWARN ($L["ERRORS.ERR_002_ERROR_READING_CFG"]);
+		$log->LOGTITLE($L["ERRORS.ERR_002_ERROR_READING_CFG"]);
 		LOGEND ("");
 		exit;
 	}
@@ -77,8 +81,11 @@ else
 	}
 	else
 	{
-		$log->LOGTITLE($L["LOGGING.LOG_011_PLUGIN_DISABLED"]);
+		$result["ms".$msno] = array("ms" => $msno,"success" => false, "error" => true, "display_error" => false, "message" => $L["LOGGING.LOG_011_PLUGIN_DISABLED"]); 
+		header('Content-Type: application/json; charset=utf-8');
+		echo json_encode($result, JSON_UNESCAPED_SLASHES);
 		LOGINF ($L["LOGGING.LOG_011_PLUGIN_DISABLED"]);
+		$log->LOGTITLE($L["LOGGING.LOG_011_PLUGIN_DISABLED"]);
 		LOGEND ("");
 		exit;
 	}
@@ -89,8 +96,11 @@ else
 	}
 	else
 	{
-		$log->LOGTITLE("MS#".$msno." ".$L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"]);
-		LOGINF ("MS#".$msno." ".$L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"]);
+		$result["ms".$msno] = array("ms" => $msno,"success" => false, "error" => true, "display_error" => false, "message" => $L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"]); 
+		header('Content-Type: application/json; charset=utf-8');
+		echo json_encode($result, JSON_UNESCAPED_SLASHES);
+		LOGINF ($L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"]);
+		$log->LOGTITLE($L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"]);
 		LOGEND ("");
 		exit;
 	}
@@ -147,7 +157,7 @@ else
 			$result["ms$msno"] = array(
 					"ms" => $msno,
 					"success" => false,
-					"error" => true,
+					"error" => true, "display_error" => true,
 					"message" => "MS#".$msno." ".$L["ERRORS.ERR_043_GET_NO_PROJECT_DATA"].$msno
 				);
 			header('Content-Type: application/json; charset=utf-8');
@@ -163,7 +173,7 @@ else
 		$result["ms$msno"] = array(
 					"ms" => $msno,
 					"success" => false,
-					"error" => true,
+					"error" => true, "display_error" => true,
 					"message" => "MS#".$msno." ".$L["ERRORS.ERR_042_NO_PROJECT_FILE"]
 				);
 		header('Content-Type: application/json; charset=utf-8');

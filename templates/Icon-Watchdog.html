@@ -7,8 +7,9 @@
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.fancy-fileupload.js?<TMPL_VAR VERSION>"></script>
 <style>
 .iconrow  				{ width: 32x; height: 32px; padding: 5px; cursor: pointer;}
-.icon_ok 				{ }
+.icon_ok 				{ color: #4D8C00;}
 .icon_bad 				{ color: #FF0000; }
+.icon_default			{ color: #808080; }
 
 .icontable {
 	cell-spacing:1px;
@@ -201,6 +202,8 @@
 	return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
 	}
 	$("body").append('<div style="display:none;" id="iwd_status_div"><TMPL_VAR STATUS></div>');
+	$("body").append('<div style="display:none;" id="svg_status_div"><TMPL_VAR STATUS></div>');
+	$("body").append('<div style="display:none;" id="backdrop"><dialog role="dialog" aria-labelledby="dialog-heading"><button id="close-dialog"><TMPL_VAR GENERAL.TXT_DIALOG_CANCEL></button><div class="dialog-heading" id="dialog-heading"><TMPL_VAR Icon-Watchdog.INF_0108_PLEASE_SELECT_AN_ICON_TO_ASSIGN></div><p id="dialogcontent"> Dies ist eine zugängliche Dialog-Box, die Sie auch mit der Tastatur benutzen können.</p></dialog></div>');
 </script>
 <CENTER>
 	<div style="background-position: center; margin-left: auto;  margin-right: auto; height:128px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+IDxzdmcgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c29kaXBvZGk9Imh0dHA6Ly9zb2RpcG9kaS5zb3VyY2Vmb3JnZS5uZXQvRFREL3NvZGlwb2RpLTAuZHRkIiB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIgdmVyc2lvbj0iMS4xIiBpZD0iRWJlbmVfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgaW5rc2NhcGU6dmVyc2lvbj0iMC45MSByMTM3MjUiIHNvZGlwb2RpOmRvY25hbWU9IndhdGNoZG9nLnN2ZyI+PHRpdGxlIGlkPSJ0aXRsZTQxODQiPldhdGNoZG9nPC90aXRsZT48bWV0YWRhdGEgaWQ9Im1ldGFkYXRhOSI+PHJkZjpSREY+PGNjOldvcmsgcmRmOmFib3V0PSIiPjxkYzpmb3JtYXQ+aW1hZ2Uvc3ZnK3htbDwvZGM6Zm9ybWF0PjxkYzp0eXBlIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+PGRjOnRpdGxlPldhdGNoZG9nPC9kYzp0aXRsZT48L2NjOldvcms+PC9yZGY6UkRGPjwvbWV0YWRhdGE+PGRlZnMgaWQ9ImRlZnM3IiAvPjxzb2RpcG9kaTpuYW1lZHZpZXcgcGFnZWNvbG9yPSIjZmZmZmZmIiBib3JkZXJjb2xvcj0iIzY2NjY2NiIgYm9yZGVyb3BhY2l0eT0iMSIgb2JqZWN0dG9sZXJhbmNlPSIxMCIgZ3JpZHRvbGVyYW5jZT0iMTAiIGd1aWRldG9sZXJhbmNlPSIxMCIgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiIGlua3NjYXBlOnBhZ2VzaGFkb3c9IjIiIGlua3NjYXBlOndpbmRvdy13aWR0aD0iMTkyMCIgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iMTAxNyIgaWQ9Im5hbWVkdmlldzUiIHNob3dncmlkPSJmYWxzZSIgaW5rc2NhcGU6em9vbT0iMTAuNDI5ODI1IiBpbmtzY2FwZTpjeD0iMjIuNTg0NTI0IiBpbmtzY2FwZTpjeT0iMzIuOTU3Mzc0IiBpbmtzY2FwZTp3aW5kb3cteD0iLTgiIGlua3NjYXBlOndpbmRvdy15PSItOCIgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMSIgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0iRWJlbmVfMSIgLz48cGF0aCBkPSJtIDI3LjUyMzAwMiw1Ljk0OTE1MjMgLTI0LjQ4OTEwMzksMCAwLDE5Ljc3OTY2MDcgMjYuMzcyODgwOSwwIDAsLTE5Ljc3OTY2MDcgLTEuODgzNzc3LDAgeiBtIDAsMTcuODk1ODgzNyAtMjIuNjA1MzI2OSwwIDAsLTE2LjAxMjEwNTIgMjIuNjA1MzI2OSwwIDAsMTYuMDEyMTA1MiB6IG0gLTYuNTkzMjIxLC03LjUzNTEwOCAtMy43Njc1NTYsMi44MjU2NjcgLTUuNjUxMzMxLC02LjU5MzIyMSAtNC43MDk0NDE3LDkuNDE4ODg2IDE4LjgzNzc3MTcsMCB6IG0gMC45NDE4ODcsLTEuODgzNzc3IiBpZD0icGF0aDMiIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiIC8+PHBhdGggaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIgaWQ9InBhdGgxNiIgc3R5bGU9ImZpbGw6IzZkYWMyMDtmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6ZXZlbm9kZDtzdHJva2U6bm9uZSIgZD0ibSAxMS45Mzk4NywxOC43NDk5NjcgYyAyLjEzNzU3NSwtMi4yNjQ4NDkgMi40OTIzODksLTAuMjA2ODQ0IDQuMDc3Njc3LDAuMjI4MDEyIDAuMTk4MTYxLDAuMDUwNTYgMC4zMzEzMjUsMC4wNjM4NSAwLjMxNzA1OCwwLjE1MDk5IC0wLjEzNjMzNSwwLjg4OTg3IC0wLjQzMTUxNiwxLjA1Njg2NSAtMC43NjA2NDgsMS4wNjUxOTMgLTAuMzY0NDMxLDAuMDExMTMgLTAuNjYxNjczLDAgLTAuODgwMzY0LDAuMTA0MjY1IC0wLjI0NzkxMiwwLjExMDU2OCAtMC40NjM1MSwwLjI4MTcxNCAtMC42MjU0NDgsMC40OTY1NzQgbCAtMi4yNDE3ODEsLTEuMTIwNzM3IGMgMC4wNzczOSwtMC4zMDE5NzcgMC4xMTQ2NDMsLTAuNjEzMjkyIDAuMTEzNTA2LC0wLjkyNDI5NyB6IG0gMS44OTc5MDgsMi40NzI1NzUgYyAtMC40Nzc3NTQsMS4yNDU1NzQgMC4xNTkwNTYsMy4xMDAxODggLTEuOTcxMDY4LDMuNzgxMTkxIC0wLjEzMTI4OSwxLjA1Nzk4MSAtMC4xMjE3NzcsMi4xMjkxNDIgMC4wMjY3NCwzLjE4NTAyMiBsIDAuMjUxODIyLC0wLjAyOTI5IGMgMC40NjU0NjcsLTAuMDQ4NzUgMC40NjIzNzYsMC4zNjc4NDYgMC4yNDI1NSwwLjYzNDI4IGwgLTEuMzg3MTI3LDAgQyAxMC45MDE2MTUsMjcuNTIzMDUzIDEwLjY1MTgyMiwyNi4xMzA0MzQgMTAuNzU0MTI2LDI0LjkxNTU3NiAxMC4wMjkzODQsMjUuMTEwMTQ4IDkuNTkwNzM2MiwyNS4wNTY0MTkgOC44MDQ0ODcyLDI0Ljc2MDQxIDguNDIyNDMzMiwyNC42MTg0NSA2Ljg0MjQwMjYsMjMuNjkyMjg1IDYuNDE1MjIwOSwyNC4wNjcxNjEgNi4xNzQ3MzI2LDI0LjI4MTk5NSA2LjgxMTU0MjQsMjUuMTMyNDMzIDUuMjI2MjU1LDI2LjY0MTI3NyBsIDAuMDI3NzY4LDEuNDkyNzM0IDAuMjgwODA3NSwwIGMgMC4zOTYzMjIzLDAgMC4zODQ5ODY4LDAuMzk5Mjg4IDAuMjM4MzIxNywwLjY1OTczIGwgLTAuNzkyNjQzOSwwIGMgLTAuNTIxMjk1MiwwIC0wLjQxMjk0MDgsMC4wNTQ3MSAtMC40MjAwNDg0LC0wLjQ4NDQwNyBsIC0wLjAxMjQ5NSwtMS4xNjc0MzUgLTAuMDgzNDkyLC0wLjcxOTYwNyBjIDAsLTAuNDI4NTc5IDAuMzE1ODE1OSwtMC44ODU3MTkgMC4wMTQ1NiwtMS45MDcxMjEgQyA0LjI4MDg3MiwyMy44NDAxNiA0LjI5ODMwOTksMjMuMzAxMTE3IDMuNzc5MTU0NiwyMy4yMjcxNTMgMy4yOTkzNDA5LDI0LjE3ODcxNyAyLjgzOTg0NTgsMjUuMDUwMTQxIDIuNDM1Mzg1OCwyNi4wNDY0MyAyLjQwNjQ3NzgsMjYuMTEzMzEgMi4zNzQ1ODg4LDI2LjE3ODE2OSAyLjMzODM2NjgsMjYuMjQxMDAzIDEuODc5MTg4MSwyNy4yODE3NTcgMS42ODcxMzA0LDI2LjQ5OTMxNiAxLjk0MjA0NDksMjUuODgzMTcxIEwgMi4xMTI0MzcsMjUuNDcwNzA1IEMgMi4zMzQxMzkxLDI0LjU5ODI2OCAyLjk1NDUxNTEsMjIuOTYyNTM2IDMuNTQxODkwMywyMi4zNTc1NDYgNS43NTI1MjA0LDIwLjA2NzI3MyAxMC4yMzI4MDcsMjIuMjM1MTIgMTEuNTUyODQ5LDIwLjI1MTcgbCAyLjI2NzQ5LDAuOTcyODYzIHoiIC8+PGcgdHJhbnNmb3JtPSJtYXRyaXgoMC4wOTc3MjMxMiwwLDAsLTAuMDk3NzIzMTIsMTcuMzI2NTY2LDE1LjQ1MzkwNykiIGlkPSJnMTAtMSIgc3R5bGU9ImZpbGw6IzZkYWMyMDtmaWxsLW9wYWNpdHk6MSI+PGcgdHJhbnNmb3JtPSJzY2FsZSgwLjEsMC4xKSIgaWQ9ImcxMi0yIiBzdHlsZT0iZmlsbDojNmRhYzIwO2ZpbGwtb3BhY2l0eToxIj48cGF0aCBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIiBpZD0icGF0aDE0LTYiIHN0eWxlPSJmaWxsOiM2ZGFjMjA7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlOm5vbmUiIGQ9Im0gNDYwLjY2LDUyNC44NzkgYyA2MC44OTksMCAxMTUuODIsLTM2LjY4IDEzOS4xMSwtOTIuOTY5IEMgNjIzLjA5LDM3NS42NiA2MTAuMTk5LDMxMC44OTggNTY3LjE0OCwyNjcuODA5IDUyNC4wNTksMjI0LjczIDQ1OS4zMDEsMjExLjg0IDQwMy4wMTIsMjM1LjE2IGMgLTU2LjI1LDIzLjMyIC05Mi45NzMsNzguMjM4IC05Mi45NzMsMTM5LjE0MSAwLDgzLjE2IDY3LjQyMiwxNTAuNTc4IDE1MC42MjEsMTUwLjU3OCB6IE0gMTY3LjEwOSw1NC43MzA1IGMgMTIuNzMxLC0wLjAzOTEgMjMuMDUxLC0xMC4zNTE2IDIzLjA5LC0yMy4wODk5IDAsLTEyLjc2OTUgLTEwLjM1OSwtMjMuMDg5ODIgLTIzLjA5LC0yMy4wNTA3NiBsIC0xMzguMjM3OSwwIEMgMTYuMTcxOSw4LjU4OTg0IDUuODU5MzgsMTguOTEwMiA1Ljg1OTM4LDMxLjY0MDYgbCAwLDEzNi4wODk0IGMgMC4wODIwMywyMC41MDggMjQuODM5ODIsMzAuNzExIDM5LjM3MTEyLDE2LjI5IGwgMC41MDc4LC0wLjU3OSBjIDQuMTAxNSwtNC4yMjIgNi40OTIyLC05LjgxMiA2LjYwMTUsLTE1LjcxMSBsIDAsLTExMi45OTk1IHogbSAwLDY4NS4yNjk1IGMgNi4wOSwwIDExLjk5MywtMi40MjIgMTYuMzMyLC02Ljc2MiBsIDAuNTM5LC0wLjU3OCBjIDEzLjc5LC0xNC43MyAzLjMyMSwtMzguODcxIC0xNi44NzEsLTM4Ljc4OSBsIC0xMTQuNzY5MiwwIDAsLTExMy4wMTIgYyAtMS42NDA2LC0yOS4wNTggLTQ0LjQ0OTE3LC0yOS4wNTggLTQ2LjEyODg2LDAgbCAwLDEzNi4wNTEgYyAtMC4xNjAxNiw2LjA1OSAyLjE0ODQ0LDExLjkxOCA2LjM2NzE2LDE2LjI1IDQuMzAwOCw0LjQxOCAxMC4xNTI0LDYuODc5IDE2LjI5Myw2Ljg0IHogTSA3NTQuMTgsNjkzLjg3MSBjIC0xMi43MzEsLTAuMDQzIC0yMy4wOSwxMC4yNyAtMjMuMDksMjMuMDM5IDAuMDM5LDEyLjczOCAxMC4zNTksMjMuMDUxIDIzLjA5LDIzLjA5IGwgMTM4LjE2LDAgYyA2LjEwMSwtMC4wMzkgMTEuOTYxLC0yLjQ2MSAxNi4yODksLTYuNzYyIDQuMzQsLTQuMzI4IDYuNzYyLC0xMC4xODcgNi43MjMsLTE2LjMyOCBsIDAsLTEzNi4wNTEgYyAwLC0xMi43MzggLTEwLjI3NCwtMjMuMDUgLTIzLjAxMiwtMjMuMDUgLTEyLjY5MiwwLjA0MyAtMjMsMTAuMzEyIC0yMy4wNzgsMjMuMDUgbCAwLDExMy4wMTIgeiBtIDAsLTY4NS4yODExNiBDIDc0MS40NDksOC41NTA3OCA3MzEuMDksMTguODcxMSA3MzEuMDksMzEuNjQwNiBjIDAuMDM5LDEyLjczODMgMTAuMzU5LDIzLjA1MDggMjMuMDksMjMuMDg5OSBsIDExNS4xNiwwIDAsMTEyLjk5OTUgYyAwLDEyLjczOSAxMC4zMDgsMjMuMDUxIDIzLDIzLjA1MSAxMi43MzgsMCAyMy4wMTIsLTEwLjMxMiAyMy4wMTIsLTIzLjA1MSBsIDAsLTEzNi4wODk0IEMgOTE1LjM1MiwxOC45MTAyIDkwNS4wNzgsOC41ODk4NCA4OTIuMzQsOC41ODk4NCBaIE0gNy4zMzk4NCwzOTMuMTk5IGMgMjEuMTc5NjYsMjUuNjcyIDQ0LjEwOTM2LDQ5Ljc3IDY4LjY0MDY2LDcyLjIzMSAxMDcuNTM5NSw5Ny41IDIzNS4xOTE1LDE1MCAzNjYuODI4NSwxNTIuNzY5IDEzMS42MDEsMi43ODEgMjY2LjAxOSwtNDQuMjUgMzg3Ljc0MiwtMTQ0LjY3OSAzMCwtMjQuODA5IDU4LjE2LC01MS43MTkgODQuMjg5LC04MC41NTEgOC41NTgsLTkuNDE4IDkuMzAxLC0yMy41OSAxLjcxOSwtMzMuODI4IEMgODg2Ljg3OSwzMTYuODc5IDg1MS4zMjgsMjc4Ljk4IDgxMS4wNTEsMjQ2LjY0MSA3MTUuMzkxLDE3MS4wMiA1OTYuOTEsMTMwIDQ3NC45NjEsMTMwLjMwOSAzNTEuOTEsMTMwLjE5OSAyMzEuODQsMTY4LjM5OCAxMzEuNDgsMjM5LjYwOSA4NC4xNDA2LDI3My4xMjEgNDEuNzYxNywzMTMuMTIxIDUuNjIxMDksMzU4LjQ4IC0yLjUsMzY4Ljg3MSAtMS43NjE3MiwzODMuNjI5IDcuMzM5ODQsMzkzLjE5OSBaIE0gMTExLjkxLDQyNi4wNTEgQyA5NC4yMTg4LDQwOS45MjIgNzcuNDIxOSwzOTIuODUyIDYxLjY0MDYsMzc0Ljg3OSA5MS4yODkxLDM0MC4zNTIgMTI1LjAzOSwzMDkuNTcgMTYyLjE0OCwyODMuMTYgMjUzLjUyLDIxOC4zMiAzNjIuNzcsMTgzLjQ4IDQ3NC44MDEsMTgzLjUyIGMgMTA5Ljg5LC0wLjIgMjE2LjYwOSwzNi43ODkgMzAyLjc3NywxMDUgMzAuNzgxLDI0LjY3OSA1OC40NzMsNTMuMDM5IDgyLjUsODQuMzcxIC0yMCwyMS4wNTggLTQxLjI1LDQwLjk4IC02My41OTgsNTkuNjA5IC0xMTEuNjc5LDkxLjk0OSAtMjM0LjE0LDEzNSAtMzUzLDEzMi41MzkgQyAzMjQuNjA5LDU2Mi41MzkgMjA5LjM0LDUxNSAxMTEuNTIsNDI2LjA1MSBaIG0gMzQ5LjExLDMuMjg5IGMgMjIuMywwIDQyLjQyMSwtMTMuNDQyIDUwLjkyOSwtMzQuMDMxIDguNTIsLTIwLjYxOCAzLjc4OSwtNDQuMzI5IC0xMS45ODgsLTYwLjA3OSAtMTUuNzgxLC0xNS43ODEgLTM5LjQ5MiwtMjAuNDYgLTYwLjA4MiwtMTEuOTEgLTIwLjYxNyw4LjU1OSAtMzQuMDIsMjguNjY4IC0zMy45ODEsNTAuOTgxIDAsMTQuNjA5IDUuODIxLDI4LjYyOSAxNi4xMzMsMzguOTM3IDEwLjM0OCwxMC4zNTIgMjQuMzc5LDE2LjE0MSAzOC45ODksMTYuMTAyIHoiIC8+PC9nPjwvZz48L3N2Zz4=')"></div>
@@ -208,6 +211,7 @@
 	<br><small><TMPL_VAR Icon-Watchdog.DESCRIPTION_TEXT></small>
 	<br>
 </CENTER>
+
 <DIV id="notifblock">
 	<!-- NOTIFICATIONS //-->
 		<TMPL_VAR NOTIFICATIONS>
@@ -238,6 +242,7 @@
   	 	<span id="alert_form_close"> X </span>
  	 	 	<div id="error_message"></div>
  	 </div>
+</div>
 </div>
 <CENTER>
 	<STYLE>
@@ -446,6 +451,60 @@
 			</DIV>
 </CENTER>
 <small><small><TMPL_VAR VERSION></small></small>
+  <script>
+  
+	
+function svgDialog(ms,U,Title){ 
+	clearInterval(status);
+	var dialog = document.querySelector('dialog'),
+    	closebutton = document.getElementById('close-dialog');
+
+	if (!dialog.hasAttribute('open')) {
+		// do not allow to change default icons
+		if ( "00000000-0000" === U.substring(0,13) ) 
+		{
+			$( '#svg_status_div' ).html("<TMPL_VAR ERRORS.ERR_058_DO_NOT_CHANGE_DEFAULT_ICONS>").trigger('create');
+			$( '#svg_status_div' ).fadeIn('slow');
+			setTimeout( function() { 
+			$( '#svg_status_div' ).fadeOut('slow');
+			}, 7000);
+
+		return;
+		}
+		// show the dialog 
+		$("#backdrop").css('display','block');
+		dialog.setAttribute('open','open');
+		$("#dialogcontent").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
+
+			$.ajax({url: '<TMPL_VAR HTMLPATH>dialog.php', type: 'POST', data : {ms:ms},
+	            success: function (dialog) 
+	            {
+						$("#dialog-heading").html("<TMPL_VAR Icon-Watchdog.INF_0108_PLEASE_SELECT_AN_ICON_TO_ASSIGN><br/><b>'"+Title+"'</b><br/><sub>"+U+"</sub>");
+						$("#dialogcontent").html(dialog);
+	            },
+	            error: function (errorThrown) 
+	            {
+					$("#dialog-heading").html("<TMPL_VAR ERRORS.ERR_TITLE>");
+					$("#dialogcontent").html("<font color='red'><TMPL_VAR ERRORS.ERR_057_ERROR_WHEN_LOADING_DIALOG></font>");
+					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_057_ERROR_WHEN_LOADING_DIALOG>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
+			    }	
+	        });
+			setTimeout( function() { status = setInterval(function() { checkStatus(); },5000); }, 5000);
+			
+		
+		// after displaying the dialog, focus the closebutton inside it
+		closebutton.focus();
+		closebutton.addEventListener('click', svgDialog);
+	}
+	else {
+ 		dialog.removeAttribute('open');  
+		$("#backdrop").css('display','none');
+	}
+}
+ 
+ 
+ </script>
+ 
 <script>
 	function build_svgDropdown (ms,icons_as_json)
 	{
@@ -457,11 +516,11 @@
 		$( ".icontable.IconCat.ms"+ms+" > tbody tr" ).remove();
 		$( ".icontable.IconState.ms"+ms+" > tbody tr" ).remove();
 		var icons = JSON.parse(icons_as_json);
-		$.each(icons.Icons, function( id, icon ) 
+		$.each(icons.Icons[0], function( id, icon ) 
 		{
 			if ( icon.Type[0] )
 			{
-				$("#icontable_"+icon.Type[0]+"_"+ms+" > tbody:last-child").append('<tr class="iconrow '+icon.Type[0]+' '+ icon.Class+'"><td><span class="svg_icon"  id="svg_icon_'+ms+'_'+icon.U[0]+'"></span></td><td>'+icon.U[0]+'</td><td>'+icon.Title[0]+'</td></tr>"');							
+				$("#icontable_"+icon.Type[0]+"_"+ms+" > tbody:last-child").append('<tr class="iconrow '+icon.Type[0]+' '+ icon.Class+'" onclick="svgDialog( '+ms+',\''+icon.U[0]+'\',\''+icon.Title[0]+'\');"><td><span class="svg_icon"  id="svg_icon_'+ms+'_'+icon.U[0]+'"></span></td><td>'+icon.Title[0]+'</td><td>'+icon.U[0]+'</td></tr>"');							
 				$('#svg_icon_'+ms+'_'+icon.U[0]).html(icon.ImageSrc);
 
 			}
@@ -551,16 +610,19 @@
 						{
 							$( '#iwd_status_div' ).html(result["ms"+ms].message).trigger('create');
 							$( '#iwd_status_div' ).fadeIn('slow');
-							$( '#btndwl'+ms ).attr("href", '<TMPL_VAR HTMLPATH>get_project.php?ms='+ms+'&getfile&');
-							$( '#btndwl'+ms ).fadeIn("slow");
+							$( '#btndwl'+result["ms"+ms].ms ).attr("href", '<TMPL_VAR HTMLPATH>get_project.php?ms='+ms+'&getfile&');
+							$( '#btndwl'+result["ms"+ms].ms ).fadeIn("slow");
 						}
 						else
 						{
-							$( '#btndwl'+result["ms"+ms] ).attr("href");
-							$( '#btndwl'+result["ms"+ms] ).fadeOut("slow");
+							$( '#btndwl'+result["ms"+ms].ms ).attr("href","#");
+							$( '#btndwl'+result["ms"+ms].ms ).fadeOut("slow");
 							if ( parseInt(result["ms"+ms].ms) > 0 )
 							{
-								show_error("Miniserver #"+result["ms"+ms].ms +"\n<br>"+ result["ms"+ms].message);
+								if ( result["ms"+ms].display_error === true )
+								{
+									show_error("Miniserver #"+result["ms"+ms].ms +"\n<br>"+ result["ms"+ms].message);
+								}
 							}
 							else
 							{
@@ -575,7 +637,7 @@
 					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
 			    }	
 	        });
-			setTimeout( function() { status = setInterval(function() { checkStatus(); },2500); }, 5000);
+			setTimeout( function() { status = setInterval(function() { checkStatus(); },5000); }, 5000);
 			
 	}
 	
@@ -604,7 +666,7 @@
 							}
 						}
 						
-						setTimeout( function() { status = setInterval(function() { checkStatus(); },2500); }, 5000);
+						setTimeout( function() { status = setInterval(function() { checkStatus(); },5000); }, 5000);
 	            },
 	            error: function (errorThrown) 
 	            {
@@ -612,7 +674,7 @@
 					$( '#iwd_status_div' ).fadeIn('slow');
 					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
 					setTimeout( function() {$('.to_disable_on_save').removeClass('ui-disabled');}, 500);
-					setTimeout( function() { status = setInterval(function() { checkStatus(); },2500); }, 5000);
+					setTimeout( function() { status = setInterval(function() { checkStatus(); },5000); }, 5000);
 			    }	
 	        });
 	}

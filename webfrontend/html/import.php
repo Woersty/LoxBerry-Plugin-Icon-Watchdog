@@ -181,8 +181,7 @@ function import_loxone_project($file,$ms)
 	}
 		
 	$IconData = array("Icons" => array());
-						
-	//$pretty = "<Table><tr class='icon_head'><td style='width:64px; height:64px;'></td><td>UID</td><td>Titel</td><td>Typ</td>";
+	$unsorted_array = array();					
 	$xml = convert_icons($xml,array("IconPlace","IconCat","IconState"));
 
 	foreach ($xml->C->C as $value) 
@@ -198,31 +197,40 @@ function import_loxone_project($file,$ms)
 						if (is_readable(dirname($file)."/../../zip/ms_$ms/".$icon["U"].".svg"))
 						{
 							$pic = file_get_contents (dirname($file)."/../../zip/ms_$ms/".$icon["U"].".svg");
-							$class="icon_ok";
+							if ( substr($icon["U"],0,13)  == "00000000-0000" )
+							{
+								$class="icon_default";
+							}
+							else
+							{
+								$class="icon_ok";
+							}
 						}
 						else
 						{
 							$pic = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="32" height="32" viewBox="0 0 31.999999 31.999998" id="svg_missing" version="1.1" inkscape:version="0.91 r13725" sodipodi:docname="NOTFOUND.svg"> <defs id="defs4158" /> <metadata id="metadata4161"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> <dc:title></dc:title> </cc:Work> </rdf:RDF> </metadata> <g inkscape:label="Ebene 1" inkscape:groupmode="layer" id="layer1" transform="translate(0,-1020.3622)"> <path id="path3761" d="m 8.5398993,1028.0718 16.5086917,16.5086" style="fill:none;stroke:#e00000;stroke-width:3.47145557;stroke-linecap:round;stroke-linejoin:round" inkscape:connector-curvature="0" /> <path id="path3763" style="fill:none;stroke:#e00000;stroke-width:3.47145557;stroke-linecap:round;stroke-linejoin:round" inkscape:connector-curvature="0" d="M 25.047669,1028.0718 8.5389776,1044.5804" /></g></svg>';
 							$class="icon_bad";
 						}
-						array_push($IconData["Icons"], array(
+						array_push($unsorted_array, array(
 							"U" 			=> $icon["U"],
 							"Title" 		=> $icon["Title"],
 							"Type"			=> $icon["Type"],
 							"ImageSrc"		=> $pic,
 							"Class"			=> $class));
-						
-						//$pretty .= "<tr class='".$class."'><td><div style='width:64px; height:64px; ".$pic."'></td><td>".$icon["U"]."</td><td>".$icon["Title"]."</td><td>".$icon["Type"]."</td></tr>";
 					}
 				}
 			}	
 		}
 	}
-	//$pretty .= "</Table>";
+	// Sort alphabetical
+	foreach ($unsorted_array as $id => $value) { $titles[$id] = $value['Title']; }
+	$keys = array_keys($unsorted_array);
+	array_multisort($titles, SORT_ASC, SORT_NATURAL, $unsorted_array, $keys);
+	$sorted_array = array_combine($keys, $unsorted_array);
+	array_push($IconData["Icons"],array_values($sorted_array));
 	$data['xml'] = $xml->asXML();
 	$data['xml'] = str_replace(array("<IoData/>","<Display/>","__dummy_for_apos__","__dummy_for_backtick__"),array("<IoData></IoData>","<Display></Display>","&apos;","`"),$data);
 	$data['json'] = json_encode($IconData);
 	$data['Serial'] = $ProjectSerial;
-	//$data['pretty'] = $pretty;
 	return $data;
 }
