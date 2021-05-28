@@ -599,8 +599,6 @@ function svgDialog(ms,U,Title){
 					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_057_ERROR_WHEN_LOADING_DIALOG>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
 			    }	
 	        });
-			setTimeout( function() { status = setInterval(function() { checkStatus(); },5000); }, 5000);
-			
 		
 		// after displaying the dialog, focus the closebutton inside it
 		closebutton.focus();
@@ -750,8 +748,7 @@ function svgDialog(ms,U,Title){
 					setTimeout( function() { $("#working").fadeOut('slow'); }, 1500);
 			    }	
 	        });
-			setTimeout( function() { status = setInterval(function() { checkStatus(); },5000); }, 5000);
-			
+			setTimeout( function() { clearInterval(status); status = setInterval(function() { checkStatus(); },5000); checkStatus(); }, 500);
 	}
 	
 	function runCheck(ms)
@@ -780,7 +777,7 @@ function svgDialog(ms,U,Title){
 							}
 							$("#working").fadeOut('slow');
 						}
-						setTimeout( function() { status = setInterval(function() { checkStatus(); },5000); }, 5000);
+						setTimeout( function() { clearInterval(status); status = setInterval(function() { checkStatus(); },5000); checkStatus(); }, 500);
 	            },
 	            error: function (errorThrown) 
 	            {
@@ -788,7 +785,7 @@ function svgDialog(ms,U,Title){
 					$( '#iwd_status_div' ).fadeIn('slow');
 					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
 					setTimeout( function() {$('.to_disable_on_save').removeClass('ui-disabled');}, 500);
-					setTimeout( function() { status = setInterval(function() { checkStatus(); },5000); }, 5000);
+					setTimeout( function() { clearInterval(status); status = setInterval(function() { checkStatus(); },5000); checkStatus(); }, 500);
 					$("#working").fadeOut('slow');
 			    }	
 	        });

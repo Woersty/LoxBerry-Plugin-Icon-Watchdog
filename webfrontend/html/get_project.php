@@ -1,7 +1,7 @@
 <?php
 // LoxBerry Icon-Watchdog Plugin
 // Christian Woerstenfeld - git@loxberry.woerstenfeld.de
-
+ignore_user_abort();
 // Include System Lib
 require_once "loxberry_system.php";
 require_once "loxberry_log.php";
