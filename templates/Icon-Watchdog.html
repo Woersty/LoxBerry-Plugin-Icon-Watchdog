@@ -321,7 +321,6 @@
 	<br><small><TMPL_VAR Icon-Watchdog.DESCRIPTION_TEXT></small>
 	<br>
 </CENTER>
-
 <DIV id="notifblock">
 	<!-- NOTIFICATIONS //-->
 		<TMPL_VAR NOTIFICATIONS>
@@ -355,12 +354,13 @@
 </div>
 </div>
 <CENTER>
+	<div id="plugin_content" style="display:none"><img src="<TMPL_VAR HTMLPATH>css/nomobile.svg"><br/><TMPL_VAR Icon-Watchdog.INF_0109_NO_TOUCH_DEVICES></div>
 	<STYLE>
 	.PreferHttps1 {	border-style: solid; border-width: thin; border-radius: 5px; background: #C0FFC0; padding: 2px; font-size:10px; }
 	.PreferHttps0 {	visibility: hidden; }
 	</STYLE>
 	<TMPL_LOOP TEMPLATE_ROW>
-		<DIV style="display:inline-block; width:100%;" class="to_disable_on_save">
+		<DIV style="display:inline-block; width:100%;" class="to_disable_on_save plugin_content">
 			<DIV id="MS_LOOP_ROW<TMPL_VAR MSID>" style="text-align:left; display:inline-block; margin-bottom:5px; width:99%; padding:10px; border: 1px solid black; border-radius: 5px; background-color: rgba(228,228,228,.1);"> 
 				<DIV id="colored_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:5px; border: 1px solid black; border-radius: 5px; background-color: rgba(0,228,228,.1);">
 					<TMPL_LOOP NAME="MSROW">
@@ -911,6 +911,25 @@ function svgDialog(ms,U,Title){
 	$("body").css('height','90%'); 
 	$("#iwd_use_notify").val("<TMPL_VAR IWD_USE_NOTIFY>"); 
 	$("#iwd_use").val("<TMPL_VAR IWD_USE>"); 
+
+	var hasTouchScreen = false;
+	if ("maxTouchPoints" in navigator) {
+		hasTouchScreen = navigator.maxTouchPoints > 0;
+	} else if ("msMaxTouchPoints" in navigator) {
+		hasTouchScreen = navigator.msMaxTouchPoints > 0;
+	} else {
+		var mQ = window.matchMedia && matchMedia("(pointer:coarse)");
+		if (mQ && mQ.media === "(pointer:coarse)") {
+			hasTouchScreen = !!mQ.matches;
+		} else if ('orientation' in window) {
+			hasTouchScreen = true; // deprecated, but good fallback
+		} else {
+			// Only as a last resort, fall back to user agent sniffing
+			var UA = navigator.userAgent;
+			hasTouchScreen = ( /\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(UA) || /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA));
+		}
+	}
+
 	$( document ).ready(function() 
 	{
 		$("#iwd_use-button").remove(); 
@@ -943,8 +962,12 @@ function svgDialog(ms,U,Title){
 		$("#loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>").val("<TMPL_VAR PLUGINDB_LOGLEVEL>");
 		$("#loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>").selectmenu("refresh");
 
+		if (hasTouchScreen)
+		{
+			$(".plugin_content").css("display","none");
+			$("#plugin_content").css("display","block");
+		}
+
 	});
-	
-	
 	
 </script>
