@@ -1,6 +1,7 @@
 <?php
 // LoxBerry Icon-Watchdog Plugin
 // Christian Woerstenfeld - git@loxberry.woerstenfeld.de
+ignore_user_abort();
 
 // Header output
 header('Content-Type: application/json; charset=utf-8');
@@ -28,11 +29,10 @@ $L						= LBSystem::readlanguage("language.ini");
 $logfiles_to_keep		= 10;									     # Number of logfiles to keep (also done by LoxBerry Core /sbin/log_maint.pl)
 $resultarray 			= array();
 
-#Prevent blocking / Recreate state file if missing or older than 60 min
-touch($watchstate_file);
+#Prevent blocking / Recreate state file if missing or older than 45 s
 if ( is_file($watchstate_file) ) 
 {
-	if ( ( time() - filemtime( $watchstate_file ) ) > (60 * 60) ) 
+	if ( ( time() - filemtime( $watchstate_file ) ) > (45) ) 
 	{
 		file_put_contents($watchstate_file, "");
 	}

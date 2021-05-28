@@ -1,5 +1,6 @@
 <?php
 // Include System Lib
+ignore_user_abort();
 require_once "loxberry_system.php";
 require_once "loxberry_log.php";
 require_once "import.php";
