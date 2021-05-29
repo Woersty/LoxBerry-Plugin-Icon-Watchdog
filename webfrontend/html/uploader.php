@@ -110,8 +110,6 @@ require_once "fancy_file_uploader_helper.php";
 								chmod("$lbpdatadir/project/ms_$ms/".$L["GENERAL.PREFIX_CONVERTED_FILE"].$files[0]["name"], 0666);
 								chmod("$lbpdatadir/project/ms_$ms/".$L["GENERAL.PREFIX_JSON_FILE"].$ms.".json", 0666);
 								$result = array(
-									//"project_as_json" => $project['json'],
-									//"project_as_pretty" => $project['pretty'],
 									"success" => true,
 									"message" => str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"])
 								);
@@ -131,20 +129,32 @@ require_once "fancy_file_uploader_helper.php";
 					}
 					else if ( strtolower($files[0]["ext"]) == "svg" )
 					{
-						if (!is_dir("$lbpdatadir/zip/ms_$ms/"))
+						if (!is_dir("$lbpdatadir/svg"))
 						{
-							@mkdir("$lbpdatadir/zip/ms_$ms/", 0777, true);
+							@mkdir("$lbpdatadir/svg", 0777, true);
 						}
 						
-						if (is_dir("$lbpdatadir/zip/ms_$ms/"))
+						if (is_dir("$lbpdatadir/svg"))
 						{
-							rename($files[0]["file"], "$lbpdatadir/zip/ms_$ms/".strtolower($files[0]["name"]));
-							LOGINF  ("<INFO>".str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"])." [".$files[0]["name"]."]");
-						
-							$result = array(
-								"success" => true,
-								"message" => str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"])
-							);
+							$targetfile = file_get_contents($files[0]["file"]);
+							if ( strpos($targetfile, 'viewBox="0 0 32 32"') || strpos($targetfile, "viewBox='0 0 32 32'") )
+							{
+								// Valid viewBox found. Accept upload.
+								$targetfile = str_ireplace(array("script","link"),array("",""),$targetfile);
+								file_put_contents("$lbpdatadir/svg/".strtolower($files[0]["name"]),$targetfile);
+								LOGINF  ("<INFO>".str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"])." [".$files[0]["name"]."]");
+								$result = array(
+									"success" => true,
+									"message" => str_ireplace('<file>',$files[0]["name"],$L["LOGGING.LOG_020_UPLOAD_SUCCESS"])
+								);
+							}
+							else
+							{
+								$result = array(
+								"success" => false,
+								"error" => $L["ERRORS.ERR_059_INVALID_VIEWBOX"],
+								"errorcode" => "invalid_viewbox");
+							}
 						}					
 						else
 						{

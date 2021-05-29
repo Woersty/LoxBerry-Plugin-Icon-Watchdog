@@ -45,7 +45,7 @@
 	background-color: rgba(49,56,62,0.9);
 }
 
-.svg_icon { width: 32x; height: 32px; background-repeat: no-repeat; }
+.svg_icon { max-width: 32px; max-height: 32px; width: 32px; height: 32px; background-repeat: no-repeat; }
 
 	#alert_form{ display:none; }
 	#alert_form {
@@ -415,7 +415,6 @@
 						<DIV class="svg to_disable_on_plugin_off" id="svg_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,192,.5);">
 							<TMPL_VAR Icon-Watchdog.TXT_IMPORT_SVG>
 							<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
-								<input name="_token" type="hidden" value="yYpUn8Ex5OyOIj1aA5xG3s4deDzJxC9mD3IBmhGD<TMPL_VAR MSID>">
 								<input style="display:none;" class="hidden" id="svg_files<TMPL_VAR MSID>" type="file" name="files" accept=".svg" multiple>
 							</form>						
 							<script>
@@ -430,7 +429,7 @@
 
 									},
 									edit : false,
-									maxfilesize : 10000000,
+									maxfilesize : 25600,
 									uploadcompleted : function(e, data) { 
 									$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
 									$( '#iwd_status_div' ).fadeIn('slow');
@@ -573,7 +572,43 @@
 </CENTER>
 <small><small><TMPL_VAR VERSION></small></small>
   <script>
-  
+function assign_icon(svgfilename,ms,U)
+{
+			$("#svg_status_div").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
+			$.ajax({url: '<TMPL_VAR HTMLPATH>manage_svgs.php', type: 'POST', data : {svgfilename:svgfilename, ms:ms, U:U},
+	            success: function (json_assign_icon_result) 
+	            {
+						var assign_icon_result = JSON.parse(json_assign_icon_result);
+						if (assign_icon_result.success === true)
+						{
+							$( '#svg_status_div' ).html(assign_icon_result.message).trigger('create');
+							if ( assign_icon_result.refresh && assign_icon_result.refresh_data)
+							{
+								$( '#'+assign_icon_result.refresh ).html(atob(assign_icon_result.refresh_data));
+							}
+							$( '#svg_status_div' ).fadeIn('slow');
+							setTimeout( function() { 
+							$( '#svg_status_div' ).fadeOut('slow');
+							}, 7000);
+						}
+						else
+						{
+							show_error(assign_icon_result.message);
+						}
+	            },
+	            error: function (errorThrown) 
+	            {
+					$( '#svg_status_div' ).html("<TMPL_VAR ERRORS.ERR_061_SVG_ASSIGNMENT_FAILED>").trigger('create');
+					$( '#svg_status_div' ).fadeIn('slow');
+					setTimeout( function() { 
+					$( '#svg_status_div' ).fadeOut('slow');
+					}, 7000);
+			    }	
+	        });
+
+	
+	
+}
 	
 function svgDialog(ms,U,Title){ 
 	clearInterval(status);
@@ -597,11 +632,25 @@ function svgDialog(ms,U,Title){
 		dialog.setAttribute('open','open');
 		$("#dialogcontent").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
 
-			$.ajax({url: '<TMPL_VAR HTMLPATH>dialog.php', type: 'POST', data : {ms:ms},
-	            success: function (dialog) 
+			$.ajax({url: '<TMPL_VAR HTMLPATH>manage_svgs.php', type: 'POST', data : {ms:ms},
+	            success: function (svg_data) 
 	            {
 						$("#dialog-heading").html("<TMPL_VAR Icon-Watchdog.INF_0108_PLEASE_SELECT_AN_ICON_TO_ASSIGN><br/><b>"+Title+"</b><br/><sub>"+U+"</sub>");
-						$("#dialogcontent").html(dialog);
+						$( ".svgtable > tbody tr" ).remove();
+
+						if ( svg_data.svg.error )
+						{
+							$("#dialog-heading").html("<TMPL_VAR ERRORS.ERR_TITLE>");
+							$("#dialogcontent").html("<font color='red'>"+svg_data.svg.message+"</font>");
+						}
+						else
+						{
+							$("#dialogcontent").html('<table class="svgtable" id="svgtable"><tbody><tr><th></th></tr></tbody></table>');
+							$.each(svg_data.svg.svg_data, function( id, svg ) 
+							{
+								$("#svgtable > tbody:last-child").append('<tr class="svgrow"><td><div onclick="assign_icon(\''+svg.name+'\',\''+ms+'\',\''+U+'\'); svgDialog();" id="'+svg.name+'" title="'+svg.name+'" class="svg_icon" style="background-image: url(\'data:image/svg+xml;base64,'+svg.image+'\')"></div></td></tr>"');							
+							});
+						}
 	            },
 	            error: function (errorThrown) 
 	            {
@@ -856,7 +905,7 @@ function svgDialog(ms,U,Title){
 				setTimeout( function() {
 				if ( parseInt(which_ms) > 0 ) 
 				{
-					$("#btncheck"+parseInt(which_ms)).trigger( "click");
+					//$("#btncheck"+parseInt(which_ms)).trigger( "click");
 				}
 				which_ms = 0; }, 1000); 
 				$( '#iwd_status_div' ).attr("something_uploaded","");
