@@ -233,6 +233,7 @@
 		$("#working").css("z-index", 1005);
 		$("#working").css("display", "none");
 		$("#working").css("position", "fixed");
+		$("#working").css("cursor", "wait");
 
 	///////////////////////////////////////////////////////////////////////////
 	///////////////////////////// Create filter ///////////////////////////////
@@ -572,10 +573,10 @@
 </CENTER>
 <small><small><TMPL_VAR VERSION></small></small>
   <script>
-function assign_icon(svgfilename,ms,U)
+function assign_icon(svgfilename,ms,U,Title)
 {
 			$("#svg_status_div").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
-			$.ajax({url: '<TMPL_VAR HTMLPATH>manage_svgs.php', type: 'POST', data : {svgfilename:svgfilename, ms:ms, U:U},
+			$.ajax({url: '<TMPL_VAR HTMLPATH>manage_svgs.php', type: 'POST', data : {svgfilename:svgfilename, ms:ms, U:U, Title:Title},
 	            success: function (json_assign_icon_result) 
 	            {
 						var assign_icon_result = JSON.parse(json_assign_icon_result);
@@ -606,8 +607,6 @@ function assign_icon(svgfilename,ms,U)
 			    }	
 	        });
 
-	
-	
 }
 	
 function svgDialog(ms,U,Title){ 
@@ -648,7 +647,7 @@ function svgDialog(ms,U,Title){
 							$("#dialogcontent").html('<table class="svgtable" id="svgtable"><tbody><tr><th></th></tr></tbody></table>');
 							$.each(svg_data.svg.svg_data, function( id, svg ) 
 							{
-								$("#svgtable > tbody:last-child").append('<tr class="svgrow"><td><div onclick="assign_icon(\''+svg.name+'\',\''+ms+'\',\''+U+'\'); svgDialog();" id="'+svg.name+'" title="'+svg.name+'" class="svg_icon" style="background-image: url(\'data:image/svg+xml;base64,'+svg.image+'\')"></div></td></tr>"');							
+								$("#svgtable > tbody:last-child").append('<tr class="svgrow"><td><div onclick="assign_icon(\''+svg.name+'\',\''+ms+'\',\''+U+'\',\''+btoa(Title)+'\'); svgDialog();" id="'+svg.name+'" title="'+svg.name+'" class="svg_icon" style="background-image: url(\'data:image/svg+xml;base64,'+svg.image+'\')"></div></td></tr>"');							
 							});
 						}
 	            },
@@ -797,7 +796,8 @@ function svgDialog(ms,U,Title){
 								show_error(result["ms"+ms].message);
 							}
 						}
-						setTimeout( function() { $("#working").fadeOut('slow'); }, 1500);
+						setTimeout( function() { $("#working").fadeOut('slow'); }, 500);
+						
 
 	            },
 	            error: function (errorThrown) 
@@ -805,7 +805,7 @@ function svgDialog(ms,U,Title){
 					$( '#iwd_status_div' ).html('<TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms).trigger('create');
 					$( '#iwd_status_div' ).fadeIn('slow');
 					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
-					setTimeout( function() { $("#working").fadeOut('slow'); }, 1500);
+					setTimeout( function() { $("#working").fadeOut('slow'); }, 500);
 			    }	
 	        });
 			setTimeout( function() { clearInterval(status); status = setInterval(function() { checkStatus(); },5000); checkStatus(); }, 500);
@@ -835,7 +835,7 @@ function svgDialog(ms,U,Title){
 							{
 								show_error(result["ms"+ms].error);
 							}
-							$("#working").fadeOut('slow');
+							setTimeout( function() { $("#working").fadeOut('slow'); }, 500);
 						}
 						setTimeout( function() { clearInterval(status); status = setInterval(function() { checkStatus(); },5000); checkStatus(); }, 500);
 	            },
@@ -846,7 +846,7 @@ function svgDialog(ms,U,Title){
 					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
 					setTimeout( function() {$('.to_disable_on_save').removeClass('ui-disabled');}, 500);
 					setTimeout( function() { clearInterval(status); status = setInterval(function() { checkStatus(); },5000); checkStatus(); }, 500);
-					$("#working").fadeOut('slow');
+					setTimeout( function() { $("#working").fadeOut('slow'); }, 500);
 			    }	
 	        });
 	}

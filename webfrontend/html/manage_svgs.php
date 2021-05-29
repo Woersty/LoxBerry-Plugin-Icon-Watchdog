@@ -1,8 +1,8 @@
 <?php
 // LoxBerry Icon-Watchdog Plugin
 // Christian Woerstenfeld - git@loxberry.woerstenfeld.de
-ignore_user_abort();
 // Include System Lib
+ignore_user_abort();
 require_once "loxberry_system.php";
 require_once "loxberry_log.php";
 
@@ -13,22 +13,24 @@ $logfilename			= $logfileprefix.$logfilesuffix;
 $L						= LBSystem::readlanguage("language.ini");
 
 $params = [
-    "name" => $L["LOGGING.LOG_027_LOGFILE_NAME_SVG_VIEWER"],
-    "filename" => $logfilename,
-    "addtime" => 1];
+    "name" 		=> $L["LOGGING.LOG_026_LOGFILE_NAME_SVG_VIEWER"],
+    "filename" 	=> $logfilename,
+    "addtime" 	=> 1];
 
 // Error Reporting 
 error_reporting(E_ALL);     
 ini_set("display_errors", false);
 ini_set("log_errors", 1);
 
-$log = LBLog::newLog ($params);
-LOGSTART ($L["Icon-Watchdog.INF_0110_SVG_VIEW_REQUEST"]);
-$log->LOGTITLE($L["Icon-Watchdog.INF_0110_SVG_VIEW_REQUEST"]);
+(isset($_REQUEST["ms"]))?$msinfo="MS#".$_REQUEST["ms"]." ":$msinfo="";
 
-if ( isset($_REQUEST["svgfilename"]) && isset($_REQUEST["ms"]) && isset($_REQUEST["U"]) )
+$log = LBLog::newLog ($params);
+LOGSTART ($msinfo.$L["Icon-Watchdog.INF_0110_SVG_VIEW_REQUEST"]);
+$log->LOGTITLE($msinfo.$L["Icon-Watchdog.INF_0110_SVG_VIEW_REQUEST"]);
+
+if ( isset($_REQUEST["svgfilename"]) && isset($_REQUEST["ms"]) && isset($_REQUEST["U"]) && isset($_REQUEST["Title"]) )
 {
-	$ms = $_REQUEST["ms"];
+	$ms = intval($_REQUEST["ms"]);
 	if (!is_dir("$lbpdatadir/zip/ms_$ms"))
 	{
 		@mkdir("$lbpdatadir/zip/ms_$ms", 0777, true);
@@ -42,11 +44,10 @@ if ( isset($_REQUEST["svgfilename"]) && isset($_REQUEST["ms"]) && isset($_REQUES
 					"error" => false,
 					"refresh" => "svg_icon_".$ms."_".strtolower(basename($_REQUEST["U"])),
 					"refresh_data" => base64_encode(file_get_contents("$lbpdatadir/zip/ms_$ms/".strtolower(basename($_REQUEST["U"])).".svg")),
-					"message" => $L["Icon-Watchdog.INF_0112_SVG_ASSIGNMENT_OK"]
-				);
+					"message" => str_replace(array("<file>","<title>","<id>"),array($_REQUEST["svgfilename"],base64_decode($_REQUEST["Title"]),$_REQUEST["U"]),$L["Icon-Watchdog.INF_0112_SVG_ASSIGNMENT_OK"]));
 			echo json_encode($result, JSON_UNESCAPED_SLASHES);
-			LOGOK ($L["Icon-Watchdog.INF_0112_SVG_ASSIGNMENT_OK"]);
-			$log->LOGTITLE($L["Icon-Watchdog.INF_0112_SVG_ASSIGNMENT_OK"]);
+			LOGOK ($msinfo.str_replace(array("<file>","<title>","<id>"),array($_REQUEST["svgfilename"],base64_decode($_REQUEST["Title"]),$_REQUEST["U"]),$L["Icon-Watchdog.INF_0112_SVG_ASSIGNMENT_OK"]));
+			$log->LOGTITLE($msinfo.str_replace(array("<file>","<title>","<id>"),array($_REQUEST["svgfilename"],base64_decode($_REQUEST["Title"]),$_REQUEST["U"]),$L["Icon-Watchdog.INF_0112_SVG_ASSIGNMENT_OK"]));
 			LOGEND ("");
 			exit;
 		}
@@ -57,8 +58,8 @@ if ( isset($_REQUEST["svgfilename"]) && isset($_REQUEST["ms"]) && isset($_REQUES
 		"message" => $L["ERRORS.ERR_061_SVG_ASSIGNMENT_FAILED"]
 	);
 	echo json_encode($result, JSON_UNESCAPED_SLASHES);
-	LOGERR ($L["ERRORS.ERR_061_SVG_ASSIGNMENT_FAILED"]);
-	$log->LOGTITLE($L["ERRORS.ERR_061_SVG_ASSIGNMENT_FAILED"]);
+	LOGERR ($msinfo.$L["ERRORS.ERR_061_SVG_ASSIGNMENT_FAILED"]);
+	$log->LOGTITLE($msinfo.$L["ERRORS.ERR_061_SVG_ASSIGNMENT_FAILED"]);
 	LOGEND ("");
 	exit;
 }	
@@ -86,8 +87,8 @@ if ( isset($svg_files) )
 				"message" => str_replace("<number>",$i,$L["Icon-Watchdog.INF_0111_SVG_VIEW_PROCESSED"])
 			);
 		echo json_encode($result, JSON_UNESCAPED_SLASHES);
-		LOGOK (str_replace("<number>",$i,$L["Icon-Watchdog.INF_0111_SVG_VIEW_PROCESSED"]));
-		$log->LOGTITLE(str_replace("<number>",$i,$L["Icon-Watchdog.INF_0111_SVG_VIEW_PROCESSED"]));
+		LOGOK ($msinfo.str_replace("<number>",$i,$L["Icon-Watchdog.INF_0111_SVG_VIEW_PROCESSED"]));
+		$log->LOGTITLE($msinfo.str_replace("<number>",$i,$L["Icon-Watchdog.INF_0111_SVG_VIEW_PROCESSED"]));
 		LOGEND ("");
 		exit;
 	}
@@ -100,7 +101,7 @@ $result["svg"] = array(
 		);
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode($result, JSON_UNESCAPED_SLASHES);
-LOGERR ($L["ERRORS.ERR_060_NO_SVG_TO_BROWSE"]);
-$log->LOGTITLE($L["ERRORS.ERR_060_NO_SVG_TO_BROWSE"]);
+LOGERR ($msinfo.$L["ERRORS.ERR_060_NO_SVG_TO_BROWSE"]);
+$log->LOGTITLE($msinfo.$L["ERRORS.ERR_060_NO_SVG_TO_BROWSE"]);
 LOGEND ("");
 exit;
