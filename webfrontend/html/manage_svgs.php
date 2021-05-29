@@ -44,10 +44,10 @@ if ( isset($_REQUEST["svgfilename"]) && isset($_REQUEST["ms"]) && isset($_REQUES
 					"error" => false,
 					"refresh" => "svg_icon_".$ms."_".strtolower(basename($_REQUEST["U"])),
 					"refresh_data" => base64_encode(file_get_contents("$lbpdatadir/zip/ms_$ms/".strtolower(basename($_REQUEST["U"])).".svg")),
-					"message" => str_replace(array("<file>","<title>","<id>"),array($_REQUEST["svgfilename"],base64_decode($_REQUEST["Title"]),$_REQUEST["U"]),$L["Icon-Watchdog.INF_0112_SVG_ASSIGNMENT_OK"]));
+					"message" => str_replace(array("<file>","<title>","<id>"),array($_REQUEST["svgfilename"],utf8_encode(base64_decode($_REQUEST["Title"])),$_REQUEST["U"]),$L["Icon-Watchdog.INF_0112_SVG_ASSIGNMENT_OK"]));
 			echo json_encode($result, JSON_UNESCAPED_SLASHES);
-			LOGOK ($msinfo.str_replace(array("<file>","<title>","<id>"),array($_REQUEST["svgfilename"],base64_decode($_REQUEST["Title"]),$_REQUEST["U"]),$L["Icon-Watchdog.INF_0112_SVG_ASSIGNMENT_OK"]));
-			$log->LOGTITLE($msinfo.str_replace(array("<file>","<title>","<id>"),array($_REQUEST["svgfilename"],base64_decode($_REQUEST["Title"]),$_REQUEST["U"]),$L["Icon-Watchdog.INF_0112_SVG_ASSIGNMENT_OK"]));
+			LOGOK ($msinfo.str_replace(array("<file>","<title>","<id>"),array($_REQUEST["svgfilename"],utf8_encode(base64_decode($_REQUEST["Title"])),$_REQUEST["U"]),$L["Icon-Watchdog.INF_0112_SVG_ASSIGNMENT_OK"]));
+			$log->LOGTITLE($msinfo.str_replace(array("<file>","<title>","<id>"),array($_REQUEST["svgfilename"],utf8_encode(base64_decode($_REQUEST["Title"])),$_REQUEST["U"]),$L["Icon-Watchdog.INF_0112_SVG_ASSIGNMENT_OK"]));
 			LOGEND ("");
 			exit;
 		}

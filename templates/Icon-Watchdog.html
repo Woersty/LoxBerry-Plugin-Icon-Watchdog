@@ -45,7 +45,11 @@
 	background-color: rgba(49,56,62,0.9);
 }
 
-.svg_icon { max-width: 32px; max-height: 32px; width: 32px; height: 32px; background-repeat: no-repeat; }
+.svgtable { width:100%; }
+.flex { display: flex; flex-wrap:wrap; justify-content: center;} 
+.svg_browser_tile { position: relative; max-height: 64px; min-width: 64px; min-height: 64px; width: 64px; height: 64px;  margin: 5px;  background-color: #808080; border-radius: .4em .4em .4em .4em; }
+.svg_browser_tile:hover { cursor:pointer; background-color: #ffffff; }
+ 
 
 	#alert_form{ display:none; }
 	#alert_form {
@@ -67,7 +71,7 @@
 		margin-top: 75px;
 		padding: 45px;
 		border: 1px solid #9E9E9E;
-		border-radius: .25em .25em .4em .4em;
+		border-radius: .4em .4em .4em .4em;
 		text-align: center;
 		box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 		background-color: rgba(255,225,225,.9);
@@ -635,7 +639,7 @@ function svgDialog(ms,U,Title){
 	            success: function (svg_data) 
 	            {
 						$("#dialog-heading").html("<TMPL_VAR Icon-Watchdog.INF_0108_PLEASE_SELECT_AN_ICON_TO_ASSIGN><br/><b>"+Title+"</b><br/><sub>"+U+"</sub>");
-						$( ".svgtable > tbody tr" ).remove();
+						$( ".svg_browser_tile" ).remove();
 
 						if ( svg_data.svg.error )
 						{
@@ -644,10 +648,10 @@ function svgDialog(ms,U,Title){
 						}
 						else
 						{
-							$("#dialogcontent").html('<table class="svgtable" id="svgtable"><tbody><tr><th></th></tr></tbody></table>');
+							$("#dialogcontent").html('<div class="svgtable" id="svgtable"><div class="flex"></div></div>');
 							$.each(svg_data.svg.svg_data, function( id, svg ) 
 							{
-								$("#svgtable > tbody:last-child").append('<tr class="svgrow"><td><div onclick="assign_icon(\''+svg.name+'\',\''+ms+'\',\''+U+'\',\''+btoa(Title)+'\'); svgDialog();" id="'+svg.name+'" title="'+svg.name+'" class="svg_icon" style="background-image: url(\'data:image/svg+xml;base64,'+svg.image+'\')"></div></td></tr>"');							
+								$("#svgtable > div:last-child").append('<div onclick="assign_icon(\''+svg.name+'\',\''+ms+'\',\''+U+'\',\''+btoa(Title)+'\'); svgDialog();" id="'+svg.name+'" title="'+svg.name+'" class="svg_browser_tile"><svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64"><svg x="0" y="0" height="64" width="64">'+atob(svg.image)+'</svg></svg></div>');							
 							});
 						}
 	            },
