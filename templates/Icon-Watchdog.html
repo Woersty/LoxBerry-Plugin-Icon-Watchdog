@@ -253,11 +253,7 @@
 		 </div>
 	</div>
 	<CENTER>
-		<div id="plugin_content" style="display:none"><img src="<TMPL_VAR HTMLPATH>css/nomobile.svg"><br/><TMPL_VAR Icon-Watchdog.INF_0109_NO_TOUCH_DEVICES></div>
-		<STYLE>
-		.PreferHttps1 {	border-style: solid; border-width: thin; border-radius: 5px; background: #C0FFC0; padding: 2px; font-size:10px; }
-		.PreferHttps0 {	visibility: hidden; }
-		</STYLE>
+	<div id="plugin_content" style="display:none"><img src="<TMPL_VAR HTMLPATH>css/nomobile.svg"><br/><TMPL_VAR Icon-Watchdog.INF_0109_NO_TOUCH_DEVICES></div>
 		<TMPL_LOOP TEMPLATE_ROW>
 			<DIV style="display:inline-block; width:100%;" class="to_disable_on_save plugin_content">
 				<DIV id="MS_LOOP_ROW<TMPL_VAR MSID>" style="text-align:left; display:inline-block; margin-bottom:5px; width:99%; padding:10px; border: 1px solid black; border-radius: 5px; background-color: rgba(228,228,228,.1);"> 
@@ -265,151 +261,147 @@
 						<TMPL_LOOP NAME="MSROW">
 							#<TMPL_VAR MSID> - <TMPL_VAR Name> <small>[<TMPL_VAR IPAddress>]</small> <span class="PreferHttps<TMPL_VAR PreferHttps>">HTTPS</span><BR>
 							<input data-mini="true" class="to_save to_disable_on_save to_disable_on_plugin_off to_hide_on_plugin_off" onclick="if ( $(this).is(':checked') ) { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(1); $('#inactive_div<TMPL_VAR MSID>').fadeIn('fast');  } else { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(0); $('#inactive_div<TMPL_VAR MSID>').fadeOut('fast'); }" type="checkbox" id="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>" name="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><label id="MS_MONITOR_CB_LABEL<TMPL_VAR MSID>" class="to_disable_on_plugin_off" for="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><TMPL_VAR GENERAL.TXT_LABEL_MONITOR></label>
-							<div id="inactive_div<TMPL_VAR MSID>">
-							<table>
-							 <tr>
-							  <td><a id="btncheck<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left;" data-role="button" data-icon="clock" data-mini="true" onclick="runCheck('<TMPL_VAR MSID>');"><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></a></td>
-							  <td><a target="_self" id="btndwl<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left; display:none;" data-role="button" data-icon="action" data-mini="true"><TMPL_VAR GENERAL.TXT_DOWNLOAD_CONVERTED_PROJECT></a></td>
-							  <td style="width:100%"></td>
-							  <td><a href="<TMPL_VAR HTMLPATH>svg/Example_EU_Socket.svg" download="<TMPL_VAR GENERAL.TXT_DOWNLOAD_EXAMPLE_SVG_FILENAME>" id="btnsvg<TMPL_VAR MSID>" class="btnsvg" style="text-align:right;" data-role="button" data-icon="action" data-mini="true"><TMPL_VAR GENERAL.TXT_DOWNLOAD_EXAMPLE_SVG></a></td>
-							  </tr></table>
-							<input class="to_disable_on_plugin_off" id="MS_MONITOR_CB<TMPL_VAR MSID>" name="MS_MONITOR_CB<TMPL_VAR MSID>" type="hidden" value="<TMPL_VAR MS_MONITOR_CB>">
-							<DIV class="to_disable_on_plugin_off" id="loxone_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,79,.5);">
-								<TMPL_VAR Icon-Watchdog.TXT_IMPORT_PROJECT>
-								<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
-									<input class="to_disable_on_plugin_off" style="display:none;" class="hidden" id="loxone_files<TMPL_VAR MSID>" type="file" name="files" accept=".Loxone" max-uploads=1>
-								</form>						
+							<DIV id="inactive_div<TMPL_VAR MSID>">
+								<table>
+								 <tr>
+								  <td><a id="btncheck<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left;" data-role="button" data-icon="clock" data-mini="true" onclick="runCheck('<TMPL_VAR MSID>');"><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></a></td>
+								  <td><a target="_self" id="btndwl<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left; display:none;" data-role="button" data-icon="action" data-mini="true"><TMPL_VAR GENERAL.TXT_DOWNLOAD_CONVERTED_PROJECT></a></td>
+								  <td style="width:100%"></td>
+								  <td><a href="<TMPL_VAR HTMLPATH>svg/Example_EU_Socket.svg" download="<TMPL_VAR GENERAL.TXT_DOWNLOAD_EXAMPLE_SVG_FILENAME>" id="btnsvg<TMPL_VAR MSID>" class="btnsvg" style="text-align:right;" data-role="button" data-icon="action" data-mini="true"><TMPL_VAR GENERAL.TXT_DOWNLOAD_EXAMPLE_SVG></a></td>
+								  </tr>
+								</table>
+								<input class="to_disable_on_plugin_off" id="MS_MONITOR_CB<TMPL_VAR MSID>" name="MS_MONITOR_CB<TMPL_VAR MSID>" type="hidden" value="<TMPL_VAR MS_MONITOR_CB>">
+								<DIV class="to_disable_on_plugin_off" id="loxone_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,79,.5);">
+									<TMPL_VAR Icon-Watchdog.TXT_IMPORT_PROJECT>
+									<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
+										<input class="to_disable_on_plugin_off" style="display:none;" class="hidden" id="loxone_files<TMPL_VAR MSID>" type="file" name="files" accept=".Loxone" max-uploads=1>
+									</form>						
+									<script type="text/javascript">
+										$(function() 
+										{
+											$('#loxone_files<TMPL_VAR MSID>').FancyFileUpload({
+												params : {
+													action : 'fileuploader',
+													url : '<TMPL_VAR HTMLPATH>uploader.php',
+													ms  : '<TMPL_VAR MSID>',
+													singleFileUploads: true,
+													limitMultiFileUploads: 1,
+													sequentialUploads: true,
+												},
+												edit : false,
+												maxfilesize : 10000000,
+												uploadcompleted : function(e, data) { 
+												$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
+												$( '#iwd_status_div' ).fadeIn('slow');
+												setTimeout( function() {data.ff_info.RemoveFile();
+												}, 5000); 
+												},
+												added : function(e, data) {
+													// It is okay to simulate clicking the start upload button.
+													progress(1);
+													this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
+													
+												},
+												langmap : langmap
+											});
+										});
+									</script>
+								</DIV>
+								<br/><br/>
+								<DIV class="svg to_disable_on_plugin_off" id="svg_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,192,.5);">
+									<TMPL_VAR Icon-Watchdog.TXT_IMPORT_SVG>
+									<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
+										<input style="display:none;" class="hidden" id="svg_files<TMPL_VAR MSID>" type="file" name="files" accept=".svg" multiple>
+									</form>						
+									<script type="text/javascript">
+										$(function() 
+										{
+											$('#svg_files<TMPL_VAR MSID>').FancyFileUpload({
+												params : {
+													action : 'fileuploader',
+													url : '<TMPL_VAR HTMLPATH>uploader.php',
+													ms  : '<TMPL_VAR MSID>',
+													sequentialUploads: true,
+
+												},
+												edit : false,
+												maxfilesize : 25600,
+												uploadcompleted : function(e, data) { 
+												$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
+												$( '#iwd_status_div' ).fadeIn('slow');
+												setTimeout( function() { data.ff_info.RemoveFile(); }, 5000); },
+												added : function(e, data) {
+													// It is okay to simulate clicking the start upload button.
+													this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
+													progress(1);
+												},
+												langmap : langmap
+											});
+										});
+									</script>
+								</DIV>
 								<script type="text/javascript">
-								$(function() 
-								{
-									$('#loxone_files<TMPL_VAR MSID>').FancyFileUpload({
-										params : {
-											action : 'fileuploader',
-											url : '<TMPL_VAR HTMLPATH>uploader.php',
-											ms  : '<TMPL_VAR MSID>',
-											singleFileUploads: true,
-											limitMultiFileUploads: 1,
-											sequentialUploads: true,
-										},
-										edit : false,
-										maxfilesize : 10000000,
-										uploadcompleted : function(e, data) { 
-										$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
-										$( '#iwd_status_div' ).fadeIn('slow');
-										setTimeout( function() {data.ff_info.RemoveFile();
-										}, 5000); 
-										},
-										added : function(e, data) {
-											// It is okay to simulate clicking the start upload button.
-											progress(1);
-											this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
-											
-										},
-										langmap : langmap
+									$( document ).ready(function() 
+									{
+									
+										$(".svg .ff_fileupload_wrap .ff_fileupload_dropzone").css('background-Image','url(<TMPL_VAR HTMLPATH>css/fancy_upload_svg.svg)');
+										<TMPL_VAR MS_MONITOR_CB_script>
+
+										if ( $('#MS_MONITOR_CB<TMPL_VAR MSID>').val() == 1 )
+										{
+											$('#inactive_div<TMPL_VAR MSID>').fadeIn('fast'); 
+										}
+										else 
+										{ 
+											$('#inactive_div<TMPL_VAR MSID>').fadeOut('fast'); 
+										}
+
+										$( "label[for='MS_MONITOR_CB_script<TMPL_VAR MSID>']" ).removeClass( "ui-checkbox-off" ).addClass( "ui-checkbox-on" );
+
+										getProjectfile("<TMPL_VAR MSID>");
+										$(".ff_fileupload_hidden").css('display','none');
+
 									});
-								});
+									var nbr_miniservers = miniservers.push('<TMPL_VAR MSID>');
+									$("#colored_div_<TMPL_VAR MSID>").css('background-color','rgba'+colors[<TMPL_VAR MSID>]); 
+									
 								</script>
-							</DIV>
-							<br/><br/>
-							<DIV class="svg to_disable_on_plugin_off" id="svg_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,192,.5);">
-								<TMPL_VAR Icon-Watchdog.TXT_IMPORT_SVG>
-								<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
-									<input style="display:none;" class="hidden" id="svg_files<TMPL_VAR MSID>" type="file" name="files" accept=".svg" multiple>
-								</form>						
-								<script type="text/javascript">
-								$(function() 
-								{
-									$('#svg_files<TMPL_VAR MSID>').FancyFileUpload({
-										params : {
-											action : 'fileuploader',
-											url : '<TMPL_VAR HTMLPATH>uploader.php',
-											ms  : '<TMPL_VAR MSID>',
-											sequentialUploads: true,
-
-										},
-										edit : false,
-										maxfilesize : 25600,
-										uploadcompleted : function(e, data) { 
-										$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
-										$( '#iwd_status_div' ).fadeIn('slow');
-										setTimeout( function() { data.ff_info.RemoveFile(); }, 5000); },
-										added : function(e, data) {
-											// It is okay to simulate clicking the start upload button.
-											this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
-											progress(1);
-										},
-	//									startupload : function(SubmitUpload, e, data) {
-	//										SubmitUpload();
-	//									},
-										langmap : langmap
-									});
-								});
-								
-								
-								</script>
-							</DIV>
-							<script type="text/javascript">
-							$( document ).ready(function() 
-							{
-							
-								$(".svg .ff_fileupload_wrap .ff_fileupload_dropzone").css('background-Image','url(<TMPL_VAR HTMLPATH>css/fancy_upload_svg.svg)');
-								<TMPL_VAR MS_MONITOR_CB_script>
-
-								if ( $('#MS_MONITOR_CB<TMPL_VAR MSID>').val() == 1 )
-								{
-									$('#inactive_div<TMPL_VAR MSID>').fadeIn('fast'); 
-								}
-								else 
-								{ 
-									$('#inactive_div<TMPL_VAR MSID>').fadeOut('fast'); 
-								}
-
-								$( "label[for='MS_MONITOR_CB_script<TMPL_VAR MSID>']" ).removeClass( "ui-checkbox-off" ).addClass( "ui-checkbox-on" );
-
-								getProjectfile("<TMPL_VAR MSID>");
-								$(".ff_fileupload_hidden").css('display','none');
-
-							});
-							var nbr_miniservers = miniservers.push('<TMPL_VAR MSID>');
-							$("#colored_div_<TMPL_VAR MSID>").css('background-color','rgba'+colors[<TMPL_VAR MSID>]); 
-							
-							</script>
-							<br/><br/>
-							<DIV class="svg to_disable_on_plugin_off" style="display:none;" id="div_svgDropdown_<TMPL_VAR MSID>">
-								<DIV style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(255,192,255,.5);">
-									<TMPL_VAR Icon-Watchdog.TXT_SVG_DROPDOWN><br/>
-									<center>
-									<table class="table" style="width:99%; padding:0; spacing:1; margin:0; border: 2px solid #808080; border-radius: .4em .4em .4em .4em;">
-										<tr>
-										   <td style="width:99%; vertical-align: top; background-color: rgba(64,64,255,.2);">
-											<div onclick="if ( $('.icontable.IconPlace').css('display') == 'none' ) {$('.icontable.IconPlace').fadeIn('slow');} else {$('.icontable.IconPlace').fadeOut('slow');}"  
-												style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI2LDNINkM1LjQsMyw1LDMuNCw1LDR2MjRjMCwwLjYsMC40LDEsMSwxaDIwYzAuNiwwLDEtMC40LDEtMVY0QzI3LDMuNCwyNi42LDMsMjYsM3ogTTI1LDE1aC04VjVoOFYxNXogTTE1LDV2MTBIN1Y1SDE1eiBNNywxN2g4djEwSDdWMTd6IE0xNywyN1YxN2g4djEwSDE3eiI+PC9wYXRoPiA8L3N2Zz4=')">
-												<br/>
-												<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONPLACE></div>
-											</div><TMPL_VAR icontable_IconPlace></td>
-										</tr>
-										<tr>
-										   <td style="width:99%; vertical-align: top; background-color: rgba(255,255,64,.2);">
-											<div onclick="if ( $('.icontable.IconState').css('display') == 'none' ) {$('.icontable.IconState').fadeIn('slow');} else {$('.icontable.IconState').fadeOut('slow');}"  
-												style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI3LDVIMVYyNkgyOVY1SDI3Wm0wLDE5SDNWN0gyN1YyNFptLTctOC00LDMtNi03TDUsMjJIMjVabTEtMmEyLDIsMCwxLDAtMi0yQTIsMiwwLDAsMCwyMSwxNFoiPjwvcGF0aD4gPC9zdmc+')">
-												<br/>
-												<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONSTATE></div>
-											</div><TMPL_VAR icontable_IconState></td>
-										</tr>
-										<tr>
-										   <td style="width:99%; vertical-align: top; background-color: rgba(0,120,0,.2);">
-											<div onclick="if ( $('.icontable.IconCat').css('display') == 'none' ) {$('.icontable.IconCat').fadeIn('slow');} else {$('.icontable.IconCat').fadeOut('slow');}"  
-												style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTEwLDJINkM1LjQsMiw1LDIuNCw1LDN2MjZjMCwwLjYsMC40LDEsMSwxaDRjMC42LDAsMS0wLjQsMS0xVjNDMTEsMi40LDEwLjYsMiwxMCwyeiBNOCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzEwLDI3LjEsOS4xLDI4LDgsMjh6IE0xMCwxOEg2VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTE4LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MxOSwyLjQsMTguNiwyLDE4LDJ6IE0xNiwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzE4LDI3LjEsMTcuMSwyOCwxNiwyOHogTTE4LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTI2LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MyNywyLjQsMjYuNiwyLDI2LDJ6IE0yNCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzI2LDI3LjEsMjUuMSwyOCwyNCwyOHogTTI2LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPC9zdmc+')">
-												<br/>
-												<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONCAT></div>
-											</div><TMPL_VAR icontable_IconCat></td>
-										</tr>	
-									</table>
-									</center>
+								<br/><br/>
+								<DIV class="svg to_disable_on_plugin_off" style="display:none;" id="div_svgDropdown_<TMPL_VAR MSID>">
+									<DIV style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(255,192,255,.5);">
+										<TMPL_VAR Icon-Watchdog.TXT_SVG_DROPDOWN><br/>
+										<center>
+											<table class="table" style="width:99%; padding:0; spacing:1; margin:0; border: 2px solid #808080; border-radius: .4em .4em .4em .4em;">
+												<tr>
+												   <td style="width:99%; vertical-align: top; background-color: rgba(64,64,255,.2);">
+													<div onclick="if ( $('.icontable.IconPlace').css('display') == 'none' ) {$('.icontable.IconPlace').fadeIn('slow');} else {$('.icontable.IconPlace').fadeOut('slow');}"  
+														style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI2LDNINkM1LjQsMyw1LDMuNCw1LDR2MjRjMCwwLjYsMC40LDEsMSwxaDIwYzAuNiwwLDEtMC40LDEtMVY0QzI3LDMuNCwyNi42LDMsMjYsM3ogTTI1LDE1aC04VjVoOFYxNXogTTE1LDV2MTBIN1Y1SDE1eiBNNywxN2g4djEwSDdWMTd6IE0xNywyN1YxN2g4djEwSDE3eiI+PC9wYXRoPiA8L3N2Zz4=')">
+														<br/>
+														<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONPLACE></div>
+													</div><TMPL_VAR icontable_IconPlace></td>
+												</tr>
+												<tr>
+												   <td style="width:99%; vertical-align: top; background-color: rgba(255,255,64,.2);">
+													<div onclick="if ( $('.icontable.IconState').css('display') == 'none' ) {$('.icontable.IconState').fadeIn('slow');} else {$('.icontable.IconState').fadeOut('slow');}"  
+														style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI3LDVIMVYyNkgyOVY1SDI3Wm0wLDE5SDNWN0gyN1YyNFptLTctOC00LDMtNi03TDUsMjJIMjVabTEtMmEyLDIsMCwxLDAtMi0yQTIsMiwwLDAsMCwyMSwxNFoiPjwvcGF0aD4gPC9zdmc+')">
+														<br/>
+														<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONSTATE></div>
+													</div><TMPL_VAR icontable_IconState></td>
+												</tr>
+												<tr>
+												   <td style="width:99%; vertical-align: top; background-color: rgba(0,120,0,.2);">
+													<div onclick="if ( $('.icontable.IconCat').css('display') == 'none' ) {$('.icontable.IconCat').fadeIn('slow');} else {$('.icontable.IconCat').fadeOut('slow');}"  
+														style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTEwLDJINkM1LjQsMiw1LDIuNCw1LDN2MjZjMCwwLjYsMC40LDEsMSwxaDRjMC42LDAsMS0wLjQsMS0xVjNDMTEsMi40LDEwLjYsMiwxMCwyeiBNOCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzEwLDI3LjEsOS4xLDI4LDgsMjh6IE0xMCwxOEg2VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTE4LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MxOSwyLjQsMTguNiwyLDE4LDJ6IE0xNiwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzE4LDI3LjEsMTcuMSwyOCwxNiwyOHogTTE4LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTI2LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MyNywyLjQsMjYuNiwyLDI2LDJ6IE0yNCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzI2LDI3LjEsMjUuMSwyOCwyNCwyOHogTTI2LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPC9zdmc+')">
+														<br/>
+														<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONCAT></div>
+													</div><TMPL_VAR icontable_IconCat></td>
+												</tr>	
+											</table>
+										</center>
+									</DIV>
 								</DIV>
 							</DIV>
-							</DIV>
-					</TMPL_LOOP>
+						</TMPL_LOOP>
 					</DIV>
 				</DIV>
 			</DIV>
@@ -418,211 +410,206 @@
 		<br><a class="to_disable_on_save" id="btncancel" data-role="button" data-inline="true" data-mini="true" data-icon="delete" href="/admin/index.cgi"><TMPL_VAR Icon-Watchdog.BUTTON_EXIT></a>
 		<br>
 		<br>
-					
-				<DIV style="display:table; width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(240,240,255,.5);">
-					<b><TMPL_VAR LOGGING.LOG_AREA></b>
-					<DIV style="display:table-row;">
-						<DIV style="display:table-cell; border-radius: 5px;">
-							<table>
-								<tr>
-									<td>
-										<TMPL_VAR LOGGING.LOG_LEVEL>
-									</td>
-									<td>
-										<select name="loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>" id="loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>" data-mini="true">
-												<option value="0"><TMPL_VAR LOGGING.LOGLEVEL0></option>
-											<optgroup label="<TMPL_VAR LOGGING.LOGLEVEL_GROUP_NOTIFY>">
-												<option value="1"><TMPL_VAR LOGGING.LOGLEVEL1></option>
-												<option value="2"><TMPL_VAR LOGGING.LOGLEVEL2></option> 
-												<option value="3"><TMPL_VAR LOGGING.LOGLEVEL3></option>
-											</optgroup>
-											<optgroup label="<TMPL_VAR LOGGING.LOGLEVEL_GROUP_NORMAL>">
-												<option value="4"><TMPL_VAR LOGGING.LOGLEVEL4></option>
-												<option value="5"><TMPL_VAR LOGGING.LOGLEVEL5></option>
-											</optgroup>
-											<optgroup label="<TMPL_VAR LOGGING.LOGLEVEL_GROUP_FREAKS>">
-												<option value="6"><TMPL_VAR LOGGING.LOGLEVEL6></option>
-											</optgroup>
-											<optgroup label="<TMPL_VAR LOGGING.LOGLEVEL_GROUP_DEVELOPMENT>">
-												<option value="7"><TMPL_VAR LOGGING.LOGLEVEL7></option>
-											</optgroup>
-										</select>
-									</td>
-									<td>
-										<button onclick="window.open('/admin/system/logmanager.cgi?package=icon-watchdog', 'log'); return false;" id="logview" data-icon="bars" data-role="button" data-inline="true" data-mini="true"><TMPL_VAR LOGGING.LOG_MGR></button>
-									</td>
-								</tr>
-							</table>
-							<script type="text/javascript">
-								function post_value (action, pluginmd5, value)
-								{
-									console.log("Action:", action, "Plugin-MD5:", pluginmd5, "Value:", value);
-									$.post ( '/admin/system/tools/ajax-config-handler.cgi', 
-										{ 	action: action,
-											value: value,
-											pluginmd5: pluginmd5
-										});
-								}
+		<DIV style="display:table; width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(240,240,255,.5);">
+			<b><TMPL_VAR LOGGING.LOG_AREA></b>
+			<DIV style="display:table-row;">
+				<DIV style="display:table-cell; border-radius: 5px;">
+					<table>
+						<tr>
+							<td>
+								<TMPL_VAR LOGGING.LOG_LEVEL>
+							</td>
+							<td>
+								<select name="loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>" id="loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>" data-mini="true">
+										<option value="0"><TMPL_VAR LOGGING.LOGLEVEL0></option>
+									<optgroup label="<TMPL_VAR LOGGING.LOGLEVEL_GROUP_NOTIFY>">
+										<option value="1"><TMPL_VAR LOGGING.LOGLEVEL1></option>
+										<option value="2"><TMPL_VAR LOGGING.LOGLEVEL2></option> 
+										<option value="3"><TMPL_VAR LOGGING.LOGLEVEL3></option>
+									</optgroup>
+									<optgroup label="<TMPL_VAR LOGGING.LOGLEVEL_GROUP_NORMAL>">
+										<option value="4"><TMPL_VAR LOGGING.LOGLEVEL4></option>
+										<option value="5"><TMPL_VAR LOGGING.LOGLEVEL5></option>
+									</optgroup>
+									<optgroup label="<TMPL_VAR LOGGING.LOGLEVEL_GROUP_FREAKS>">
+										<option value="6"><TMPL_VAR LOGGING.LOGLEVEL6></option>
+									</optgroup>
+									<optgroup label="<TMPL_VAR LOGGING.LOGLEVEL_GROUP_DEVELOPMENT>">
+										<option value="7"><TMPL_VAR LOGGING.LOGLEVEL7></option>
+									</optgroup>
+								</select>
+							</td>
+							<td>
+								<button onclick="window.open('/admin/system/logmanager.cgi?package=icon-watchdog', 'log'); return false;" id="logview" data-icon="bars" data-role="button" data-inline="true" data-mini="true"><TMPL_VAR LOGGING.LOG_MGR></button>
+							</td>
+						</tr>
+					</table>
+					<script type="text/javascript">
+						function post_value (action, pluginmd5, value)
+						{
+							console.log("Action:", action, "Plugin-MD5:", pluginmd5, "Value:", value);
+							$.post ( '/admin/system/tools/ajax-config-handler.cgi', 
+								{ 	action: action,
+									value: value,
+									pluginmd5: pluginmd5
+								});
+						}
 
-							</script>
-						</DIV>
-					</DIV>
+					</script>
 				</DIV>
+			</DIV>
+		</DIV>
 	</CENTER>
 	<small><small><TMPL_VAR VERSION></small></small>
 	<script type="text/javascript">
-	function delete_icon(parentid, base64svgfilename)
-	{
-		var r = confirm("<TMPL_VAR GENERAL.TXT_CONFIRM_DELETE>");
-		if (r == true) 
+		function delete_icon(parentid, base64svgfilename)
 		{
-			$("#svg_status_div").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
-				$.ajax({url: '<TMPL_VAR HTMLPATH>manage_svgs.php', type: 'POST', data : {base64svgfilename:base64svgfilename, delete_icon:true},
-					success: function (delete_icon_result) 
-					{
-							if (delete_icon_result.success === true)
-							{
-								$( '#svg_status_div' ).html(delete_icon_result.message).trigger('create');
-								if ( delete_icon_result.refresh )
-								{
-									$( "#"+parentid ).remove();
-								}
-								$( '#svg_status_div' ).fadeIn('slow');
-								setTimeout( function() { 
-								$( '#svg_status_div' ).fadeOut('slow');
-								}, 7000);
-							}
-							else
-							{
-								show_error(delete_icon_result.message);
-							}
-					},
-					error: function (errorThrown) 
-					{
-						$( '#svg_status_div' ).html("<TMPL_VAR ERRORS.ERR_062_SVG_DELETION_FAILED>").trigger('create');
-						$( '#svg_status_div' ).fadeIn('slow');
-						setTimeout( function() { 
-						$( '#svg_status_div' ).fadeOut('slow');
-						}, 7000);
-					}	
-				});
-		} 
-	}
-	function assign_icon(svgfilename,ms,U,Title)
-	{
-				$("#svg_status_div").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
-				$.ajax({url: '<TMPL_VAR HTMLPATH>manage_svgs.php', type: 'POST', data : {svgfilename:svgfilename, ms:ms, U:U, Title:Title},
-					success: function (json_assign_icon_result) 
-					{
-							var assign_icon_result = JSON.parse(json_assign_icon_result);
-							if (assign_icon_result.success === true)
-							{
-								$( '#svg_status_div' ).html(assign_icon_result.message).trigger('create');
-								if ( assign_icon_result.refresh && assign_icon_result.refresh_data)
-								{
-									$( '#'+assign_icon_result.refresh ).html(atob(assign_icon_result.refresh_data));
-								}
-								$( '#svg_status_div' ).fadeIn('slow');
-								setTimeout( function() { 
-								$( '#svg_status_div' ).fadeOut('slow');
-								}, 7000);
-							}
-							else
-							{
-								show_error(assign_icon_result.message);
-							}
-					},
-					error: function (errorThrown) 
-					{
-						$( '#svg_status_div' ).html("<TMPL_VAR ERRORS.ERR_061_SVG_ASSIGNMENT_FAILED>").trigger('create');
-						$( '#svg_status_div' ).fadeIn('slow');
-						setTimeout( function() { 
-						$( '#svg_status_div' ).fadeOut('slow');
-						}, 7000);
-					}	
-				});
-
-	}
-		
-	function svgDialog(ms,U,Title){ 
-
-		var dialog = $('#dialog');
-		if ( ms === undefined )
-		{
-			dialog.removeProp('open');  
-			dialog.css('display','none');  
-			$("#backdrop").css('display','none');
-			setTimeout( function() { $( '#svg_status_div' ).fadeOut('slow');}, 7000);
-			return;
-		}
-		clearInterval(status);
-		$('#close-dialog').button();
-		$('#close-dialog').css("z-index",2000);
-		$('#close-dialog').parent().on( "click" , function() { 
-			dialog.removeProp('open');  
-			dialog.css('display','none');  
-			$("#backdrop").css('display','none');
-		} );
-
-		if ( !dialog.prop("open") ) 
-		{
-			// do not allow to change default icons
-			
-			if ( "00000000-0000" === U.substring(0,13) ) 
+			var r = confirm("<TMPL_VAR GENERAL.TXT_CONFIRM_DELETE>");
+			if (r == true) 
 			{
-				$( '#svg_status_div' ).html("<TMPL_VAR ERRORS.ERR_058_DO_NOT_CHANGE_DEFAULT_ICONS>").trigger('create');
-				$( '#svg_status_div' ).fadeIn('slow');
-				setTimeout( function() { 
-				$( '#svg_status_div' ).fadeOut('slow');
-				}, 7000);
-
-			return;
-			}
-			// show the dialog 
-			dialog.prop('open',true);
-			$("#backdrop").css('display','block');
-			dialog.css('display','block');
-			$("#dialogcontent").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
-
-				$.ajax({url: '<TMPL_VAR HTMLPATH>manage_svgs.php', type: 'POST', data : {ms:ms},
-					success: function (svg_data) 
-					{
-							$("#dialog-heading").html("<TMPL_VAR Icon-Watchdog.INF_0108_PLEASE_SELECT_AN_ICON_TO_ASSIGN><br/><b>"+Title+"</b><br/><sub>"+U+"</sub>");
-							$( ".svg_browser_tile" ).remove();
-
-							if ( svg_data.svg.error )
-							{
-								$("#dialog-heading").html("<TMPL_VAR ERRORS.ERR_TITLE>");
-								$("#dialogcontent").html("<font color='red'>"+svg_data.svg.message+"</font>");
-							}
-							else
-							{
-								$("#dialogcontent").html('<div class="svgtable" id="svgtable"><div class="flex"></div></div>');
-								$.each(svg_data.svg.svg_data, function( id, svg ) 
+				$("#svg_status_div").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
+					$.ajax({url: '<TMPL_VAR HTMLPATH>manage_svgs.php', type: 'POST', data : {base64svgfilename:base64svgfilename, delete_icon:true},
+						success: function (delete_icon_result) 
+						{
+								if (delete_icon_result.success === true)
 								{
-									$("#svgtable > div:last-child").append('<div id="'+btoa(svg.name).replaceAll("+","_").replaceAll("=","_").replaceAll("/","_")+'" class="icon_browser_outer"><div class="icon_browser_delete" onclick="delete_icon(\''+btoa(svg.name).replaceAll("+","_").replaceAll("=","_").replaceAll("/","_")+'\',\''+btoa(svg.name)+'\');"></div><div onclick="assign_icon(\''+svg.name+'\',\''+ms+'\',\''+U+'\',\''+btoa(Title)+'\'); svgDialog();" id="'+svg.name+'" title="'+svg.name+'" class="svg_browser_tile"><svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64"><svg x="0" y="0" height="64" width="64">'+atob(svg.image)+'</svg></svg></div></div>');							
-								});
-							}
-					},
-					error: function (errorThrown) 
-					{
-						$("#dialog-heading").html("<TMPL_VAR ERRORS.ERR_TITLE>");
-						$("#dialogcontent").html("<font color='red'><TMPL_VAR ERRORS.ERR_057_ERROR_WHEN_LOADING_DIALOG></font>");
-						console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_057_ERROR_WHEN_LOADING_DIALOG>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
-					}	
-				});
+									$( '#svg_status_div' ).html(delete_icon_result.message).trigger('create');
+									if ( delete_icon_result.refresh )
+									{
+										$( "#"+parentid ).remove();
+									}
+									$( '#svg_status_div' ).fadeIn('slow');
+									setTimeout( function() { 
+									$( '#svg_status_div' ).fadeOut('slow');
+									}, 7000);
+								}
+								else
+								{
+									show_error(delete_icon_result.message);
+								}
+						},
+						error: function (errorThrown) 
+						{
+							$( '#svg_status_div' ).html("<TMPL_VAR ERRORS.ERR_062_SVG_DELETION_FAILED>").trigger('create');
+							$( '#svg_status_div' ).fadeIn('slow');
+							setTimeout( function() { 
+							$( '#svg_status_div' ).fadeOut('slow');
+							}, 7000);
+						}	
+					});
+			} 
 		}
-		else {
-			dialog.removeProp('open');  
-			dialog.css('display','none');  
-			$("#backdrop").css('display','none');
+		function assign_icon(svgfilename,ms,U,Title)
+		{
+					$("#svg_status_div").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
+					$.ajax({url: '<TMPL_VAR HTMLPATH>manage_svgs.php', type: 'POST', data : {svgfilename:svgfilename, ms:ms, U:U, Title:Title},
+						success: function (json_assign_icon_result) 
+						{
+								var assign_icon_result = JSON.parse(json_assign_icon_result);
+								if (assign_icon_result.success === true)
+								{
+									$( '#svg_status_div' ).html(assign_icon_result.message).trigger('create');
+									if ( assign_icon_result.refresh && assign_icon_result.refresh_data)
+									{
+										$( '#'+assign_icon_result.refresh ).html(atob(assign_icon_result.refresh_data));
+									}
+									$( '#svg_status_div' ).fadeIn('slow');
+									setTimeout( function() { 
+									$( '#svg_status_div' ).fadeOut('slow');
+									}, 7000);
+								}
+								else
+								{
+									show_error(assign_icon_result.message);
+								}
+						},
+						error: function (errorThrown) 
+						{
+							$( '#svg_status_div' ).html("<TMPL_VAR ERRORS.ERR_061_SVG_ASSIGNMENT_FAILED>").trigger('create');
+							$( '#svg_status_div' ).fadeIn('slow');
+							setTimeout( function() { 
+							$( '#svg_status_div' ).fadeOut('slow');
+							}, 7000);
+						}	
+					});
+
 		}
-	}
-	 
-	 
-	 </script>
-	 
-	<script type="text/javascript">
+			
+		function svgDialog(ms,U,Title){ 
+
+			var dialog = $('#dialog');
+			if ( ms === undefined )
+			{
+				dialog.removeProp('open');  
+				dialog.css('display','none');  
+				$("#backdrop").css('display','none');
+				setTimeout( function() { $( '#svg_status_div' ).fadeOut('slow');}, 7000);
+				return;
+			}
+			clearInterval(status);
+			$('#close-dialog').button();
+			$('#close-dialog').css("z-index",2000);
+			$('#close-dialog').parent().on( "click" , function() { 
+				dialog.removeProp('open');  
+				dialog.css('display','none');  
+				$("#backdrop").css('display','none');
+			} );
+
+			if ( !dialog.prop("open") ) 
+			{
+				// do not allow to change default icons
+				
+				if ( "00000000-0000" === U.substring(0,13) ) 
+				{
+					$( '#svg_status_div' ).html("<TMPL_VAR ERRORS.ERR_058_DO_NOT_CHANGE_DEFAULT_ICONS>").trigger('create');
+					$( '#svg_status_div' ).fadeIn('slow');
+					setTimeout( function() { 
+					$( '#svg_status_div' ).fadeOut('slow');
+					}, 7000);
+
+				return;
+				}
+				// show the dialog 
+				dialog.prop('open',true);
+				$("#backdrop").css('display','block');
+				dialog.css('display','block');
+				$("#dialogcontent").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
+
+					$.ajax({url: '<TMPL_VAR HTMLPATH>manage_svgs.php', type: 'POST', data : {ms:ms},
+						success: function (svg_data) 
+						{
+								$("#dialog-heading").html("<TMPL_VAR Icon-Watchdog.INF_0108_PLEASE_SELECT_AN_ICON_TO_ASSIGN><br/><b>"+Title+"</b><br/><sub>"+U+"</sub>");
+								$( ".svg_browser_tile" ).remove();
+
+								if ( svg_data.svg.error )
+								{
+									$("#dialog-heading").html("<TMPL_VAR ERRORS.ERR_TITLE>");
+									$("#dialogcontent").html("<font color='red'>"+svg_data.svg.message+"</font>");
+								}
+								else
+								{
+									$("#dialogcontent").html('<div class="svgtable" id="svgtable"><div class="flex"></div></div>');
+									$.each(svg_data.svg.svg_data, function( id, svg ) 
+									{
+										$("#svgtable > div:last-child").append('<div id="'+btoa(svg.name).replaceAll("+","_").replaceAll("=","_").replaceAll("/","_")+'" class="icon_browser_outer"><div class="icon_browser_delete" onclick="delete_icon(\''+btoa(svg.name).replaceAll("+","_").replaceAll("=","_").replaceAll("/","_")+'\',\''+btoa(svg.name)+'\');"></div><div onclick="assign_icon(\''+svg.name+'\',\''+ms+'\',\''+U+'\',\''+btoa(Title)+'\'); svgDialog();" id="'+svg.name+'" title="'+svg.name+'" class="svg_browser_tile"><svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64"><svg x="0" y="0" height="64" width="64">'+atob(svg.image)+'</svg></svg></div></div>');							
+									});
+								}
+						},
+						error: function (errorThrown) 
+						{
+							$("#dialog-heading").html("<TMPL_VAR ERRORS.ERR_TITLE>");
+							$("#dialogcontent").html("<font color='red'><TMPL_VAR ERRORS.ERR_057_ERROR_WHEN_LOADING_DIALOG></font>");
+							console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_057_ERROR_WHEN_LOADING_DIALOG>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
+						}	
+					});
+			}
+			else {
+				dialog.removeProp('open');  
+				dialog.css('display','none');  
+				$("#backdrop").css('display','none');
+			}
+		}
+
 		function build_svgDropdown (ms,icons_as_json)
 		{
 			progress(1);
@@ -977,6 +964,5 @@
 			}
 
 		});
-		
 	</script>
 </DIV>
