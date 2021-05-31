@@ -45,11 +45,7 @@
 	background-color: rgba(49,56,62,0.9);
 }
 
-.svgtable { width:100%; }
-.flex { display: flex; flex-wrap:wrap; justify-content: center;} 
-.svg_browser_tile { position: relative; max-height: 64px; min-width: 64px; min-height: 64px; width: 64px; height: 64px;  margin: 5px;  background-color: #808080; border-radius: .4em .4em .4em .4em; }
-.svg_browser_tile:hover { cursor:pointer; background-color: #ffffff; }
- 
+
 
 	#alert_form{ display:none; }
 	#alert_form {
@@ -331,7 +327,6 @@
 		<TMPL_VAR NOTIFICATIONS>
 	<!-- NOTIFICATIONS //-->
 </DIV>
-
 <CENTER>
 	<br>
 	<TABLE>
@@ -577,7 +572,44 @@
 			</DIV>
 </CENTER>
 <small><small><TMPL_VAR VERSION></small></small>
-  <script>
+<script>
+function delete_icon(parentid, base64svgfilename)
+{
+	var r = confirm("<TMPL_VAR GENERAL.TXT_CONFIRM_DELETE>");
+	if (r == true) 
+	{
+		$("#svg_status_div").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
+			$.ajax({url: '<TMPL_VAR HTMLPATH>manage_svgs.php', type: 'POST', data : {base64svgfilename:base64svgfilename, delete_icon:true},
+	            success: function (delete_icon_result) 
+	            {
+						if (delete_icon_result.success === true)
+						{
+							$( '#svg_status_div' ).html(delete_icon_result.message).trigger('create');
+							if ( delete_icon_result.refresh )
+							{
+								$( "#"+parentid ).remove();
+							}
+							$( '#svg_status_div' ).fadeIn('slow');
+							setTimeout( function() { 
+							$( '#svg_status_div' ).fadeOut('slow');
+							}, 7000);
+						}
+						else
+						{
+							show_error(delete_icon_result.message);
+						}
+	            },
+	            error: function (errorThrown) 
+	            {
+					$( '#svg_status_div' ).html("<TMPL_VAR ERRORS.ERR_062_SVG_DELETION_FAILED>").trigger('create');
+					$( '#svg_status_div' ).fadeIn('slow');
+					setTimeout( function() { 
+					$( '#svg_status_div' ).fadeOut('slow');
+					}, 7000);
+			    }	
+	        });
+	} 
+}
 function assign_icon(svgfilename,ms,U,Title)
 {
 			$("#svg_status_div").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
@@ -670,7 +702,7 @@ function svgDialog(ms,U,Title){
 							$("#dialogcontent").html('<div class="svgtable" id="svgtable"><div class="flex"></div></div>');
 							$.each(svg_data.svg.svg_data, function( id, svg ) 
 							{
-								$("#svgtable > div:last-child").append('<div onclick="assign_icon(\''+svg.name+'\',\''+ms+'\',\''+U+'\',\''+btoa(Title)+'\'); svgDialog();" id="'+svg.name+'" title="'+svg.name+'" class="svg_browser_tile"><svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64"><svg x="0" y="0" height="64" width="64">'+atob(svg.image)+'</svg></svg></div>');							
+								$("#svgtable > div:last-child").append('<div id="'+btoa(svg.name).replaceAll("+","_").replaceAll("=","_").replaceAll("/","_")+'" class="icon_browser_outer"><div class="icon_browser_delete" onclick="delete_icon(\''+btoa(svg.name).replaceAll("+","_").replaceAll("=","_").replaceAll("/","_")+'\',\''+btoa(svg.name)+'\');"></div><div onclick="assign_icon(\''+svg.name+'\',\''+ms+'\',\''+U+'\',\''+btoa(Title)+'\'); svgDialog();" id="'+svg.name+'" title="'+svg.name+'" class="svg_browser_tile"><svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64"><svg x="0" y="0" height="64" width="64">'+atob(svg.image)+'</svg></svg></div></div>');							
 							});
 						}
 	            },

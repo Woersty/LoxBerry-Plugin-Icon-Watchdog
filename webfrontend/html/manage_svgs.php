@@ -28,6 +28,38 @@ $log = LBLog::newLog ($params);
 LOGSTART ($msinfo.$L["Icon-Watchdog.INF_0110_SVG_VIEW_REQUEST"]);
 $log->LOGTITLE($msinfo.$L["Icon-Watchdog.INF_0110_SVG_VIEW_REQUEST"]);
 
+if ( isset($_REQUEST["base64svgfilename"]) && isset($_REQUEST["delete_icon"]) )
+{
+	$svgname = basename(utf8_encode(base64_decode($_REQUEST["base64svgfilename"])));
+	if ( unlink("$lbpdatadir/svg/".$svgname ) )
+	{
+		$result = array(
+				"success" => true,
+				"error" => false,
+				"refresh" => $svgname,
+				"message" => str_replace(array("<file>"),array($svgname),$L["Icon-Watchdog.INF_0117_SVG_DELETION_OK"]));
+		header('Content-Type: application/json; charset=utf-8');
+		echo json_encode($result, JSON_UNESCAPED_SLASHES);
+		LOGOK ($msinfo.str_replace(array("<file>"),array($svgname),$L["Icon-Watchdog.INF_0117_SVG_DELETION_OK"]));
+		$log->LOGTITLE($msinfo.str_replace(array("<file>"),array($svgname),$L["Icon-Watchdog.INF_0117_SVG_DELETION_OK"]));
+		LOGEND ("");
+		exit;
+	}
+	else
+	{
+			$result = array(
+		"success" => false,
+		"error" => true,
+		"message" => $msinfo.str_replace(array("<file>"),array($svgname),$L["Icon-Watchdog.ERR_062_SVG_DELETION_FAILED"]));
+		header('Content-Type: application/json; charset=utf-8');
+		echo json_encode($result, JSON_UNESCAPED_SLASHES);
+		LOGWARN ($msinfo.str_replace(array("<file>"),array($svgname),$L["Icon-Watchdog.ERR_062_SVG_DELETION_FAILED"]));
+		$log->LOGTITLE($msinfo.str_replace(array("<file>"),array($svgname),$L["Icon-Watchdog.ERR_062_SVG_DELETION_FAILED"]));
+		LOGEND ("");
+		exit;
+	}
+}
+
 if ( isset($_REQUEST["svgfilename"]) && isset($_REQUEST["ms"]) && isset($_REQUEST["U"]) && isset($_REQUEST["Title"]) )
 {
 	$ms = intval($_REQUEST["ms"]);
