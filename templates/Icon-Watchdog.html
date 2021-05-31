@@ -208,7 +208,7 @@
 	}
 	$("body").append('<div style="display:none;" id="iwd_status_div"><TMPL_VAR STATUS></div>');
 	$("body").append('<div style="display:none;" id="svg_status_div"><TMPL_VAR STATUS></div>');
-	$("body").append('<div style="display:none;" id="backdrop"><dialog role="dialog" aria-labelledby="dialog-heading"><button id="close-dialog"><TMPL_VAR GENERAL.TXT_DIALOG_CANCEL></button><div class="dialog-heading" id="dialog-heading"><TMPL_VAR Icon-Watchdog.INF_0108_PLEASE_SELECT_AN_ICON_TO_ASSIGN></div><p id="dialogcontent"> Dies ist eine zugängliche Dialog-Box, die Sie auch mit der Tastatur benutzen können.</p></dialog></div>');
+	$("body").append('<div style="display:none;" id="backdrop"><div class="dialog" id="dialog"><br><a role="button" data-role="button"  data-mini="true" id="close-dialog"><TMPL_VAR GENERAL.TXT_DIALOG_CANCEL></a><div class="dialog-heading" id="dialog-heading"><TMPL_VAR Icon-Watchdog.INF_0108_PLEASE_SELECT_AN_ICON_TO_ASSIGN></div><p id="dialogcontent"> Dies ist eine zugängliche Dialog-Box, die Sie auch mit der Tastatur benutzen können.</p></div></div>');
 	///////////////////////////////////////////////////////////////////////////
 	/////////////////////////////// Set-up ////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////	
@@ -331,6 +331,7 @@
 		<TMPL_VAR NOTIFICATIONS>
 	<!-- NOTIFICATIONS //-->
 </DIV>
+
 <CENTER>
 	<br>
 	<TABLE>
@@ -614,12 +615,29 @@ function assign_icon(svgfilename,ms,U,Title)
 }
 	
 function svgDialog(ms,U,Title){ 
-	clearInterval(status);
-	var dialog = document.querySelector('dialog'),
-    	closebutton = document.getElementById('close-dialog');
 
-	if (!dialog.hasAttribute('open')) {
+	var dialog = $('#dialog');
+	if ( ms === undefined )
+	{
+		dialog.removeProp('open');  
+		dialog.css('display','none');  
+		$("#backdrop").css('display','none');
+		setTimeout( function() { $( '#svg_status_div' ).fadeOut('slow');}, 7000);
+		return;
+	}
+	clearInterval(status);
+    $('#close-dialog').button();
+	$('#close-dialog').css("z-index",2000);
+    $('#close-dialog').parent().on( "click" , function() { 
+		dialog.removeProp('open');  
+		dialog.css('display','none');  
+		$("#backdrop").css('display','none');
+	} );
+
+	if ( !dialog.prop("open") ) 
+	{
 		// do not allow to change default icons
+		
 		if ( "00000000-0000" === U.substring(0,13) ) 
 		{
 			$( '#svg_status_div' ).html("<TMPL_VAR ERRORS.ERR_058_DO_NOT_CHANGE_DEFAULT_ICONS>").trigger('create');
@@ -631,8 +649,9 @@ function svgDialog(ms,U,Title){
 		return;
 		}
 		// show the dialog 
+		dialog.prop('open',true);
 		$("#backdrop").css('display','block');
-		dialog.setAttribute('open','open');
+		dialog.css('display','block');
 		$("#dialogcontent").html("<TMPL_VAR GENERAL.TXT_STATUS_WORKING>");
 
 			$.ajax({url: '<TMPL_VAR HTMLPATH>manage_svgs.php', type: 'POST', data : {ms:ms},
@@ -662,13 +681,10 @@ function svgDialog(ms,U,Title){
 					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_057_ERROR_WHEN_LOADING_DIALOG>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
 			    }	
 	        });
-		
-		// after displaying the dialog, focus the closebutton inside it
-		closebutton.focus();
-		closebutton.addEventListener('click', svgDialog);
 	}
 	else {
- 		dialog.removeAttribute('open');  
+		dialog.removeProp('open');  
+		dialog.css('display','none');  
 		$("#backdrop").css('display','none');
 	}
 }
