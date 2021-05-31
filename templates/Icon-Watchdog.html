@@ -817,10 +817,10 @@ function svgDialog(ms,U,Title){
 	
 	function runCheck(ms)
 	{
-		clearInterval(status);
 		$("#working").fadeIn('slow');
 		$('.to_disable_on_save').addClass('ui-disabled');
 	       	// Send datas
+			setTimeout( function() { clearInterval(status); status = setInterval(function() { checkStatus(); },5000); checkStatus(); }, 2500);
 			$.ajax({url: '<TMPL_VAR HTMLPATH>watch.php', type: 'POST', data : {ms:ms},
 	            success: function (result) 
 	            {
@@ -841,7 +841,6 @@ function svgDialog(ms,U,Title){
 							}
 							setTimeout( function() { $("#working").fadeOut('slow'); }, 500);
 						}
-						setTimeout( function() { clearInterval(status); status = setInterval(function() { checkStatus(); },5000); checkStatus(); }, 500);
 	            },
 	            error: function (errorThrown) 
 	            {
@@ -849,7 +848,6 @@ function svgDialog(ms,U,Title){
 					$( '#iwd_status_div' ).fadeIn('slow');
 					console.log('<TMPL_VAR GENERAL.MY_NAME> <TMPL_VAR ERRORS.ERR_043_GET_NO_PROJECT_DATA>'+ms+' Error => ' + errorThrown.status + ' => ' + errorThrown.statusText);
 					setTimeout( function() {$('.to_disable_on_save').removeClass('ui-disabled');}, 500);
-					setTimeout( function() { clearInterval(status); status = setInterval(function() { checkStatus(); },5000); checkStatus(); }, 500);
 					setTimeout( function() { $("#working").fadeOut('slow'); }, 500);
 			    }	
 	        });

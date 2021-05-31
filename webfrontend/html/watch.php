@@ -1361,10 +1361,10 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 									curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYHOST		, 0);
 									curl_setopt($curl_reboot, CURLOPT_HEADER				, 0);  
 									curl_setopt($curl_reboot, CURLOPT_RETURNTRANSFER		, true);
+									$reboot_ok = false;
 									if ( !$curl_reboot )
 									{
 										debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_0002_ERROR_INIT_CURL"],4);
-										debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_055_MS_REBOOT_FAILED"],4);
 									}
 									else
 									{
@@ -1373,11 +1373,52 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 										{
 											case "200":
 												debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0101_MS_REBOOT_OK"],5);
+												curl_close($curl_reboot);
+												debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0113_WAIT_MS_AFTER_REBOOT"],5);
+												for ($i = 1; $i <= 100; $i++) 
+												{
+													set_time_limit (30);
+													sleep (4);
+													$curl_reboot = curl_init($prefix.$miniserver['IPAddress'].":".$port."/dev/cfg/mac");			
+													curl_setopt($curl_reboot, CURLOPT_USERPWD				, $miniserver['Credentials_RAW']);
+													curl_setopt($curl_reboot, CURLOPT_NOPROGRESS			, 1);
+													curl_setopt($curl_reboot, CURLOPT_FOLLOWLOCATION		, 1);
+													curl_setopt($curl_reboot, CURLOPT_CONNECTTIMEOUT		, 10); 
+													curl_setopt($curl_reboot, CURLOPT_TIMEOUT				, 10);
+													curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYPEER		, 0);
+													curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYSTATUS		, 0);
+													curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYHOST		, 0);
+													curl_setopt($curl_reboot, CURLOPT_HEADER				, 0);  
+													curl_setopt($curl_reboot, CURLOPT_RETURNTRANSFER		, true);
+													$reboot_response = curl_exec($curl_reboot);  
+													switch (curl_getinfo($curl_reboot,CURLINFO_RESPONSE_CODE)) 
+													{
+														case "200":
+															$wait_msg = "MS#".$msno." ".str_replace(array("<ms>","<tries>"),array($msno,$i),$L["Icon-Watchdog.INF_0116_MS_BACK_AFTER_REBOOT"]);
+															debug(__line__,$wait_msg,5);
+															file_put_contents($watchstate_file, $wait_msg);
+															$log->LOGTITLE($wait_msg);
+															$i = 101;
+															$reboot_ok = true;
+															sleep (4);
+															break;
+														default;
+															$wait_msg = "MS#".$msno." ".str_replace(array("<ms>","<try>","<maxtry>"),array($msno,$i,100),$L["Icon-Watchdog.INF_0115_STILL_WAITING_FOR_MS_AFTER_REBOOT"]);
+															debug(__line__,$wait_msg,5);
+															file_put_contents($watchstate_file, $wait_msg);
+															$log->LOGTITLE($wait_msg);
+													}
+													curl_close($curl_reboot);
+												}
+												
 												break;
 											default;
-											debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_055_MS_REBOOT_FAILED"],4);
+												curl_close($curl_reboot);
 										}
-										curl_close($curl_reboot);
+									}
+									if (!$reboot_ok)
+									{
+										debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_055_MS_REBOOT_FAILED"],4);
 									}
 								}
 							}
