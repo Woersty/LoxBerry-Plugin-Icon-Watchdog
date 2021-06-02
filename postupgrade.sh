@@ -19,4 +19,9 @@ mv -v $ARGV5/data/plugins/tmp_data_iwd/* $ARGV5/data/plugins/$ARGV3/
 echo "<INFO> Remove temporary folders"
 rm -rf /tmp/$ARGV1\_upgrade
 rm -rf $ARGV5/data/plugins/tmp_data_iwd
+
+echo "<INFO> Extract example icons"
+tar --skip-old-files -xzvf $ARGV5/data/plugins/$ARGV3/svg/svgs.tgz 
+rm -f $ARGV5/data/plugins/$ARGV3/svg/svgs.tgz 
+
 exit 0
