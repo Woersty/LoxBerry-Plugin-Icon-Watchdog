@@ -96,11 +96,11 @@ else
 	}
 	else
 	{
-		$result["ms".$msno] = array("ms" => $msno,"success" => false, "error" => true, "display_error" => false, "message" => $L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"]); 
+		$result["ms".$msno] = array("ms" => $msno,"success" => false, "error" => true, "display_error" => false, "message" => "MS#".$msno." ".$L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"]); 
 		header('Content-Type: application/json; charset=utf-8');
 		echo json_encode($result, JSON_UNESCAPED_SLASHES);
-		LOGINF ($L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"]);
-		$log->LOGTITLE($L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"]);
+		LOGINF ("MS#".$msno." ".$L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"]);
+		$log->LOGTITLE("MS#".$msno." ".$L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"]);
 		LOGEND ("");
 		exit;
 	}
