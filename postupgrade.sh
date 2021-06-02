@@ -8,20 +8,20 @@ ARGV5=$5 # Fifth argument is Base folder of LoxBerry
 shopt -s dotglob
 
 echo "<INFO> Moving back existing config files"
-mv -v /tmp/$ARGV1\_upgrade/config/* $ARGV5/config/plugins/$ARGV3/
+/bin/mv -v /tmp/$ARGV1\_upgrade/config/* $ARGV5/config/plugins/$ARGV3/
 
 echo "<INFO> Moving back existing log files"
-mv -v /tmp/$ARGV1\_upgrade/log/* $ARGV5/log/plugins/$ARGV3/
+/bin/mv -v /tmp/$ARGV1\_upgrade/log/* $ARGV5/log/plugins/$ARGV3/
 
 echo "<INFO> Moving back existing compare files"
-mv -v $ARGV5/data/plugins/tmp_data_iwd/* $ARGV5/data/plugins/$ARGV3/
+/bin/mv -v $ARGV5/data/plugins/tmp_data_iwd/* $ARGV5/data/plugins/$ARGV3/
 
 echo "<INFO> Remove temporary folders"
-rm -rf /tmp/$ARGV1\_upgrade
-rm -rf $ARGV5/data/plugins/tmp_data_iwd
+/bin/rm -rf /tmp/$ARGV1\_upgrade
+/bin/rm -rf $ARGV5/data/plugins/tmp_data_iwd
 
 echo "<INFO> Extract example icons"
-tar --skip-old-files -xzvf $ARGV5/data/plugins/$ARGV3/svg/svgs.tgz 
-rm -f $ARGV5/data/plugins/$ARGV3/svg/svgs.tgz 
+/bin/tar --skip-old-files -xzvf $ARGV5/data/plugins/$ARGV3/svg/svgs.tgz -C  $ARGV5/data/plugins/$ARGV3/svg
+/bin/rm -f $ARGV5/data/plugins/$ARGV3/svg/svgs.tgz 
 
 exit 0
