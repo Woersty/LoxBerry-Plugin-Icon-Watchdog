@@ -118,6 +118,18 @@ function import_loxone_project($file,$ms)
 	$xml_project_file_to_parse = file_get_contents($file);
 	$ProjectSerial="none";
 	$fixed_xml_string = "";
+
+	//First remove any indentations:
+	$xml_project_file_to_parse = str_replace("     ","", $xml_project_file_to_parse);
+	$xml_project_file_to_parse = str_replace("\t","", $xml_project_file_to_parse);
+	//Next replace unify all new-lines into unix LF:
+	$xml_project_file_to_parse = str_replace("\r","\n", $xml_project_file_to_parse);
+	$xml_project_file_to_parse = str_replace("\n\n","\n", $xml_project_file_to_parse);
+	//Next replace all new lines with the unicode xml conform new line:
+	$xml_project_file_to_parse = str_replace("\n","&#10;", $xml_project_file_to_parse);
+	//Finally, replace any new line entities after > with a \n:
+	$xml_project_file_to_parse = str_replace(">&#10;",">\n", $xml_project_file_to_parse);
+
 	foreach (explode("\n",$xml_project_file_to_parse) as $xml_line)
 	{
 		if ( strpos($xml_line,' DType="13"') )
@@ -222,6 +234,10 @@ function import_loxone_project($file,$ms)
 			}	
 		}
 	}
+	
+	// Debug - Code Block found
+	// echo ($xml->xpath("C[@Type='Document']/C[@Type='Program']/C[@Type='Page']/C[@Type='Code16']")[0]->attributes()["Code"]);
+	
 	// Sort alphabetical
 	foreach ($unsorted_array as $id => $value) { $titles[$id] = $value['Title']; }
 	$keys = array_keys($unsorted_array);
@@ -229,7 +245,7 @@ function import_loxone_project($file,$ms)
 	$sorted_array = array_combine($keys, $unsorted_array);
 	array_push($IconData["Icons"],array_values($sorted_array));
 	$data['xml'] = $xml->asXML();
-	$data['xml'] = str_replace(array("<IoData/>","<Display/>","__dummy_for_apos__","__dummy_for_backtick__"),array("<IoData></IoData>","<Display></Display>","&apos;","`"),$data);
+	$data['xml'] = str_replace(array("<IoData/>","<Display/>","__dummy_for_apos__","__dummy_for_backtick__","&#10;"),array("<IoData></IoData>","<Display></Display>","&apos;","`","\n"),$data);
 	$data['json'] = json_encode($IconData);
 	$data['Serial'] = $ProjectSerial;
 	return $data;
