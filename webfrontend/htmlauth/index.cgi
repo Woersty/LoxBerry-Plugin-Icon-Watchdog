@@ -207,7 +207,8 @@ sub defaultpage
 			$ms{icontable_IconPlace}	= '<center><table style="display:none;" class="icontable IconPlace ms'.$ms_id.' " id="icontable_IconPlace_'.$ms_id.'"><thead><tr><th>'.$L{'GENERAL.TXT_TABLE_ICON'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_TITLE'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_UNIQUEID'}.'</th></tr></thead><tbody></tbody></table></center>';
 			$ms{icontable_IconCat}		= '<center><table style="display:none;" class="icontable IconCat ms'.$ms_id.' "   id="icontable_IconCat_'.$ms_id.'"><thead><tr><th>'.$L{'GENERAL.TXT_TABLE_ICON'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_TITLE'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_UNIQUEID'}.'</th></tr></thead><tbody></tbody></table></center>';
 			$ms{icontable_IconState}	= '<center><table style="display:none;" class="icontable IconState ms'.$ms_id.' " id="icontable_IconState_'.$ms_id.'"><thead><tr><th>'.$L{'GENERAL.TXT_TABLE_ICON'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_TITLE'}.'</th><th>'.$L{'GENERAL.TXT_TABLE_UNIQUEID'}.'</th></tr></thead><tbody></tbody></table></center>';
-			
+			$ms{CRONTIME} 				= "20:00";
+			$ms{CRONTIME} 				= $Config{'IWD.CRONTIME' . $ms_id} if ( $Config{"IWD.CRONTIME" . $ms_id} ne "" );
 			if ( $ms{PreferHttps} eq "1" )
 			{
 				$ms{Port} 		= $miniservers{$ms_id}{'PortHttps'};

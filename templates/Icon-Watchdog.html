@@ -1,11 +1,13 @@
 <link rel="stylesheet" href="<TMPL_VAR HTMLPATH>css/style.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
 <link rel="stylesheet" href="<TMPL_VAR HTMLPATH>css/fancy_fileupload.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
+<link rel="stylesheet" href="<TMPL_VAR HTMLPATH>css/timepicker.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
 <script type="text/javascript"> var langmap = {<TMPL_VAR LANGMAP.LANGMAP>} // fancy-fileupload LoxBerry translation mapping</script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.ui.widget.js?<TMPL_VAR VERSION>"></script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.fileupload.js?<TMPL_VAR VERSION>"></script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.iframe-transport.js?<TMPL_VAR VERSION>"></script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.fancy-fileupload.js?<TMPL_VAR VERSION>"></script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/d3.v3.min.js?<TMPL_VAR VERSION>"></script>
+<script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/timepicker.js?<TMPL_VAR VERSION>"></script>
 <script type="text/javascript"> 
 	var miniservers=[];
 	colors=[
@@ -260,7 +262,21 @@
 					<DIV id="colored_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:5px; border: 1px solid black; border-radius: 5px; background-color: rgba(0,228,228,.1);">
 						<TMPL_LOOP NAME="MSROW">
 							#<TMPL_VAR MSID> - <TMPL_VAR Name> <small>[<TMPL_VAR IPAddress>]</small> <span class="PreferHttps<TMPL_VAR PreferHttps>">HTTPS</span><BR>
-							<input data-mini="true" class="to_save to_disable_on_save to_disable_on_plugin_off to_hide_on_plugin_off" onclick="if ( $(this).is(':checked') ) { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(1); $('#inactive_div<TMPL_VAR MSID>').fadeIn('fast');  } else { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(0); $('#inactive_div<TMPL_VAR MSID>').fadeOut('fast'); }" type="checkbox" id="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>" name="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><label id="MS_MONITOR_CB_LABEL<TMPL_VAR MSID>" class="to_disable_on_plugin_off" for="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><TMPL_VAR GENERAL.TXT_LABEL_MONITOR></label>
+						  <table>
+							<tr>
+							<td><input data-mini="true" class="to_save to_disable_on_save to_disable_on_plugin_off to_hide_on_plugin_off" onclick="if ( $(this).is(':checked') ) { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(1); $('#inactive_div<TMPL_VAR MSID>').fadeIn('fast'); $('#timepicker_div<TMPL_VAR MSID>').fadeIn('fast');  } else { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(0); $('#inactive_div<TMPL_VAR MSID>').fadeOut('fast'); $('#timepicker_div<TMPL_VAR MSID>').fadeOut('fast'); }" type="checkbox" id="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>" name="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><label id="MS_MONITOR_CB_LABEL<TMPL_VAR MSID>" class="to_disable_on_plugin_off" for="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><TMPL_VAR GENERAL.TXT_LABEL_MONITOR></label></td>
+						    <td><div id="timepicker_div<TMPL_VAR MSID>"><table><tr><td><nobr><TMPL_VAR Icon-Watchdog.INF_0118_DAILY_SYNC_TIME></nobr></td><td><div class="container"><input id="CRONTIME<TMPL_VAR MSID>" type="text" class="timepickerinput to_save to_disable_on_plugin_off to_disable_on_save"></div></td></tr></table></div>
+							<script>
+							  $(function () {
+							  
+								$('#CRONTIME<TMPL_VAR MSID>').val("<TMPL_VAR CRONTIME>").timepicker().on('change',function() {alert('changed');}).css("width","55px").css("font-weight","bold");
+								$(".timepicker").on('change', function() {
+								alert('changed');
+												}); 
+								});
+							</script>
+							</td></tr></table>
+
 							<DIV id="inactive_div<TMPL_VAR MSID>">
 								<table>
 								 <tr>
@@ -350,10 +366,12 @@
 										if ( $('#MS_MONITOR_CB<TMPL_VAR MSID>').val() == 1 )
 										{
 											$('#inactive_div<TMPL_VAR MSID>').fadeIn('fast'); 
+											$('#timepicker_div<TMPL_VAR MSID>').fadeIn('fast'); 
 										}
 										else 
 										{ 
 											$('#inactive_div<TMPL_VAR MSID>').fadeOut('fast'); 
+											$('#timepicker_div<TMPL_VAR MSID>').fadeOut('fast'); 
 										}
 
 										$( "label[for='MS_MONITOR_CB_script<TMPL_VAR MSID>']" ).removeClass( "ui-checkbox-off" ).addClass( "ui-checkbox-on" );
@@ -677,6 +695,7 @@
 				{
 					// Add values per Miniserver
 					postData['MS_MONITOR_CB'+miniserver_id] = $('#MS_MONITOR_CB'+miniserver_id).val();
+					postData['CRONTIME'+miniserver_id] = $('#CRONTIME'+miniserver_id).val();
 				});		
 		
 				// Disable input fields and buttons			

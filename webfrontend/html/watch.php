@@ -373,32 +373,47 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 	$backups_to_keep		= 7;
 	$ms_subdir				= "";
 	$ms_monitor				= 0;
+	$crontime				= "";
 	if ( isset($plugin_cfg["MS_SUBDIR".$msno]) ) $ms_subdir	= "/".$plugin_cfg["MS_SUBDIR".$msno];
 	if ( isset($plugin_cfg["MS_MONITOR_CB".$msno]) ) $ms_monitor = $plugin_cfg["MS_MONITOR_CB".$msno];
-	//$bkpfolder 				= str_pad($msno,3,0,STR_PAD_LEFT)."_".$miniserver['Name'];
+	if ( isset($plugin_cfg["CRONTIME".$msno]) ) $crontime = $plugin_cfg["CRONTIME".$msno];
 	$bkpfolder = "ms_".$msno;
 	
 	$last_save 				= "";
+
+	if ( $ms_monitor === "1" )
+	{
+		debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0005_MS_MONITORING_ENABLED"],5);
+	}
+	else
+	{
+		debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"],5);
+		continue;
+	}
+
 	#Manual Backup Button on Admin page
 	$manual_check = 0;
 	if (isset($argv[1])) 
 	{
+		debug(__line__,"CLI-ARG1: ".$argv[1]);
 		if ( $argv[1] == "manual" )
 		{
 			$manual_check = 1;
 		}
+		elseif ( $argv[1] == "cron" )
+		{
+			debug(__line__,"MS#".$msno." ".$L["LOGGING.LOG_018_CRON_CALLED"],5);
+			if ( ( preg_match("/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/", $crontime) ) && ( "$crontime" == date('H:i') ) )
+			{
+				debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0120_CRON_TIME_IS_NOW"],5);
+			}
+			else
+			{
+				debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0121_CRON_TIME_NO_MATCH"],5);
+				continue;
+			}
+		}
 	}
-		if ( $ms_monitor === "1" )
-		{
-			debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0005_MS_MONITORING_ENABLED"],5);
-		}
-		else
-		{
-			debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0006_MS_MONITORING_DISABLED"],5);
-			continue;
-		}
-	
-	//$workdir_tmp = $plugin_cfg["WORKDIR_PATH"];
 
 	debug(__line__,$L["Icon-Watchdog.INF_0008_CLEAN_WORKDIR_TMP"]." ".$workdir_tmp);
 	create_clean_workdir_tmp($workdir_tmp);

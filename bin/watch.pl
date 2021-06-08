@@ -29,7 +29,8 @@ if ( -f $watchstate_tmp && int $output_string eq 0 )
 }
 my $which = 0;
 $which = @ARGV[1] if (@ARGV[1]);
-system ("/usr/bin/php -f $lbphtmldir/watch.php ".@ARGV[0]." $which >/dev/null 2>&1 &" );
+LOGDEB "/usr/bin/php -f $lbphtmldir/watch.php ".@ARGV[0]." $which >/dev/null 2>&1 &";
+system ("/usr/bin/php -f $lbphtmldir/watch.php ".@ARGV[0]." $which >/dev/null 2>&1 &");
 # Wait a second and check if PHP process is there
 sleep 1;
 my $output_string = `ps -ef | grep "$lbphtmldir/watch.php"|grep -v grep |wc -l 2>/dev/null`;
@@ -37,5 +38,9 @@ if ( int $output_string == 0 )
 {
 	notify( $lbpplugindir, $ERR{'GENERAL.MY_NAME'}, $ERR{'ERRORS.ERR_012_UNABLE_TO_INITIATE_CHECK'},1);
 	LOGERR $ERR{'ERRORS.ERR_012_UNABLE_TO_INITIATE_CHECK'}; 
+}
+else
+{
+	LOGOK $ERR{'Icon-Watchdog.INF_0119_CRONJOB_EXECUTED'};
 }
 LOGEND ""; 
