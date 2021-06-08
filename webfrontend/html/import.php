@@ -115,7 +115,7 @@ function import_loxone_project($file,$ms)
 {
 	global $log, $L;
 	libxml_use_internal_errors(true);
-	$xml_project_file_to_parse = file_get_contents($file);
+	$xml_project_file_to_parse = trim(file_get_contents($file));
 	$ProjectSerial="none";
 	$fixed_xml_string = "";
 
