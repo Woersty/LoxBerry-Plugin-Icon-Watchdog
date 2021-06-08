@@ -1,2 +1,2 @@
 # m h dom mon dow user  command
-0/15 * * * * loxberry REPLACELBPBINDIR/watch.pl cron >> REPLACELBPLOGDIR/Icon-Watchdog_cron.log 2>&1 &
+*/15 * * * * loxberry REPLACELBPBINDIR/watch.pl cron >> REPLACELBPLOGDIR/Icon-Watchdog_cron.log 2>&1 &
