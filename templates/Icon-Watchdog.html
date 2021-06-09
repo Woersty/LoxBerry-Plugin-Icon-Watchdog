@@ -1,12 +1,13 @@
 <link rel="stylesheet" href="<TMPL_VAR HTMLPATH>css/style.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
 <link rel="stylesheet" href="<TMPL_VAR HTMLPATH>css/fancy_fileupload.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
-<link rel="stylesheet" href="<TMPL_VAR HTMLPATH>css/timepicker.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
+<link rel="stylesheet" href="<TMPL_VAR HTMLPATH>css/timepickercss.css?<TMPL_VAR VERSION>" type="text/css" media="all" />
 <script type="text/javascript"> var langmap = {<TMPL_VAR LANGMAP.LANGMAP>} // fancy-fileupload LoxBerry translation mapping</script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.ui.widget.js?<TMPL_VAR VERSION>"></script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.fileupload.js?<TMPL_VAR VERSION>"></script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.iframe-transport.js?<TMPL_VAR VERSION>"></script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/jquery.fancy-fileupload.js?<TMPL_VAR VERSION>"></script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/d3.v3.min.js?<TMPL_VAR VERSION>"></script>
+<script type="text/javascript"> var timepicker_lang=["<TMPL_VAR GENERAL.TXT_TIMEPICKER_SELECT_TIME>","<TMPL_VAR GENERAL.TXT_TIMEPICKER_CLICK_TO_CHOOSE_HOUR>","<TMPL_VAR GENERAL.TXT_TIMEPICKER_CLICK_TO_CHOOSE_MINUTE>","<TMPL_VAR GENERAL.TXT_TIMEPICKER_CHOOSE_HOUR>","<TMPL_VAR GENERAL.TXT_TIMEPICKER_CHOOSE_MINUTE>"]; </script>
 <script type="text/javascript" src="<TMPL_VAR HTMLPATH>js/timepicker.js?<TMPL_VAR VERSION>"></script>
 <script type="text/javascript"> 
 	var miniservers=[];
@@ -223,30 +224,25 @@
 		<br><small><TMPL_VAR Icon-Watchdog.DESCRIPTION_TEXT></small>
 		<br>
 	</CENTER>
-	<DIV id="notifblock">
+	<DIV id="notifblock" class="flex" style="align-items: center; justify-content: center; margin:15px 10px 0 10px;">
 		<!-- NOTIFICATIONS //-->
 			<TMPL_VAR NOTIFICATIONS>
 		<!-- NOTIFICATIONS //-->
 	</DIV>
-	<CENTER>
-		<br>
-		<TABLE>
-			<TR>
-				<TD>
-					<select name="iwd_use" id="iwd_use" class="to_save to_disable_on_save">
-						<option value="off"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_OFF></option>
-						<option value="on"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_ON></option>
-					</select>
-				</TD>
-				<TD>
-					<select name="iwd_use_notify" id="iwd_use_notify" class="to_save to_disable_on_plugin_off to_disable_on_save">
-						<option value="off"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_NOTIFY_OFF></option>
-						<option value="on"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_NOTIFY_ON></option>
-					</select>
-				</TD>
-			</TR>
-		</TABLE>
-	</CENTER>
+		<div class="flex" style="align-items: center; justify-content: center;">
+			<span style="margin:0 10px 0 10px;">
+			<select name="iwd_use" id="iwd_use" class="to_save to_disable_on_save">
+				<option value="off"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_OFF></option>
+				<option value="on"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_ON></option>
+			</select>
+			</span>
+			<span style="margin:0 10px 0 10px;">
+			<select name="iwd_use_notify" id="iwd_use_notify" class="to_save to_disable_on_plugin_off to_disable_on_save">
+				<option value="off"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_NOTIFY_OFF></option>
+				<option value="on"><TMPL_VAR GENERAL.TXT_LABEL_IWD_USE_NOTIFY_ON></option>
+			</select>
+			</span>
+		</div>
 	<BR>
 	<div id="alert_form" > 
 		 <div id="sub_alert_form"> 
@@ -255,180 +251,174 @@
 		 </div>
 	</div>
 	<CENTER>
-	<div id="plugin_content" style="display:none"><img src="<TMPL_VAR HTMLPATH>css/nomobile.svg"><br/><TMPL_VAR Icon-Watchdog.INF_0109_NO_TOUCH_DEVICES></div>
 		<TMPL_LOOP TEMPLATE_ROW>
-			<DIV style="display:inline-block; width:100%;" class="to_disable_on_save plugin_content">
-				<DIV id="MS_LOOP_ROW<TMPL_VAR MSID>" style="text-align:left; display:inline-block; margin-bottom:5px; width:99%; padding:10px; border: 1px solid black; border-radius: 5px; background-color: rgba(228,228,228,.1);"> 
-					<DIV id="colored_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:5px; border: 1px solid black; border-radius: 5px; background-color: rgba(0,228,228,.1);">
-						<TMPL_LOOP NAME="MSROW">
-							#<TMPL_VAR MSID> - <TMPL_VAR Name> <small>[<TMPL_VAR IPAddress>]</small> <span class="PreferHttps<TMPL_VAR PreferHttps>">HTTPS</span><BR>
-						  <table>
-							<tr>
-							<td><input data-mini="true" class="to_save to_disable_on_save to_disable_on_plugin_off to_hide_on_plugin_off" onclick="if ( $(this).is(':checked') ) { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(1); $('#inactive_div<TMPL_VAR MSID>').fadeIn('fast'); $('#timepicker_div<TMPL_VAR MSID>').fadeIn('fast');  } else { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(0); $('#inactive_div<TMPL_VAR MSID>').fadeOut('fast'); $('#timepicker_div<TMPL_VAR MSID>').fadeOut('fast'); }" type="checkbox" id="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>" name="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><label id="MS_MONITOR_CB_LABEL<TMPL_VAR MSID>" class="to_disable_on_plugin_off" for="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><TMPL_VAR GENERAL.TXT_LABEL_MONITOR></label></td>
-						    <td><div id="timepicker_div<TMPL_VAR MSID>"><table><tr><td><nobr><TMPL_VAR Icon-Watchdog.INF_0118_DAILY_SYNC_TIME></nobr></td><td><div class="container"><input id="CRONTIME<TMPL_VAR MSID>" type="text" class="timepickerinput to_save to_disable_on_plugin_off to_disable_on_save"></div></td></tr></table></div>
-							<script>
-							  $(function () {
-							  
-								$('#CRONTIME<TMPL_VAR MSID>').val("<TMPL_VAR CRONTIME>").timepicker().on('change',function() {alert('changed');}).css("width","55px").css("font-weight","bold");
-								$(".timepicker").on('change', function() {
-								alert('changed');
-												}); 
-								});
-							</script>
-							</td></tr></table>
-
-							<DIV id="inactive_div<TMPL_VAR MSID>">
-								<table>
-								 <tr>
-								  <td><a id="btncheck<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left;" data-role="button" data-icon="clock" data-mini="true" onclick="runCheck('<TMPL_VAR MSID>');"><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></a></td>
-								  <td><a target="_self" id="btndwl<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left; display:none;" data-role="button" data-icon="action" data-mini="true"><TMPL_VAR GENERAL.TXT_DOWNLOAD_CONVERTED_PROJECT></a></td>
-								  <td style="width:100%"></td>
-								  <td><a href="<TMPL_VAR HTMLPATH>svg/Steckdose_DE_Stecker-Typ_F_CEE_7-4.svg" download="<TMPL_VAR GENERAL.TXT_DOWNLOAD_EXAMPLE_SVG_FILENAME>" id="btnsvg<TMPL_VAR MSID>" class="btnsvg" style="text-align:right;" data-role="button" data-icon="action" data-mini="true"><TMPL_VAR GENERAL.TXT_DOWNLOAD_EXAMPLE_SVG></a></td>
-								  </tr>
-								</table>
-								<input class="to_disable_on_plugin_off" id="MS_MONITOR_CB<TMPL_VAR MSID>" name="MS_MONITOR_CB<TMPL_VAR MSID>" type="hidden" value="<TMPL_VAR MS_MONITOR_CB>">
-								<DIV class="to_disable_on_plugin_off" id="loxone_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,79,.5);">
-									<TMPL_VAR Icon-Watchdog.TXT_IMPORT_PROJECT>
-									<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
-										<input class="to_disable_on_plugin_off" style="display:none;" class="hidden" id="loxone_files<TMPL_VAR MSID>" type="file" name="files" accept=".Loxone" max-uploads=1>
-									</form>						
-									<script type="text/javascript">
-										$(function() 
-										{
-											$('#loxone_files<TMPL_VAR MSID>').FancyFileUpload({
-												params : {
-													action : 'fileuploader',
-													url : '<TMPL_VAR HTMLPATH>uploader.php',
-													ms  : '<TMPL_VAR MSID>',
-													singleFileUploads: true,
-													limitMultiFileUploads: 1,
-													sequentialUploads: true,
-												},
-												edit : false,
-												maxfilesize : 10000000,
-												uploadcompleted : function(e, data) { 
-												$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
-												$( '#iwd_status_div' ).fadeIn('slow');
-												setTimeout( function() {data.ff_info.RemoveFile();
-												}, 5000); 
-												},
-												added : function(e, data) {
-													// It is okay to simulate clicking the start upload button.
-													progress(1);
-													this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
-													
-												},
-												langmap : langmap
-											});
-										});
-									</script>
+			<DIV style="display:flex; width:auto; margin:0 5px 0 5px;">
+				<DIV style="display:block; width:100%; margin:0 10px 0 10px;" class="to_disable_on_save">
+					<DIV id="MS_LOOP_ROW<TMPL_VAR MSID>" style="text-align:left;  display:block; margin-bottom:5px; width:99%; padding:1px; border: 0px solid black; border-radius: 5px; background-color: rgba(228,228,228,.1);"> 
+						<DIV id="colored_div_<TMPL_VAR MSID>" style="padding:5px; border: 1px solid black; border-radius: 5px; background-color: rgba(0,228,228,.1);">
+							<TMPL_LOOP NAME="MSROW">
+								<span><nobr>#<TMPL_VAR MSID> - <TMPL_VAR Name> <small>[<TMPL_VAR IPAddress>]</small> <span class="PreferHttps<TMPL_VAR PreferHttps>">HTTPS</span></nobr><BR/></span>
+								<DIV style="display:flex; flex:1; flex-direction:row; flex-wrap: wrap; align-items: center; justify-content: center;">
+										<div><input data-mini="true" class="to_save to_disable_on_save to_disable_on_plugin_off to_hide_on_plugin_off" onclick="if ( $(this).is(':checked') ) { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(1); $('#inactive_div_a<TMPL_VAR MSID>').fadeIn('fast'); $('#inactive_div_b<TMPL_VAR MSID>').fadeIn('fast'); $('#timepicker_div<TMPL_VAR MSID>').fadeIn('fast'); $('#btncheck<TMPL_VAR MSID>').fadeIn('fast'); } else { $('#MS_MONITOR_CB<TMPL_VAR MSID>').val(0); $('#inactive_div_a<TMPL_VAR MSID>').fadeOut('fast'); $('#inactive_div_b<TMPL_VAR MSID>').fadeOut('fast'); $('#timepicker_div<TMPL_VAR MSID>').fadeOut('fast'); $('#btncheck<TMPL_VAR MSID>').fadeOut('fast');}" type="checkbox" id="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>" name="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><label id="MS_MONITOR_CB_LABEL<TMPL_VAR MSID>" class="to_disable_on_plugin_off" for="MS_MONITOR_CB_checkbox<TMPL_VAR MSID>"><nobr><TMPL_VAR GENERAL.TXT_LABEL_MONITOR></nobr></label></div>
+										<div style="display:flex; flex-wrap: nowrap;">
+										<div id="timepicker_div<TMPL_VAR MSID>"><div title="<TMPL_VAR Icon-Watchdog.INF_0118_DAILY_SYNC_TIME>" class="container"><input style="height:35px; width:35px; margin-top:5px; margin-left:-5px; margin-right:-15px;" id="CRONTIME<TMPL_VAR MSID>" type="image" class="timepickerinput to_save to_disable_on_plugin_off to_disable_on_save" src="/plugins/icon-watchdog/css/clock.svg"></div></div>
+										<a id="btncheck<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left;" data-role="button" data-icon="" data-mini="true" onclick="runCheck('<TMPL_VAR MSID>');"><nobr><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></nobr></a></div>
+										<script> $(function () { $('#CRONTIME<TMPL_VAR MSID>').val("<TMPL_VAR CRONTIME>").timepicker().css("width","55px").css("font-weight","bold");})</script>
+										
+										<div><a target="_self" id="btndwl<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left; display:none;" data-role="button" data-icon="action" data-mini="true"><nobr><TMPL_VAR GENERAL.TXT_DOWNLOAD_CONVERTED_PROJECT></nobr></a></div>
+										<div><a href="<TMPL_VAR HTMLPATH>svg/Steckdose_DE_Stecker-Typ_F_CEE_7-4.svg" download="<TMPL_VAR GENERAL.TXT_DOWNLOAD_EXAMPLE_SVG_FILENAME>" id="btnsvg<TMPL_VAR MSID>" class="btnsvg" style="text-align:left;" data-role="button" data-icon="action" data-mini="true"><nobr><TMPL_VAR GENERAL.TXT_DOWNLOAD_EXAMPLE_SVG></nobr></a></div>
 								</DIV>
-								<br/><br/>
-								<DIV class="svg to_disable_on_plugin_off" id="svg_upload_div_<TMPL_VAR MSID>" style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,192,.5);">
-									<TMPL_VAR Icon-Watchdog.TXT_IMPORT_SVG>
-									<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
-										<input style="display:none;" class="hidden" id="svg_files<TMPL_VAR MSID>" type="file" name="files" accept=".svg" multiple>
-									</form>						
-									<script type="text/javascript">
-										$(function() 
-										{
-											$('#svg_files<TMPL_VAR MSID>').FancyFileUpload({
-												params : {
-													action : 'fileuploader',
-													url : '<TMPL_VAR HTMLPATH>uploader.php',
-													ms  : '<TMPL_VAR MSID>',
-													sequentialUploads: true,
-
-												},
-												edit : false,
-												maxfilesize : 25600,
-												uploadcompleted : function(e, data) { 
-												$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
-												$( '#iwd_status_div' ).fadeIn('slow');
-												setTimeout( function() { data.ff_info.RemoveFile(); }, 5000); },
-												added : function(e, data) {
-													// It is okay to simulate clicking the start upload button.
-													this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
-													progress(1);
-												},
-												langmap : langmap
+								<DIV id="inactive_div_a<TMPL_VAR MSID>" style="display:flex; flex:1; flex-direction:row; flex-wrap: wrap; align-items: center; justify-content: center;">
+									<input class="to_disable_on_plugin_off" id="MS_MONITOR_CB<TMPL_VAR MSID>" name="MS_MONITOR_CB<TMPL_VAR MSID>" type="hidden" value="<TMPL_VAR MS_MONITOR_CB>">
+									<DIV class="to_disable_on_plugin_off" id="loxone_upload_div_<TMPL_VAR MSID>" style="margin:10px; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,79,.5);">
+										<TMPL_VAR Icon-Watchdog.TXT_IMPORT_PROJECT>
+										<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
+											<input class="to_disable_on_plugin_off" style="display:none;" class="hidden" id="loxone_files<TMPL_VAR MSID>" type="file" name="files" accept=".Loxone" max-uploads=1>
+										</form>						
+										<script type="text/javascript">
+											$(function() 
+											{
+												$('#loxone_files<TMPL_VAR MSID>').FancyFileUpload({
+													params : {
+														action : 'fileuploader',
+														url : '<TMPL_VAR HTMLPATH>uploader.php',
+														ms  : '<TMPL_VAR MSID>',
+														singleFileUploads: true,
+														limitMultiFileUploads: 1,
+														sequentialUploads: true,
+													},
+													edit : false,
+													maxfilesize : 10000000,
+													uploadcompleted : function(e, data) { 
+													$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
+													$( '#iwd_status_div' ).fadeIn('slow');
+													setTimeout( function() {data.ff_info.RemoveFile();
+													}, 5000); 
+													},
+													added : function(e, data) {
+														// It is okay to simulate clicking the start upload button.
+														progress(1);
+														this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
+														
+													},
+													langmap : langmap
+												});
 											});
-										});
-									</script>
-								</DIV>
-								<script type="text/javascript">
-									$( document ).ready(function() 
-									{
-									
-										$(".svg .ff_fileupload_wrap .ff_fileupload_dropzone").css('background-Image','url(<TMPL_VAR HTMLPATH>css/fancy_upload_svg.svg)');
-										<TMPL_VAR MS_MONITOR_CB_script>
+										</script>
+									</DIV>
+									<DIV class="svg to_disable_on_plugin_off" id="svg_upload_div_<TMPL_VAR MSID>" style="margin:10px; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(104,192,192,.5);">
+										<TMPL_VAR Icon-Watchdog.TXT_IMPORT_SVG>
+										<form method="POST" action="<TMPL_VAR HTMLPATH>uploader.php" accept-charset="UTF-8" enctype="multipart/form-data">
+											<input style="display:none;" class="hidden" id="svg_files<TMPL_VAR MSID>" type="file" name="files" accept=".svg" multiple>
+										</form>						
+										<script type="text/javascript">
+											$(function() 
+											{
+												$('#svg_files<TMPL_VAR MSID>').FancyFileUpload({
+													params : {
+														action : 'fileuploader',
+														url : '<TMPL_VAR HTMLPATH>uploader.php',
+														ms  : '<TMPL_VAR MSID>',
+														sequentialUploads: true,
 
-										if ( $('#MS_MONITOR_CB<TMPL_VAR MSID>').val() == 1 )
+													},
+													edit : false,
+													maxfilesize : 25600,
+													uploadcompleted : function(e, data) { 
+													$( '#iwd_status_div' ).attr("something_uploaded",<TMPL_VAR MSID>);
+													$( '#iwd_status_div' ).fadeIn('slow');
+													setTimeout( function() { data.ff_info.RemoveFile(); }, 5000); },
+													added : function(e, data) {
+														// It is okay to simulate clicking the start upload button.
+														this.find('.ff_fileupload_actions button.ff_fileupload_start_upload').click();
+														progress(1);
+													},
+													langmap : langmap
+												});
+											});
+										</script>
+									</DIV>
+									<script type="text/javascript">
+										$( document ).ready(function() 
 										{
-											$('#inactive_div<TMPL_VAR MSID>').fadeIn('fast'); 
-											$('#timepicker_div<TMPL_VAR MSID>').fadeIn('fast'); 
-										}
-										else 
-										{ 
-											$('#inactive_div<TMPL_VAR MSID>').fadeOut('fast'); 
-											$('#timepicker_div<TMPL_VAR MSID>').fadeOut('fast'); 
-										}
+										
+											$(".svg .ff_fileupload_wrap .ff_fileupload_dropzone").css('background-Image','url(<TMPL_VAR HTMLPATH>css/fancy_upload_svg.svg)');
+											<TMPL_VAR MS_MONITOR_CB_script>
 
-										$( "label[for='MS_MONITOR_CB_script<TMPL_VAR MSID>']" ).removeClass( "ui-checkbox-off" ).addClass( "ui-checkbox-on" );
+											if ( $('#MS_MONITOR_CB<TMPL_VAR MSID>').val() == 1 )
+											{
+												$('#inactive_div_a<TMPL_VAR MSID>').fadeIn('fast'); 
+												$('#inactive_div_b<TMPL_VAR MSID>').fadeIn('fast'); 
+												$('#timepicker_div<TMPL_VAR MSID>').fadeIn('fast'); 
+												$('#btncheck<TMPL_VAR MSID>').fadeIn('fast');
+											}
+											else 
+											{ 
+												$('#inactive_div_a<TMPL_VAR MSID>').fadeOut('fast'); 
+												$('#inactive_div_b<TMPL_VAR MSID>').fadeOut('fast'); 
+												$('#timepicker_div<TMPL_VAR MSID>').fadeOut('fast'); 
+												$('#btncheck<TMPL_VAR MSID>').fadeOut('fast');
+											}
 
-										getProjectfile("<TMPL_VAR MSID>");
-										$(".ff_fileupload_hidden").css('display','none');
+											$( "label[for='MS_MONITOR_CB_script<TMPL_VAR MSID>']" ).removeClass( "ui-checkbox-off" ).addClass( "ui-checkbox-on" );
 
-									});
-									var nbr_miniservers = miniservers.push('<TMPL_VAR MSID>');
-									$("#colored_div_<TMPL_VAR MSID>").css('background-color','rgba'+colors[<TMPL_VAR MSID>]); 
-									
-								</script>
-								<br/><br/>
-								<DIV class="svg to_disable_on_plugin_off" style="display:none;" id="div_svgDropdown_<TMPL_VAR MSID>">
-									<DIV style="width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(255,192,255,.5);">
-										<TMPL_VAR Icon-Watchdog.TXT_SVG_DROPDOWN><br/>
-										<center>
-											<table class="table" style="width:99%; padding:0; spacing:1; margin:0; border: 2px solid #808080; border-radius: .4em .4em .4em .4em;">
-												<tr>
-												   <td style="width:99%; vertical-align: top; background-color: rgba(64,64,255,.2);">
-													<div onclick="if ( $('.icontable.IconPlace').css('display') == 'none' ) {$('.icontable.IconPlace').fadeIn('slow');} else {$('.icontable.IconPlace').fadeOut('slow');}"  
-														style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI2LDNINkM1LjQsMyw1LDMuNCw1LDR2MjRjMCwwLjYsMC40LDEsMSwxaDIwYzAuNiwwLDEtMC40LDEtMVY0QzI3LDMuNCwyNi42LDMsMjYsM3ogTTI1LDE1aC04VjVoOFYxNXogTTE1LDV2MTBIN1Y1SDE1eiBNNywxN2g4djEwSDdWMTd6IE0xNywyN1YxN2g4djEwSDE3eiI+PC9wYXRoPiA8L3N2Zz4=')">
-														<br/>
-														<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONPLACE></div>
-													</div><TMPL_VAR icontable_IconPlace></td>
-												</tr>
-												<tr>
-												   <td style="width:99%; vertical-align: top; background-color: rgba(255,255,64,.2);">
-													<div onclick="if ( $('.icontable.IconState').css('display') == 'none' ) {$('.icontable.IconState').fadeIn('slow');} else {$('.icontable.IconState').fadeOut('slow');}"  
-														style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI3LDVIMVYyNkgyOVY1SDI3Wm0wLDE5SDNWN0gyN1YyNFptLTctOC00LDMtNi03TDUsMjJIMjVabTEtMmEyLDIsMCwxLDAtMi0yQTIsMiwwLDAsMCwyMSwxNFoiPjwvcGF0aD4gPC9zdmc+')">
-														<br/>
-														<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONSTATE></div>
-													</div><TMPL_VAR icontable_IconState></td>
-												</tr>
-												<tr>
-												   <td style="width:99%; vertical-align: top; background-color: rgba(0,120,0,.2);">
-													<div onclick="if ( $('.icontable.IconCat').css('display') == 'none' ) {$('.icontable.IconCat').fadeIn('slow');} else {$('.icontable.IconCat').fadeOut('slow');}"  
-														style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTEwLDJINkM1LjQsMiw1LDIuNCw1LDN2MjZjMCwwLjYsMC40LDEsMSwxaDRjMC42LDAsMS0wLjQsMS0xVjNDMTEsMi40LDEwLjYsMiwxMCwyeiBNOCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzEwLDI3LjEsOS4xLDI4LDgsMjh6IE0xMCwxOEg2VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTE4LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MxOSwyLjQsMTguNiwyLDE4LDJ6IE0xNiwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzE4LDI3LjEsMTcuMSwyOCwxNiwyOHogTTE4LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTI2LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MyNywyLjQsMjYuNiwyLDI2LDJ6IE0yNCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzI2LDI3LjEsMjUuMSwyOCwyNCwyOHogTTI2LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPC9zdmc+')">
-														<br/>
-														<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONCAT></div>
-													</div><TMPL_VAR icontable_IconCat></td>
-												</tr>	
-											</table>
-										</center>
+											getProjectfile("<TMPL_VAR MSID>");
+											$(".ff_fileupload_hidden").css('display','none');
+
+										});
+										var nbr_miniservers = miniservers.push('<TMPL_VAR MSID>');
+										$("#colored_div_<TMPL_VAR MSID>").css('background-color','rgba'+colors[<TMPL_VAR MSID>]); 
+										
+									</script>
+									</DIV>
+									&nbsp;<br/>
+									<DIV id="inactive_div_b<TMPL_VAR MSID>" style="display:flex; flex:1; flex-direction:row; flex-wrap: wrap; align-items: center; justify-content: center;">
+
+									<DIV class="svg to_disable_on_plugin_off" style="display:none;" id="div_svgDropdown_<TMPL_VAR MSID>">
+										<DIV style="width:90%; display:inline-block; padding:7px; border: 0px;">
+											<TMPL_VAR Icon-Watchdog.TXT_SVG_DROPDOWN><br/><br/>
+											<center>
+												<table class="table" style="width:100%; padding:0; spacing:1; margin:0; border: 2px solid #808080; border-radius: .4em .4em .4em .4em;">
+													<tr>
+													   <td style="width:100%; vertical-align: top; background-color: rgba(64,64,255,.2);">
+														<div onclick="if ( $('.icontable.IconPlace').css('display') == 'none' ) {$('.icontable.IconPlace').fadeIn('slow');} else {$('.icontable.IconPlace').fadeOut('slow');}"  
+															style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI2LDNINkM1LjQsMyw1LDMuNCw1LDR2MjRjMCwwLjYsMC40LDEsMSwxaDIwYzAuNiwwLDEtMC40LDEtMVY0QzI3LDMuNCwyNi42LDMsMjYsM3ogTTI1LDE1aC04VjVoOFYxNXogTTE1LDV2MTBIN1Y1SDE1eiBNNywxN2g4djEwSDdWMTd6IE0xNywyN1YxN2g4djEwSDE3eiI+PC9wYXRoPiA8L3N2Zz4=')">
+															<br/>
+															<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONPLACE></div>
+														</div><TMPL_VAR icontable_IconPlace></td>
+													</tr>
+													<tr>
+													   <td style="width:100%; vertical-align: top; background-color: rgba(255,255,64,.2);">
+														<div onclick="if ( $('.icontable.IconState').css('display') == 'none' ) {$('.icontable.IconState').fadeIn('slow');} else {$('.icontable.IconState').fadeOut('slow');}"  
+															style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTI3LDVIMVYyNkgyOVY1SDI3Wm0wLDE5SDNWN0gyN1YyNFptLTctOC00LDMtNi03TDUsMjJIMjVabTEtMmEyLDIsMCwxLDAtMi0yQTIsMiwwLDAsMCwyMSwxNFoiPjwvcGF0aD4gPC9zdmc+')">
+															<br/>
+															<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONSTATE></div>
+														</div><TMPL_VAR icontable_IconState></td>
+													</tr>
+													<tr>
+													   <td style="width:100%; vertical-align: top; background-color: rgba(0,120,0,.2);">
+														<div onclick="if ( $('.icontable.IconCat').css('display') == 'none' ) {$('.icontable.IconCat').fadeIn('slow');} else {$('.icontable.IconCat').fadeOut('slow');}"  
+															style="cursor: pointer; background-position: center; margin-left: auto; margin-bottom:30px; margin-right: auto; height:64px; background-repeat:no-repeat; background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJFYmVuZV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPHBhdGggZD0iTTEwLDJINkM1LjQsMiw1LDIuNCw1LDN2MjZjMCwwLjYsMC40LDEsMSwxaDRjMC42LDAsMS0wLjQsMS0xVjNDMTEsMi40LDEwLjYsMiwxMCwyeiBNOCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzEwLDI3LjEsOS4xLDI4LDgsMjh6IE0xMCwxOEg2VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTE4LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MxOSwyLjQsMTguNiwyLDE4LDJ6IE0xNiwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzE4LDI3LjEsMTcuMSwyOCwxNiwyOHogTTE4LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPHBhdGggZD0iTTI2LDJoLTRjLTAuNiwwLTEsMC40LTEsMXYyNmMwLDAuNiwwLjQsMSwxLDFoNGMwLjYsMCwxLTAuNCwxLTFWM0MyNywyLjQsMjYuNiwyLDI2LDJ6IE0yNCwyOGMtMS4xLDAtMi0wLjktMi0yIGMwLTEuMSwwLjktMiwyLTJzMiwwLjksMiwyQzI2LDI3LjEsMjUuMSwyOCwyNCwyOHogTTI2LDE4aC00VjRoNFYxOHoiPjwvcGF0aD4gPC9zdmc+')">
+															<br/>
+															<div style="margin-top:40px; width:100%; color:#4D8C00; font-family: sans-serif; font-weight:bold; font-size:1.5em; text-align:center;"><TMPL_VAR Icon-Watchdog.TXT_ICONCAT></div>
+														</div><TMPL_VAR icontable_IconCat></td>
+													</tr>	
+												</table>
+											</center>
+										</DIV>
 									</DIV>
 								</DIV>
-							</DIV>
-						</TMPL_LOOP>
+							</TMPL_LOOP>
+						</DIV>
 					</DIV>
 				</DIV>
+				<BR>
 			</DIV>
-			<BR>
 		</TMPL_LOOP>
 		<br><a class="to_disable_on_save" id="btncancel" data-role="button" data-inline="true" data-mini="true" data-icon="delete" href="/admin/index.cgi"><TMPL_VAR Icon-Watchdog.BUTTON_EXIT></a>
 		<br>
 		<br>
-		<DIV style="display:table; width:99%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(240,240,255,.5);">
+		<DIV style="display:table; width:90%; display:inline-block; padding:7px; border: 1px solid black; border-radius: 5px; background-color: rgba(240,240,255,.5);">
 			<b><TMPL_VAR LOGGING.LOG_AREA></b>
 			<DIV style="display:table-row;">
 				<DIV style="display:table-cell; border-radius: 5px;">
@@ -665,7 +655,7 @@
 			// Modal form
 			$("#alert_form").on('click', function(e){ if (e.target !== this) return; });
 			// Build and show....
-			$("#error_message").html("<table style='width:100%;'><tr><td style='width:100%; font-weight:bold;'><TMPL_VAR ERRORS.ERR_TITLE></td></tr><tr><td><hr></td></tr><tr><td>"+error+"</td></tr></table>");
+			$("#error_message").html("<table style='width:90%;'><tr><td style='width:100%; font-weight:bold;'><TMPL_VAR ERRORS.ERR_TITLE></td></tr><tr><td><hr></td></tr><tr><td>"+error+"</td></tr></table>");
 			$("#alert_form").css("z-index",1000);
 			$("#alert_form").show();
 			$("#alert_form_close").on('click', function(e){  // close button code. 
@@ -926,24 +916,6 @@
 		$("#iwd_use_notify").val("<TMPL_VAR IWD_USE_NOTIFY>"); 
 		$("#iwd_use").val("<TMPL_VAR IWD_USE>"); 
 
-		var hasTouchScreen = false;
-		if ("maxTouchPoints" in navigator) {
-			hasTouchScreen = navigator.maxTouchPoints > 0;
-		} else if ("msMaxTouchPoints" in navigator) {
-			hasTouchScreen = navigator.msMaxTouchPoints > 0;
-		} else {
-			var mQ = window.matchMedia && matchMedia("(pointer:coarse)");
-			if (mQ && mQ.media === "(pointer:coarse)") {
-				hasTouchScreen = !!mQ.matches;
-			} else if ('orientation' in window) {
-				hasTouchScreen = true; // deprecated, but good fallback
-			} else {
-				// Only as a last resort, fall back to user agent sniffing
-				var UA = navigator.userAgent;
-				hasTouchScreen = ( /\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(UA) || /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA));
-			}
-		}
-
 		$( document ).ready(function() 
 		{
 			$("#iwd_use-button").remove(); 
@@ -975,12 +947,6 @@
 			});
 			$("#loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>").val("<TMPL_VAR PLUGINDB_LOGLEVEL>");
 			$("#loglevel<TMPL_VAR PLUGINDB_MD5_CHECKSUM>").selectmenu("refresh");
-
-			if (hasTouchScreen)
-			{
-				$(".plugin_content").css("display","none");
-				$("#plugin_content").css("display","block");
-			}
 
 		});
 	</script>

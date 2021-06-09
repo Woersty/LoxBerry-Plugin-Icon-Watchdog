@@ -132,7 +132,7 @@
 	background-color: rgba(49,56,62,0.9);
 }
 
-.PreferHttps1 {	border-style: solid; border-width: thin; border-radius: 5px; background: #C0FFC0; padding: 2px; font-size:10px; }
+.PreferHttps1 {	position:relative; border-style: solid; border-width: thin; border-radius: 5px; background: #C0FFC0; padding: 2px; font-size:10px; top:-2px;}
 .PreferHttps0 {	visibility: hidden; }
 
 #alert_form{ display:none; }
