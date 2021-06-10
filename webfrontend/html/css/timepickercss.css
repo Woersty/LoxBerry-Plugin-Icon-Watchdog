@@ -1,6 +1,13 @@
 /*!
  * @author waanhappy@163.com
  */
+
+.timepickerOK {
+	width:16px;height:16px;background-image:url("ok.svg");cursor:pointer;
+}
+.timepickerOK:hover {
+	background-image:url("ok_hi.svg");
+}
  
 .timepicker {
   position: absolute;
