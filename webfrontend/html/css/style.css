@@ -64,7 +64,7 @@
 .svg_browser_tile { position: relative; max-height: 64px; min-width: 64px; min-height: 64px; width: 64px; height: 64px;  margin: 0px;  background-color: #808080; border-radius: .4em .4em .4em .4em; }
 .svg_browser_tile:hover { cursor:pointer; background-color: #ffffff; }
 .icon_browser_outer { padding: 5px; }
-.icon_browser_delete { background-image: url('delete_gray.svg');	background-position: left; cursor:alias; position:fixed; z-index:1003; width:16px; min-width:16px;  max-width:16px; height:16px; min-height:16px; max-height:16px; background-repeat:no-repeat; }
+.icon_browser_delete { background-image: url('delete_gray.svg');	background-position: left; cursor:alias; position: relative; top: 16px; z-index:1003; width:16px; min-width:16px;  max-width:16px; height:16px; min-height:16px; max-height:16px; background-repeat:no-repeat; }
 .icon_browser_delete:hover { background-image: url('delete.svg'); }
 
 .dialog {
