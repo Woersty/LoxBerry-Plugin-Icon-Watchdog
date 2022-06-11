@@ -273,7 +273,10 @@
 											$( document ).ready(function() 
 											{
 												drawClock("canvas<TMPL_VAR MSID>","CRONTIME<TMPL_VAR MSID>","ctx<TMPL_VAR MSID>","radius<TMPL_VAR MSID>",$.trim("<TMPL_VAR CRONTIME>".split(':')[0]),$.trim("<TMPL_VAR CRONTIME>".split(':')[1]));
-												setTimeout( function() {runCheck('<TMPL_VAR MSID>',1);}, 1000); 
+												if ( $("#iwd_use").val() == "on" )
+												{
+													setTimeout( function() {runCheck('<TMPL_VAR MSID>',1);}, 1000); 
+												}
 											});
 										</script>										
 										</div></div>
