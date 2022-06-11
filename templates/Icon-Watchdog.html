@@ -273,11 +273,12 @@
 											$( document ).ready(function() 
 											{
 												drawClock("canvas<TMPL_VAR MSID>","CRONTIME<TMPL_VAR MSID>","ctx<TMPL_VAR MSID>","radius<TMPL_VAR MSID>",$.trim("<TMPL_VAR CRONTIME>".split(':')[0]),$.trim("<TMPL_VAR CRONTIME>".split(':')[1]));
+												setTimeout( function() {runCheck('<TMPL_VAR MSID>',1);}, 1000); 
 											});
 										</script>										
 										</div></div>
-										<a id="btncheck<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left;" data-role="button" data-icon="" data-mini="true" onclick="runCheck('<TMPL_VAR MSID>');"><nobr><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></nobr></a></div>
-										<script> $(function () { $('#CRONTIME<TMPL_VAR MSID>').val("<TMPL_VAR CRONTIME>").timepicker().css("width","55px").css("font-weight","bold");})</script>
+										<a id="btncheck<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left;" data-role="button" data-icon="" data-mini="true" onclick="runCheck('<TMPL_VAR MSID>',0);"><nobr><TMPL_VAR GENERAL.TXT_LABEL_START_ONE_CHECK_NOW></nobr></a></div>
+										<script>$(function () { $('#CRONTIME<TMPL_VAR MSID>').val("<TMPL_VAR CRONTIME>").timepicker().css("width","55px").css("font-weight","bold");})</script>
 										
 										<div><a target="_self" id="btndwl<TMPL_VAR MSID>" class="ui-disabled to_disable_on_save to_disable_on_plugin_off" style="text-align:left; display:none;" data-role="button" data-icon="action" data-mini="true"><nobr><TMPL_VAR GENERAL.TXT_DOWNLOAD_CONVERTED_PROJECT></nobr></a></div>
 										<div><a href="<TMPL_VAR HTMLPATH>svg/Steckdose_DE_Stecker-Typ_F_CEE_7-4.svg" download="<TMPL_VAR GENERAL.TXT_DOWNLOAD_EXAMPLE_SVG_FILENAME>" id="btnsvg<TMPL_VAR MSID>" class="btnsvg" style="text-align:left;" data-role="button" data-icon="action" data-mini="true"><nobr><TMPL_VAR GENERAL.TXT_DOWNLOAD_EXAMPLE_SVG></nobr></a></div>
@@ -774,13 +775,13 @@
 				setTimeout( function() { clearInterval(status); status = setInterval(function() { checkStatus(); },5000); checkStatus(); }, 500);
 		}
 		
-		function runCheck(ms)
+		function runCheck(ms,dropdown_only)
 		{
 			$("#working").fadeIn('slow');
 			$('.to_disable_on_save').addClass('ui-disabled');
 				// Send datas
 				setTimeout( function() { clearInterval(status); status = setInterval(function() { checkStatus(); },5000); checkStatus(); }, 2500);
-				$.ajax({url: '<TMPL_VAR HTMLPATH>watch.php', type: 'POST', data : {ms:ms},
+				$.ajax({url: '<TMPL_VAR HTMLPATH>watch.php', type: 'POST', data : {ms:ms, dropdown_only:dropdown_only},
 					success: function (result) 
 					{
 							if ( result["ms"+ms].success === true) 

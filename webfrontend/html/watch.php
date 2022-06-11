@@ -1237,220 +1237,225 @@ for ( $msno = 1; $msno <= count($ms); $msno++ )
 
 	generate_images_zip($msno);
 
-	// Upload to MS
-	// Check serial
-	$serial="000000000000";
-	$MAC  = $prefix.$miniserver['IPAddress'].":".$port."/dev/cfg/mac";
-	$curl_mac = curl_init(str_replace(" ","%20",$MAC));
-	curl_setopt($curl_mac, CURLOPT_USERPWD				, $miniserver['Credentials_RAW']);
-	curl_setopt($curl_mac, CURLOPT_NOPROGRESS			, 1);
-	curl_setopt($curl_mac, CURLOPT_FOLLOWLOCATION		, 1);
-	curl_setopt($curl_mac, CURLOPT_CONNECTTIMEOUT		, 10); 
-	curl_setopt($curl_mac, CURLOPT_TIMEOUT				, 10);
-	curl_setopt($curl_mac, CURLOPT_SSL_VERIFYPEER		, 0);
-	curl_setopt($curl_mac, CURLOPT_SSL_VERIFYSTATUS		, 0);
-	curl_setopt($curl_mac, CURLOPT_SSL_VERIFYHOST		, 0);
-	curl_setopt($curl_mac, CURLOPT_HEADER				, 0);  
-	curl_setopt($curl_mac, CURLOPT_RETURNTRANSFER		, true);
-	if ( !$curl_mac )
+	if (!isset($_REQUEST['dropdown_only']) or $_REQUEST['dropdown_only'] == 0) 
 	{
-		debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_0002_ERROR_INIT_CURL"],4);
-		debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_051_XML_MAC_FAILED"],4);
-	}
-	else
-	{
-		$response = curl_exec($curl_mac);  
-		debug(__line__,"MS#".$msno." URL: $MAC => Response: ".htmlentities($response)."\n");
-		curl_close($curl_mac);
+		debug(__line__,$L["LOGGING.LOG_027_BUILD_DROPDOWN_ONLY"]);
 
-		if ( $response )
+		// Upload to MS
+		// Check serial
+		$serial="000000000000";
+		$MAC  = $prefix.$miniserver['IPAddress'].":".$port."/dev/cfg/mac";
+		$curl_mac = curl_init(str_replace(" ","%20",$MAC));
+		curl_setopt($curl_mac, CURLOPT_USERPWD				, $miniserver['Credentials_RAW']);
+		curl_setopt($curl_mac, CURLOPT_NOPROGRESS			, 1);
+		curl_setopt($curl_mac, CURLOPT_FOLLOWLOCATION		, 1);
+		curl_setopt($curl_mac, CURLOPT_CONNECTTIMEOUT		, 10); 
+		curl_setopt($curl_mac, CURLOPT_TIMEOUT				, 10);
+		curl_setopt($curl_mac, CURLOPT_SSL_VERIFYPEER		, 0);
+		curl_setopt($curl_mac, CURLOPT_SSL_VERIFYSTATUS		, 0);
+		curl_setopt($curl_mac, CURLOPT_SSL_VERIFYHOST		, 0);
+		curl_setopt($curl_mac, CURLOPT_HEADER				, 0);  
+		curl_setopt($curl_mac, CURLOPT_RETURNTRANSFER		, true);
+		if ( !$curl_mac )
 		{
-			$mac_response = simplexml_load_string ( $response, "SimpleXMLElement" ,LIBXML_NOCDATA | LIBXML_NOWARNING );
-			if ($mac_response === false) 
-			{
-				$errors = libxml_get_errors();
-				$importerrors = array();
-				foreach ($errors as $error) 
-				{
-					report_xml_error($msno, $error, explode("\n",$response));
-				}
-				libxml_clear_errors();
-			}
-			else
-			{
-				if ( isset($mac_response["value"][0]) )
-				{
-					$serial	= strtoupper(str_replace(":","",$mac_response["value"][0]));
-				}
-			}
-		}
-		debug(__line__,"MS#".$msno." Project-Serial: ".$ProjectSerial);
-		debug(__line__,"MS#".$msno." Miniserver-Serial: ".$serial);
-		if ( $serial == "000000000000" || $ProjectSerial == "none" ) 
-		{	
+			debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_0002_ERROR_INIT_CURL"],4);
 			debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_051_XML_MAC_FAILED"],4);
 		}
 		else
 		{
-			if ( $ProjectSerial == $serial )
+			$response = curl_exec($curl_mac);  
+			debug(__line__,"MS#".$msno." URL: $MAC => Response: ".htmlentities($response)."\n");
+			curl_close($curl_mac);
+
+			if ( $response )
 			{
-				debug(__line__,"MS#".$msno." ".str_replace(array("<ms>","<serial>"),array($msno,$serial),$L["Icon-Watchdog.INF_0099_MS_SERIAL_OK"]),6);
-				$downloaded_zipmd5 = "";
-				if ( is_readable ( "/tmp/ms".$msno."_images.zip.md5" ) )
+				$mac_response = simplexml_load_string ( $response, "SimpleXMLElement" ,LIBXML_NOCDATA | LIBXML_NOWARNING );
+				if ($mac_response === false) 
 				{
-					$downloaded_zipmd5 = file_get_contents ("/tmp/ms".$msno."_images.zip.md5");	
-				}
-				if ( is_readable ( $savedir_path."/ms_".$msno."/web/images.zip" ) )
-				{
-					$current_zipmd5 = md5_file ($savedir_path."/ms_".$msno."/web/images.zip");
-					debug(__line__,"MS#".$msno." MD5: ".$downloaded_zipmd5 ."<>".$current_zipmd5);
-
-					if ( $downloaded_zipmd5 == $current_zipmd5 )
+					$errors = libxml_get_errors();
+					$importerrors = array();
+					foreach ($errors as $error) 
 					{
-						debug(__line__,"MS#".$msno." ".str_replace(array("<ms>","<serial>"),array($msno,$serial),$L["Icon-Watchdog.INF_0100_ZIP_NOT_CHANGED"]),5);
+						report_xml_error($msno, $error, explode("\n",$response));
 					}
-					else
+					libxml_clear_errors();
+				}
+				else
+				{
+					if ( isset($mac_response["value"][0]) )
 					{
-						// File to be uploaded not there, skip.
-						
-						// Do FTP only for matched Serial
-						
-						if ( $miniserver['UseCloudDNS'] == "on" || $miniserver['UseCloudDNS'] == "1" ) 
-						{
-							debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0041_CLOUD_DNS_USED"]." => ".$miniserver['Name'],6);
-							$ftpport = (isset($miniserver["CloudURLFTPPort"]))?$miniserver["CloudURLFTPPort"]:21;
-						}
-						else
-						{
-							$ftpport = (isset($plugin_cfg["FTPPort".$msno]))?$plugin_cfg["FTPPort".$msno]:21;
-						}	
-					
-						$file = $savedir_path."/ms_".$msno."/web/images.zip";
-						$remote_file = '/web/images.zip';
-
-						// Verbindung aufbauen
-						$conn_id = ftp_connect($miniserver['IPAddress'],$ftpport,10);
-						if ( !$conn_id )
-						{
-							debug(__line__,$L["ERRORS.ERR_048_FTP_CONNECT_FAILED"]." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,4);
-						}
-						else
-						{
-							debug(__line__,$L["Icon-Watchdog.INF_0106_FTP_CONNECT_OK"]." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,6);
-							// Login mit Benutzername und Passwort
-							$login_result = ftp_login($conn_id, $miniserver['Admin_RAW'], $miniserver['Pass_RAW']);
-							if ( !$login_result )
-							{
-								debug(__line__,str_replace("<user>",$miniserver['Admin_RAW'],$L["ERRORS.ERR_049_FTP_LOGIN_FAILED"])." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,4);
-								debug(__line__,"Miniserver #".$msno." Login ".$miniserver['Admin_RAW']." and Password ".$miniserver['Pass_RAW']." for ".$miniserver['IPAddress']." at Port ".$ftpport);
-							}
-							else
-							{
-								debug(__line__,str_replace("<user>",$miniserver['Admin_RAW'],$L["Icon-Watchdog.INF_0107_FTP_LOGIN_OK"])." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,6);
-								debug(__line__,"Miniserver #".$msno." Login ".$miniserver['Admin_RAW']." and Password ".$miniserver['Pass_RAW']." for ".$miniserver['IPAddress']." at Port ".$ftpport);
-								ftp_set_option($conn_id, FTP_TIMEOUT_SEC, 60);
-								// Lade eine Datei hoch
-								debug(__line__,"Miniserver #".$msno." Try to send $file as $remote_file");
-								$transfer = ftp_put($conn_id, $remote_file, $file, FTP_BINARY);
-								if (!$transfer) 
-								{
-									foreach ( error_get_last() as $ftp_error )
-									{
-										debug(__line__,$ftp_error);
-									}
-									debug(__line__,str_replace(array("<file>","<ms>"),array($file,$msno),$L["ERRORS.ERR_050_FTP_UPLOAD_FAILED"]),4);
-								}
-								else 
-								{
-									debug(__line__,str_replace(array("<file>","<ms>"),array($file,$msno),$L["Icon-Watchdog.INF_0098_FTP_UPLOAD_DONE"]),5);
-									file_put_contents ("/tmp/ms".$msno."_images.zip.md5", md5_file ($savedir_path."/ms_".$msno."/web/images.zip"));
-
-									$curl_reboot = curl_init(str_replace(" ","%20",$prefix.$miniserver['IPAddress'].":".$port."/dev/sys/reboot"));
-									curl_setopt($curl_reboot, CURLOPT_USERPWD				, $miniserver['Credentials_RAW']);
-									curl_setopt($curl_reboot, CURLOPT_NOPROGRESS			, 1);
-									curl_setopt($curl_reboot, CURLOPT_FOLLOWLOCATION		, 1);
-									curl_setopt($curl_reboot, CURLOPT_CONNECTTIMEOUT		, 10); 
-									curl_setopt($curl_reboot, CURLOPT_TIMEOUT				, 10);
-									curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYPEER		, 0);
-									curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYSTATUS		, 0);
-									curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYHOST		, 0);
-									curl_setopt($curl_reboot, CURLOPT_HEADER				, 0);  
-									curl_setopt($curl_reboot, CURLOPT_RETURNTRANSFER		, true);
-									$reboot_ok = false;
-									if ( !$curl_reboot )
-									{
-										debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_0002_ERROR_INIT_CURL"],4);
-									}
-									else
-									{
-										$reboot_response = curl_exec($curl_reboot);  
-										switch (curl_getinfo($curl_reboot,CURLINFO_RESPONSE_CODE)) 
-										{
-											case "200":
-												debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0101_MS_REBOOT_OK"],5);
-												curl_close($curl_reboot);
-												debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0113_WAIT_MS_AFTER_REBOOT"],5);
-												for ($i = 1; $i <= 100; $i++) 
-												{
-													set_time_limit (30);
-													sleep (4);
-													$curl_reboot = curl_init($prefix.$miniserver['IPAddress'].":".$port."/dev/cfg/mac");			
-													curl_setopt($curl_reboot, CURLOPT_USERPWD				, $miniserver['Credentials_RAW']);
-													curl_setopt($curl_reboot, CURLOPT_NOPROGRESS			, 1);
-													curl_setopt($curl_reboot, CURLOPT_FOLLOWLOCATION		, 1);
-													curl_setopt($curl_reboot, CURLOPT_CONNECTTIMEOUT		, 10); 
-													curl_setopt($curl_reboot, CURLOPT_TIMEOUT				, 10);
-													curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYPEER		, 0);
-													curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYSTATUS		, 0);
-													curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYHOST		, 0);
-													curl_setopt($curl_reboot, CURLOPT_HEADER				, 0);  
-													curl_setopt($curl_reboot, CURLOPT_RETURNTRANSFER		, true);
-													$reboot_response = curl_exec($curl_reboot);  
-													switch (curl_getinfo($curl_reboot,CURLINFO_RESPONSE_CODE)) 
-													{
-														case "200":
-															$wait_msg = "MS#".$msno." ".str_replace(array("<ms>","<tries>"),array($msno,$i),$L["Icon-Watchdog.INF_0116_MS_BACK_AFTER_REBOOT"]);
-															debug(__line__,$wait_msg,5);
-															file_put_contents($watchstate_file, $wait_msg);
-															$log->LOGTITLE($wait_msg);
-															$i = 101;
-															$reboot_ok = true;
-															sleep (4);
-															break;
-														default;
-															$wait_msg = "MS#".$msno." ".str_replace(array("<ms>","<try>","<maxtry>"),array($msno,$i,100),$L["Icon-Watchdog.INF_0115_STILL_WAITING_FOR_MS_AFTER_REBOOT"]);
-															debug(__line__,$wait_msg,5);
-															file_put_contents($watchstate_file, $wait_msg);
-															$log->LOGTITLE($wait_msg);
-													}
-													curl_close($curl_reboot);
-												}
-												
-												break;
-											default;
-												curl_close($curl_reboot);
-										}
-									}
-									if (!$reboot_ok)
-									{
-										debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_055_MS_REBOOT_FAILED"],4);
-									}
-								}
-							}
-							// Verbindung schließen
-							ftp_close($conn_id);
-						}
+						$serial	= strtoupper(str_replace(":","",$mac_response["value"][0]));
 					}
 				}
-				else			
-				{
-					// File to be uploaded not there, skip.
-					debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_052_UPLOAD_FILE_PROBLEM"],4);
-				}	
+			}
+			debug(__line__,"MS#".$msno." Project-Serial: ".$ProjectSerial);
+			debug(__line__,"MS#".$msno." Miniserver-Serial: ".$serial);
+			if ( $serial == "000000000000" || $ProjectSerial == "none" ) 
+			{	
+				debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_051_XML_MAC_FAILED"],4);
 			}
 			else
 			{
-				debug(__line__,"MS#".$msno." ".str_replace(array("<ms>","<serial>","<projectserial>"),array($msno,$serial,$ProjectSerial),$L["ERRORS.ERR_053_MS_SERIAL_MISMATCH"]),4);
+				if ( $ProjectSerial == $serial )
+				{
+					debug(__line__,"MS#".$msno." ".str_replace(array("<ms>","<serial>"),array($msno,$serial),$L["Icon-Watchdog.INF_0099_MS_SERIAL_OK"]),6);
+					$downloaded_zipmd5 = "";
+					if ( is_readable ( "/tmp/ms".$msno."_images.zip.md5" ) )
+					{
+						$downloaded_zipmd5 = file_get_contents ("/tmp/ms".$msno."_images.zip.md5");	
+					}
+					if ( is_readable ( $savedir_path."/ms_".$msno."/web/images.zip" ) )
+					{
+						$current_zipmd5 = md5_file ($savedir_path."/ms_".$msno."/web/images.zip");
+						debug(__line__,"MS#".$msno." MD5: ".$downloaded_zipmd5 ."<>".$current_zipmd5);
+
+						if ( $downloaded_zipmd5 == $current_zipmd5 )
+						{
+							debug(__line__,"MS#".$msno." ".str_replace(array("<ms>","<serial>"),array($msno,$serial),$L["Icon-Watchdog.INF_0100_ZIP_NOT_CHANGED"]),5);
+						}
+						else
+						{
+							// File to be uploaded not there, skip.
+							
+							// Do FTP only for matched Serial
+							
+							if ( $miniserver['UseCloudDNS'] == "on" || $miniserver['UseCloudDNS'] == "1" ) 
+							{
+								debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0041_CLOUD_DNS_USED"]." => ".$miniserver['Name'],6);
+								$ftpport = (isset($miniserver["CloudURLFTPPort"]))?$miniserver["CloudURLFTPPort"]:21;
+							}
+							else
+							{
+								$ftpport = (isset($plugin_cfg["FTPPort".$msno]))?$plugin_cfg["FTPPort".$msno]:21;
+							}	
+						
+							$file = $savedir_path."/ms_".$msno."/web/images.zip";
+							$remote_file = '/web/images.zip';
+
+							// Verbindung aufbauen
+							$conn_id = ftp_connect($miniserver['IPAddress'],$ftpport,10);
+							if ( !$conn_id )
+							{
+								debug(__line__,$L["ERRORS.ERR_048_FTP_CONNECT_FAILED"]." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,4);
+							}
+							else
+							{
+								debug(__line__,$L["Icon-Watchdog.INF_0106_FTP_CONNECT_OK"]." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,6);
+								// Login mit Benutzername und Passwort
+								$login_result = ftp_login($conn_id, $miniserver['Admin_RAW'], $miniserver['Pass_RAW']);
+								if ( !$login_result )
+								{
+									debug(__line__,str_replace("<user>",$miniserver['Admin_RAW'],$L["ERRORS.ERR_049_FTP_LOGIN_FAILED"])." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,4);
+									debug(__line__,"Miniserver #".$msno." Login ".$miniserver['Admin_RAW']." and Password ".$miniserver['Pass_RAW']." for ".$miniserver['IPAddress']." at Port ".$ftpport);
+								}
+								else
+								{
+									debug(__line__,str_replace("<user>",$miniserver['Admin_RAW'],$L["Icon-Watchdog.INF_0107_FTP_LOGIN_OK"])." => Miniserver #".$msno."@".$miniserver['IPAddress'].":".$ftpport,6);
+									debug(__line__,"Miniserver #".$msno." Login ".$miniserver['Admin_RAW']." and Password ".$miniserver['Pass_RAW']." for ".$miniserver['IPAddress']." at Port ".$ftpport);
+									ftp_set_option($conn_id, FTP_TIMEOUT_SEC, 60);
+									// Lade eine Datei hoch
+									debug(__line__,"Miniserver #".$msno." Try to send $file as $remote_file");
+									$transfer = ftp_put($conn_id, $remote_file, $file, FTP_BINARY);
+									if (!$transfer) 
+									{
+										foreach ( error_get_last() as $ftp_error )
+										{
+											debug(__line__,$ftp_error);
+										}
+										debug(__line__,str_replace(array("<file>","<ms>"),array($file,$msno),$L["ERRORS.ERR_050_FTP_UPLOAD_FAILED"]),4);
+									}
+									else 
+									{
+										debug(__line__,str_replace(array("<file>","<ms>"),array($file,$msno),$L["Icon-Watchdog.INF_0098_FTP_UPLOAD_DONE"]),5);
+										file_put_contents ("/tmp/ms".$msno."_images.zip.md5", md5_file ($savedir_path."/ms_".$msno."/web/images.zip"));
+
+										$curl_reboot = curl_init(str_replace(" ","%20",$prefix.$miniserver['IPAddress'].":".$port."/dev/sys/reboot"));
+										curl_setopt($curl_reboot, CURLOPT_USERPWD				, $miniserver['Credentials_RAW']);
+										curl_setopt($curl_reboot, CURLOPT_NOPROGRESS			, 1);
+										curl_setopt($curl_reboot, CURLOPT_FOLLOWLOCATION		, 1);
+										curl_setopt($curl_reboot, CURLOPT_CONNECTTIMEOUT		, 10); 
+										curl_setopt($curl_reboot, CURLOPT_TIMEOUT				, 10);
+										curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYPEER		, 0);
+										curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYSTATUS		, 0);
+										curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYHOST		, 0);
+										curl_setopt($curl_reboot, CURLOPT_HEADER				, 0);  
+										curl_setopt($curl_reboot, CURLOPT_RETURNTRANSFER		, true);
+										$reboot_ok = false;
+										if ( !$curl_reboot )
+										{
+											debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_0002_ERROR_INIT_CURL"],4);
+										}
+										else
+										{
+											$reboot_response = curl_exec($curl_reboot);  
+											switch (curl_getinfo($curl_reboot,CURLINFO_RESPONSE_CODE)) 
+											{
+												case "200":
+													debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0101_MS_REBOOT_OK"],5);
+													curl_close($curl_reboot);
+													debug(__line__,"MS#".$msno." ".$L["Icon-Watchdog.INF_0113_WAIT_MS_AFTER_REBOOT"],5);
+													for ($i = 1; $i <= 100; $i++) 
+													{
+														set_time_limit (30);
+														sleep (4);
+														$curl_reboot = curl_init($prefix.$miniserver['IPAddress'].":".$port."/dev/cfg/mac");			
+														curl_setopt($curl_reboot, CURLOPT_USERPWD				, $miniserver['Credentials_RAW']);
+														curl_setopt($curl_reboot, CURLOPT_NOPROGRESS			, 1);
+														curl_setopt($curl_reboot, CURLOPT_FOLLOWLOCATION		, 1);
+														curl_setopt($curl_reboot, CURLOPT_CONNECTTIMEOUT		, 10); 
+														curl_setopt($curl_reboot, CURLOPT_TIMEOUT				, 10);
+														curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYPEER		, 0);
+														curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYSTATUS		, 0);
+														curl_setopt($curl_reboot, CURLOPT_SSL_VERIFYHOST		, 0);
+														curl_setopt($curl_reboot, CURLOPT_HEADER				, 0);  
+														curl_setopt($curl_reboot, CURLOPT_RETURNTRANSFER		, true);
+														$reboot_response = curl_exec($curl_reboot);  
+														switch (curl_getinfo($curl_reboot,CURLINFO_RESPONSE_CODE)) 
+														{
+															case "200":
+																$wait_msg = "MS#".$msno." ".str_replace(array("<ms>","<tries>"),array($msno,$i),$L["Icon-Watchdog.INF_0116_MS_BACK_AFTER_REBOOT"]);
+																debug(__line__,$wait_msg,5);
+																file_put_contents($watchstate_file, $wait_msg);
+																$log->LOGTITLE($wait_msg);
+																$i = 101;
+																$reboot_ok = true;
+																sleep (4);
+																break;
+															default;
+																$wait_msg = "MS#".$msno." ".str_replace(array("<ms>","<try>","<maxtry>"),array($msno,$i,100),$L["Icon-Watchdog.INF_0115_STILL_WAITING_FOR_MS_AFTER_REBOOT"]);
+																debug(__line__,$wait_msg,5);
+																file_put_contents($watchstate_file, $wait_msg);
+																$log->LOGTITLE($wait_msg);
+														}
+														curl_close($curl_reboot);
+													}
+													
+													break;
+												default;
+													curl_close($curl_reboot);
+											}
+										}
+										if (!$reboot_ok)
+										{
+											debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_055_MS_REBOOT_FAILED"],4);
+										}
+									}
+								}
+								// Verbindung schließen
+								ftp_close($conn_id);
+							}
+						}
+					}
+					else			
+					{
+						// File to be uploaded not there, skip.
+						debug(__line__,"MS#".$msno." ".$L["ERRORS.ERR_052_UPLOAD_FILE_PROBLEM"],4);
+					}	
+				}
+				else
+				{
+					debug(__line__,"MS#".$msno." ".str_replace(array("<ms>","<serial>","<projectserial>"),array($msno,$serial,$ProjectSerial),$L["ERRORS.ERR_053_MS_SERIAL_MISMATCH"]),4);
+				}
 			}
 		}
 	}
