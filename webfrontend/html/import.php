@@ -245,7 +245,8 @@ function import_loxone_project($file,$ms)
 	$sorted_array = array_combine($keys, $unsorted_array);
 	array_push($IconData["Icons"],array_values($sorted_array));
 	$data['xml'] = $xml->asXML();
-	$data['xml'] = str_replace(array("<IoData/>","<Display/>","__dummy_for_apos__","__dummy_for_backtick__","&#10;"),array("<IoData></IoData>","<Display></Display>","&apos;","`","\n"),$data);
+	$data['xml'] = str_replace(array("<IoData/>"        ,"<Display/>"         ,"__dummy_for_apos__","__dummy_for_backtick__","&#10;"),
+	                           array("<IoData></IoData>","<Display></Display>","&apos;"            ,"`"                     ,"\n"   ),$data['xml']);
 	$data['json'] = json_encode($IconData);
 	$data['Serial'] = $ProjectSerial;
 	return $data;
