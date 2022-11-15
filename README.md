@@ -1,4 +1,4 @@
 # LoxBerry-Plugin-Icon-Watchdog
 A LoxBerry Plugin
 -
-For Details visit https://www.loxwiki.eu/display/LOXBERRY/Icon-Watchdog
+For Details visit https://wiki.loxberry.de/plugins/icon_watchdog/start
